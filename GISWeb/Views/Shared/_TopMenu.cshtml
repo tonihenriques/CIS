@@ -1,0 +1,351 @@
+﻿@using Ninject
+@using GISModel.DTO.Permissoes
+
+
+@{
+    var path = string.Empty;
+    if (Request.ApplicationPath.Length > 1)
+    {
+        path = Request.ApplicationPath;
+    }
+
+    if (ViewBag.Permissoes != null && ViewBag.Permissoes.Count > 0)
+    {
+        List<VMPermissao> permissoes = (List<VMPermissao>)ViewBag.Permissoes;
+        
+        <div class="sidebar-shortcuts" id="sidebar-shortcuts">
+            <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+
+                <a class="btn btn-warning" href="@path/QuaseIncidente/Novo" title="Cadastrar quase incidente com pessoa">
+                    <i class="ace-icon fa fa-plus"></i>
+                </a>
+
+                <a class="btn btn-success" href="@path/QuaseIncidente/NovoVeiculo" title="Cadastrar quase incidente com veículo">
+                    <i class="ace-icon fa fa-plus"></i>
+                </a>
+
+                <a class="btn btn-danger" href="@path/Incidente/Novo" title="Novo incidente com pessoa">
+                    <i class="ace-icon fa fa-plus-square"></i>
+                </a>
+
+                <a class="btn btn-info" href="@path/Incidente/NovoVeiculo" title="Novo incidente com veículo">
+                    <i class="ace-icon fa fa-plus-square"></i>
+                </a>
+                
+            </div>
+
+            <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+                <span class="btn btn-success"></span>
+
+                <span class="btn btn-info"></span>
+
+                <span class="btn btn-warning"></span>
+
+                <span class="btn btn-danger"></span>
+            </div>
+        </div>
+
+        <ul class="nav nav-list">
+
+
+            @if (ViewBag.MenuID != null)
+            {
+                <input type="hidden" id="MenuAtual" value="@ViewBag.MenuID" />
+            }
+
+            <li class="hover">
+                <a href="#" class="dropdown-toggle">
+                    <i class="menu-icon ace-icon fa fa-inbox"></i>
+                    <span class="menu-text"> Caixa de Entrada </span>
+                    <b class="arrow fa fa-angle-down"></b>
+                </a>
+                <b class="arrow"></b>
+
+                <ul class="submenu">
+                    <li class="hover">
+                        <a href="@path/Inbox">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Pessoal
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="hover">
+                        <a href="@path/Inbox/MeusGrupos">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Meus Grupos
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                </ul>
+
+            </li>
+
+            <li class="hover">
+                <a href="#" class="dropdown-toggle">
+                    <i class="menu-icon ace-icon fa fa-home"></i>
+                    <span class="menu-text"> Área de Trabalho </span>
+                    <b class="arrow fa fa-angle-down"></b>
+                </a>
+                <b class="arrow"></b>
+
+                <ul class="submenu">
+                    <li class="hover">
+                        <a href="@path/Usuario/">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Meus Incidentes
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="hover">
+                        <a href="@path/Usuario/">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Meus Quase Incidentes
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="hover">
+                        <a href="#" class="dropdown-toggle">
+                            <i class="menu-icon ace-icon fa fa-search"></i>
+                            <span class="menu-text"> Pesquisa </span>
+                            <b class="arrow fa fa-angle-down"></b>
+                        </a>
+
+                        <b class="arrow"></b>
+
+                        <ul class="submenu">
+                            <li class="hover">
+                                <a href="@path/Departamento/">
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    Incidentes
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+
+                            <li class="hover">
+                                <a href="@path/Empresa/">
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    Quase Incidentes
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+
+            </li>
+
+            @if (permissoes.Any(a => a.Perfil.Equals("Administrador")))
+            {
+                <li class="hover">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="menu-icon ace-icon fa fa-cogs"></i>
+                        <span class="menu-text"> Administração </span>
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
+                    <b class="arrow"></b>
+
+                    <ul class="submenu">
+
+                        <li class="hover">
+                            <a href="#" class="dropdown-toggle">
+                                <i class="menu-icon ace-icon fa fa-search"></i>
+                                <span class="menu-text"> Organizacional </span>
+                                <b class="arrow fa fa-angle-down"></b>
+                            </a>
+
+                            <b class="arrow"></b>
+
+                            <ul class="submenu">
+                                <li class="hover">
+                                    <a href="@path/Empresa/">
+                                        <i class="menu-icon fa fa-caret-right"></i>
+                                        Empresa
+                                    </a>
+                                    <b class="arrow"></b>
+                                </li>
+
+                                <li class="hover">
+                                    <a href="@path/Departamento/">
+                                        <i class="menu-icon fa fa-caret-right"></i>
+                                        Departamento
+                                    </a>
+                                    <b class="arrow"></b>
+                                </li>
+
+                                <li class="hover">
+                                    <a href="@path/NivelHierarquico/">
+                                        <i class="menu-icon fa fa-caret-right"></i>
+                                        Nível Hierárquico
+                                    </a>
+                                    <b class="arrow"></b>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="hover">
+                            <a href="@path/Perfil/">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Perfil
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+
+                        <li class="hover">
+                            <a href="@path/Usuario/">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Usuário
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+
+                        <li class="hover">
+                            <a href="@path/Permissoes/">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Permissões
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+
+                        <li class="hover">
+                            <a href="@path/Fornecedor/">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Fornecedor
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+
+                        <li class="hover">
+                            <a href="#" class="dropdown-toggle">
+                                <i class="menu-icon ace-icon fa fa-search"></i>
+                                <span class="menu-text"> Tabelas </span>
+                                <b class="arrow fa fa-angle-down"></b>
+                            </a>
+                            <b class="arrow"></b>
+
+                            <ul class="submenu">
+                                <li class="hover">
+                                    <a href="@path/Empresa/">
+                                        <i class="menu-icon fa fa-caret-right"></i>
+                                        Municípios
+                                    </a>
+                                    <b class="arrow"></b>
+                                </li>
+
+                                <li class="hover">
+                                    <a href="@path/Usuario/">
+                                        <i class="menu-icon fa fa-caret-right"></i>
+                                        Natureza
+                                    </a>
+                                    <b class="arrow"></b>
+                                </li>
+
+                                <li class="hover">
+                                    <a href="@path/Usuario/">
+                                        <i class="menu-icon fa fa-caret-right"></i>
+                                        Tipo de Atividade
+                                    </a>
+                                    <b class="arrow"></b>
+                                </li>
+
+                                <li class="hover">
+                                    <a href="@path/Usuario/">
+                                        <i class="menu-icon fa fa-caret-right"></i>
+                                        Fonte de Lesão
+                                    </a>
+                                    <b class="arrow"></b>
+                                </li>
+
+                                <li class="hover">
+                                    <a href="@path/Usuario/">
+                                        <i class="menu-icon fa fa-caret-right"></i>
+                                        Condição ambiente Inseguro
+                                    </a>
+                                    <b class="arrow"></b>
+                                </li>
+
+                            </ul>
+                        </li>
+
+                    </ul>
+
+                </li>
+
+                <li>
+                    <a href="@path/Ferramentas/">
+                        <i class="menu-icon ace-icon fa fa-cubes"></i>
+                        <span class="menu-text"> Ferramentas </span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            }
+
+
+            @if (permissoes.Any(a => a.Perfil.Equals("Relatorios")))
+            {
+
+                <li class="hover">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="menu-icon ace-icon fa fa-area-chart"></i>
+                        <span class="menu-text"> Relatórios </span>
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
+                    <b class="arrow"></b>
+
+                    <ul class="submenu">
+
+                        <li class="hover">
+                            <a href="@path/Empresa/">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Total de Incidentes por Período
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+
+                        <li class="hover">
+                            <a href="@path/Usuario/">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Total por Tipo de Incidente
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                    </ul>
+                </li>
+
+            }
+
+            <li class="hover">
+                <a href="#" class="dropdown-toggle">
+                    <i class="menu-icon ace-icon fa fa-info-circle"></i>
+                    <span class="menu-text"> Informações </span>
+                    <b class="arrow fa fa-angle-down"></b>
+                </a>
+                <b class="arrow"></b>
+
+                <ul class="submenu">
+
+                    <li class="hover">
+                        <a href="@path/Empresa/">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Administradores
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="hover">
+                        <a href="@path/Usuario/">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Chamados
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                </ul>
+            </li>
+
+        </ul>
+        
+    }
+}

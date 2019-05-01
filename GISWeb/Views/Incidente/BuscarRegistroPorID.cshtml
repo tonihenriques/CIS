@@ -1,0 +1,510 @@
+﻿@model GISModel.Entidades.Registro
+
+@{
+    ViewBag.Title = "Detalhes do Acidente";
+}
+
+<h2>Detalhes do Acidente</h2>
+
+<hr />
+
+<div class="row" style="margin-top:20px;margin-bottom:20px;border-width: thin;  border-style: solid;border-right: 1px solid red;border-left: 1px solid; border-color:red">
+    <div class="col-xs-12 col-sm-3" style="border-right: 1px solid red">
+        <div class="form-group">
+            <b>@Html.DisplayNameFor(model => model.CodMunicipio.Municipio) </b>
+            <div class="col-xs-12 col-sm-12">
+                @Html.DisplayFor(model => model.CodMunicipio.Municipio)
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-9">
+        <div class="form-group">
+            <b> @Html.DisplayNameFor(model => model.DescAcidente)</b>
+            <div class="col-xs-12 col-sm-12">
+                @Html.DisplayFor(model => model.DescAcidente)
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row" style="margin-top:20px;margin-bottom:20px;border-width: thin;  border-style: solid;border-right: 1px solid red;border-left: 1px solid; border-color:red">
+    <div class="col-xs-12 col-sm-3" style="border-right: 1px solid red">
+        <div class="form-group">
+            <b>@Html.DisplayNameFor(model => model.Data)</b>
+            <div class="col-xs-12 col-sm-12">
+                @Html.DisplayFor(model => model.Data)
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-3" style="border-right: 1px solid red">
+        <div class="form-group">
+            <b>@Html.DisplayNameFor(model => model.Horas)</b>
+            <div class="col-xs-12 col-sm-12">
+                @Html.DisplayFor(model => model.Horas)
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-3" style="border-right: 1px solid red">
+        <div class="form-group">
+            <b>@Html.DisplayNameFor(model => model.ETipoAcidente)</b>
+            <div class="col-xs-12 col-sm-12">
+                @Model.ETipoAcidente.ToString().Substring(0, 20)
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-3">
+        <div class="form-group">
+            <b>@Html.DisplayNameFor(model => model.UnidadeOrganizacional)</b>
+            <div class="col-xs-12 col-sm-12">
+                @Html.DisplayFor(model => model.UnidadeOrganizacional)
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row" style="margin-top:20px;margin-bottom:20px;border-width: thin;  border-style: solid;border-right: 1px solid red;border-left: 1px solid; border-color:red">
+    <div class="col-xs-12 col-sm-3" style="border-right: 1px solid red">
+        <div class="form-group">
+            <b>@Html.DisplayNameFor(model => model.ETipoEntrada)</b>
+            <div class="col-xs-12 col-sm-12">
+                @Html.DisplayFor(model => model.ETipoEntrada)
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-3" style="border-right: 1px solid red">
+        <div class="form-group">
+            <b>@Html.DisplayNameFor(model => model.EcentroEmpresa)</b>
+            <div class="col-xs-12 col-sm-12">
+                @Html.DisplayFor(model => model.EcentroEmpresa)
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-3" style="border-right: 1px solid red">
+        <div class="form-group">
+            <b>@Html.DisplayNameFor(model => model.Diretoria)</b>
+            <div class="col-xs-12 col-sm-12">
+                @Html.DisplayFor(model => model.Diretoria)
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-3">
+        <div class="form-group">
+            <b>@Html.DisplayNameFor(model => model.Orgao)</b>
+            <div class="col-xs-12 col-sm-12">
+                @Html.DisplayFor(model => model.Orgao)
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row" style="margin-top:20px;margin-bottom:20px;border-width: thin;  border-style: solid;border-right: 1px solid red;border-left: 1px solid; border-color:red">
+    <div class="col-xs-12 col-sm-3" style="border-right: 1px solid red">
+        <div class="form-group">
+            <b>@Html.DisplayNameFor(model => model.Cidade)</b>
+            <div class="col-xs-12 col-sm-12">
+                @Html.DisplayFor(model => model.Cidade)
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-3" style="border-right: 1px solid red">
+        <div class="form-group">
+            <b>@Html.DisplayNameFor(model => model.EUnidadeFederacao)</b>
+            <div class="col-xs-12 col-sm-12">
+                @Html.DisplayFor(model => model.EUnidadeFederacao)
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-3" style="border-right: 1px solid red">
+        <div class="form-group">
+            <b>@Html.DisplayNameFor(model => model.LocalAcidente)</b>
+            <div class="col-xs-12 col-sm-12">
+                @Html.DisplayFor(model => model.LocalAcidente)
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-3">
+        <div class="form-group">
+            <b>@Html.DisplayNameFor(model => model.DescLogradouro)</b>
+            <div class="col-xs-12 col-sm-12">
+                @Html.DisplayFor(model => model.DescLogradouro)
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" style="margin-top:20px;margin-bottom:20px;border-width: thin;  border-style: solid;border-right: 1px solid red;border-left: 1px solid; border-color:red">
+    <div class="col-xs-12 col-sm-4" style="border-right: 1px solid red">
+        <div class="form-group">
+            <b>@Html.DisplayNameFor(model => model.NumLogradouro)</b>
+            <div class="col-xs-12 col-sm-12">
+                @Html.DisplayFor(model => model.NumLogradouro)
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-4" style="border-right: 1px solid red">
+        <div class="form-group">
+            <b>@Html.DisplayNameFor(model => model.InstalCemig)</b>
+            <div class="col-xs-12 col-sm-12">
+                @Html.DisplayFor(model => model.InstalCemig)
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-4">
+        <div class="form-group">
+            <b>@Html.DisplayNameFor(model => model.CNPJLocalAcidente)</b>
+            <div class="col-xs-12 col-sm-12">
+                @Html.DisplayFor(model => model.CNPJLocalAcidente)
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="margin-top:20px;margin-bottom:20px;border-width:thin;  border-style: solid;border-right: 1px solid red;border-left: 1px solid; border-color:red">
+    <div class="col-xs-12 col-sm-12">
+        <div class="form-group">
+            <b> Descrição E-Social</b>
+            <div class="col-xs-12 col-sm-12">
+                @Html.DisplayFor(model => model.Esocial.Descricao)
+            </div>
+        </div>
+    </div>
+</div>
+
+<h3><b>Envolvidos</b></h3>
+<h4><b>Empregado Próprio</b></h4>
+
+@foreach (var item in Model.EmpregadoProprio)
+{
+
+    <div class="row" style="margin-top:1px;margin-bottom:20px;border-width: thin;  border-style: solid;border-right: 1px solid red;border-left: 1px solid; border-color:red">
+        <div class="col-xs-12 col-sm-4" style="border-right: 1px solid red">
+            <div class="form-group">
+                <b> Nome do Empregado</b>
+                <div class="col-xs-12 col-sm-12">
+                    @item.NomeEmpregado
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4" style="border-right: 1px solid red">
+            <div class="form-group">
+                <b>Função</b>
+                <div class="col-xs-12 col-sm-12">
+                    @item.funcao
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <b>Matrícula</b>
+                <div class="col-xs-12 col-sm-12">
+                    @item.NumeroPessoal
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<h4><b>Empregado Contratado</b></h4>
+
+@foreach (var item in Model.EmpregadoContratado)
+{
+
+
+    <div class="row" style="margin-top:1px;margin-bottom:1px;border-width: thin;  border-style: solid;border-right: 1px solid blue;border-left: 1px solid; border-color:blue; background-color:steelblue ">
+        <div class="col-xs-12 col-sm-4" style="border-right: 1px solid blue">
+            <div class="form-group">
+                <b>Fornecedor</b>
+                <div class="col-xs-12 col-sm-12">
+                    @item.CodFornecedor
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-4" style="border-right: 1px solid blue">
+            <div class="form-group">
+                <b>Empresa</b>
+                <div class="col-xs-12 col-sm-12">
+                    @item.NomeEmpresa
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <b>Empregado</b>
+                <div class="col-xs-12 col-sm-12">
+                    @item.NomeEmpregado
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top:1px;margin-bottom:20px;border-width: thin; border-style: solid;border-right: 1px solid blue;border-left: 1px solid; border-color:blue ; background-color:steelblue">
+        <div class="col-xs-12 col-sm-4" style="border-right: 1px solid blue">
+            <div class="form-group">
+                <b>CPF</b>
+                <div class="col-xs-12 col-sm-12">
+                    @item.CPF
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-4" style="border-right: 1px solid blue">
+            <div class="form-group">
+                <b>Nascimento</b>
+                <div class="col-xs-12 col-sm-12">
+                    @item.Nascimento
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <b>Função</b>
+                <div class="col-xs-12 col-sm-12">
+                    @item.funcao
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+}
+
+
+
+@foreach (var item in Model.AcidenteNBR)
+{
+    if (item != null)
+    {
+        <h4><b>Codificação NBR-14280</b></h4>
+
+        <div class="row" style="margin-top:1px;margin-bottom:1px;border-width: thin;  border-style: solid;border-right: 1px solid red;border-left: 1px solid; border-color:red">
+            <div class="col-xs-12 col-sm-4" style="border-right: 1px solid red">
+                <div class="form-group">
+                    <b>Tipo de Acidente</b>
+                    <div class="col-xs-12 col-sm-12">
+                        @item.EtipoAcidente
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4" style="border-right: 1px solid red">
+                <div class="form-group">
+                    <b>Atividade</b>
+                    <div class="col-xs-12 col-sm-12">
+                        @item.EAtividade
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    <b>Tipo de Atividade</b>
+                    <div class="col-xs-12 col-sm-12">
+                        @item.TipoAtividade.NomeAtividade
+                    </div>
+                </div>
+            </div>
+        </div>
+                <div class="row" style="margin-top:1px;margin-bottom:1px;border-width: thin;  border-style: solid;border-right: 1px solid red;border-left: 1px solid; border-color:red">
+                    <div class="col-xs-12 col-sm-4" style="border-right: 1px solid red">
+                        <div class="form-group">
+                            <b>Natureza</b>
+                            <div class="col-xs-12 col-sm-12">
+                                @item.Natureza.NomeNatureza
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4" style="border-right: 1px solid red">
+                        <div class="form-group">
+                            <b>Consequencia da Lesão</b>
+                            <div class="col-xs-12 col-sm-12">
+                                @item.EConsequencia
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="form-group">
+                            <b>Função GRIDS</b>
+                            <div class="col-xs-12 col-sm-12">
+                                @item.FuncoaGrids.NomeGrids
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top:1px;margin-bottom:1px;border-width: thin;  border-style: solid;border-right: 1px solid red;border-left: 1px solid; border-color:red">
+                    <div class="col-xs-12 col-sm-4" style="border-right: 1px solid red">
+                        <div class="form-group">
+                            <b>Acidente Impessoal</b>
+                            <div class="col-xs-12 col-sm-12">
+                                @item.AcidentePessoal.NomeAciPessoal
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4" style="border-right: 1px solid red">
+                        <div class="form-group">
+                            <b>Acidente Pessoal</b>
+                            <div class="col-xs-12 col-sm-12">
+                                @item.AcidentePessoal.NomeAciPessoal
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="form-group">
+                            <b>Agente do Acidente</b>
+                            <div class="col-xs-12 col-sm-12">
+                                @item.AgenteAcidente.NomeAgAcidente
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:1px;margin-bottom:1px;border-width: thin;  border-style: solid;border-right: 1px solid red;border-left: 1px solid; border-color:red">
+                    <div class="col-xs-12 col-sm-4" style="border-right: 1px solid red">
+                        <div class="form-group">
+                            <b>Fonte da lesão</b>
+                            <div class="col-xs-12 col-sm-12">
+                                @item.FonteLesao.NomeFonteLesao
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4" style="border-right: 1px solid red">
+                        <div class="form-group">
+                            <b>Fator pessoal Insegurança</b>
+                            <div class="col-xs-12 col-sm-12">
+                                @item.FatorPesInseguranca.FatorInsegNome
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="form-group">
+                            <b>Ato Inseguro</b>
+                            <div class="col-xs-12 col-sm-12">
+                                @item.AtoInseguro.NomeAtoInseg.Substring(0, 38)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:1px;margin-bottom:1px;border-width: thin;  border-style: solid;border-right: 1px solid red;border-left: 1px solid; border-color:red">
+                    <div class="col-xs-12 col-sm-4" style="border-right: 1px solid red">
+                        <div class="form-group">
+                            <b>Condição Ambiental de Insegurança</b>
+                            <div class="col-xs-12 col-sm-12">
+                                @item.CondAmbInseg.NomeConAmbInseg
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4" style="border-right: 1px solid red">
+                        <div class="form-group">
+                            <b>Prejuizo Material</b>
+                            <div class="col-xs-12 col-sm-12">
+                                @item.PrejMaterial.NomePrejMaterial
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="form-group">
+                            <b>Custo</b>
+                            <div class="col-xs-12 col-sm-12">
+                                @item.Custo
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    }
+
+
+
+
+}
+
+
+
+@foreach (var item in Model.LesaoDoenca)
+{
+    if (item != null)
+    {
+        <h4><b>Lesão / Doença</b></h4>
+
+        <div class="row" style="margin-top:1px;margin-bottom:1px;border-width: thin;  border-style: solid;border-right: 1px solid red;border-left: 1px solid; border-color:red">
+            <div class="col-xs-12 col-sm-4" style="border-right: 1px solid red">
+                <div class="form-group">
+                    <b>Descrição da Lesão</b>
+                    <div class="col-xs-12 col-sm-12">
+                        @item.DescricaoLesao
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4" style="border-right: 1px solid red">
+                <div class="form-group">
+                    <b>Boletim de Ocorrência</b>
+                    <div class="col-xs-12 col-sm-12">
+                        @item.BoletimOcor
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    <b>Data do Registro</b>
+                    <div class="col-xs-12 col-sm-12">
+                        @item.DataRegistro
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                        <div class="row" style="margin-top:1px;margin-bottom:1px;border-width: thin;  border-style: solid;border-right: 1px solid red;border-left: 1px solid; border-color:red">
+                            <div class="col-xs-12 col-sm-3" style="border-right: 1px solid red">
+                                <div class="form-group">
+                                    <b>Natureza da Lesão Principal</b>
+                                    <div class="col-xs-12 col-sm-12">
+                                        @item.OrigemLesao.NomeOrigem
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3" style="border-right: 1px solid red">
+                                <div class="form-group">
+                                    <b>Localização da Lesão Principal</b>
+                                    <div class="col-xs-12 col-sm-12">
+                                        @item.PontoLesao.NomePonto
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3" style="border-right: 1px solid red">
+                                <div class="form-group">
+                                    <b>Natureza da Lesão Secundária</b>
+                                    <div class="col-xs-12 col-sm-12">
+                                        @item.OriLeSec.NomeOriSec
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <b>Localização da Lesão Secundária</b>
+                                    <div class="col-xs-12 col-sm-12">
+                                        @item.PontLesSec.NomePontLesSec
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+    }
+}
+
+
+
+
+<p>
+    @*@Html.ActionLink("Edit", "Edit", new { id = Model.RegistroID }) |*@
+    @Html.ActionLink("Retornar", "Index")
+</p>

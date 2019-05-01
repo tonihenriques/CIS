@@ -1,0 +1,150 @@
+﻿@model GISModel.Entidades.Arquivo
+
+@*@using GISModel.Entidades*@
+
+@{
+    ViewBag.Title = "Anexar Arquivo";
+}
+
+
+
+<div id="formCadArquivo">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 widget-container-col ui-sortable">
+            <div class="page-header">
+                <h1>
+                    Cadastro de Arquivo
+                </h1>
+            </div>
+        </div>
+    </div>
+
+    @using (Ajax.BeginForm("Cadastrar", "Arquivo", null, new AjaxOptions { HttpMethod = "POST", OnBegin = "OnBeginCadastrarArquivo", OnSuccess = "OnSuccessCadastrarArquivo", }, new { @id = "formCadastroArquivo", @class = "form-horizontal" }))
+    {
+        @Html.AntiForgeryToken()
+        
+
+    <div class="row">
+
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NomeArquivo, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-6 no-padding-right" })
+                    <div class="col-xs-10">
+                        @*<textarea class="form-control" rows="5" cols="40" id="DescAcidente"></textarea>*@
+                        @Html.EditorFor(model => model.NomeArquivo, new { htmlAttributes = new { @class = "form-control rows=10" } })
+                        @Html.ValidationMessageFor(model => model.NomeArquivo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                @Html.LabelFor(d => d.URL_LogoMarca, new { @class = "form-field-select-3 col-xs-12 col-sm-6 no-padding-right" })
+                <div class="col-xs-12 col-sm-12">
+                    @Html.EditorFor(d => d.URL_LogoMarca, new { htmlAttributes = new { @class = "col-xs-12 col-sm-12", @readonly = "readonly", @id = "URLLogoMarca" } })
+                    @Html.ValidationMessageFor(d => d.URL_LogoMarca, string.Empty, new { @style = "font-size: 10px; color: #a94442;" })
+                </div>
+            </div>
+        </div>
+
+        @*<input type="text" name="RegistroID" id="RegistroID" value=@ViewBag.RegistroID hidden />*@
+    </div>
+
+        <div class="row">
+            <a id="txtAnexo" href="" data-id="@ViewBag.Registro">
+                <i class="ace-icon fa fa-cloud-upload" style="font-size:48px;color:red"></i>
+
+            </a>
+            @*<button class="btn btn-outline-primary" data-id="@ViewBag.Registro" id="botao01">Detalhes</button>*@
+
+
+        </div>
+
+        @*<p>
+                @Html.ActionLink("Edit", "Edit", new { id = Model.ProprioID }) |
+                @Html.ActionLink("Back to List", "Index")
+            </p>*@
+
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-sm-offset-3 align-center">
+                <button class="btn btn-info" id="btnSalvar" type="submit">
+                    <i class="ace-icon fa fa-check bigger-110"></i>
+                    Salvar
+                </button>
+                &nbsp;
+                <button class="btn btn-warning" type="reset">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    Limpar
+                </button>
+                &nbsp;
+                <a class="btn" href="javascript:history.back()">
+                    <i class="ace-icon fa fa-arrow-left"></i>
+                    Voltar
+                </a>
+            </div>
+        </div>
+    }
+ </div>
+
+
+
+
+            <div id="modalArquivo" class="modal fade" style="z-index: 10001">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button id="modalArquivoX" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h3 class="smaller lighter blue no-margin"><i class="ace-icon fa fa-folder-open orange2"></i> Arquivo referente ao Acidente</h3>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div id="modalArquivoCorpoLoading" style="float: right; display: none">
+                                        ...Carregando
+                                        @*<img src="~/Content/Images/ajax-loading.GIF" />*@
+                                        <i id="loadingLogin" style="margin-top: 5px;" class="ace-icon fa fa-spinner fa-spin blue bigger-125"></i>
+                                    </div>
+                                    <div id="modalArquivoCorpo"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <span id="modalArquivoLoading" style="display: none; float: left; padding-top: 6px">
+                                        @*<img src="~/Content/Images/ajax-loading.GIF" />*@
+                                        <i id="loadingLogin" style="margin-top: 5px;" class="ace-icon fa fa-spinner fa-spin blue bigger-125"></i>
+                                    </span>
+
+                                    <button id="modalArquivoFechar" class="btn btn-sm btn-default pull-right" data-dismiss="modal">
+                                        <i class="ace-icon fa fa-times"></i>
+                                        Fechar
+                                    </button>
+
+                                    <button id="modalArquivoProsseguir" class="btn btn-sm btn-info" style="right: 5px; left: auto">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        Prosseguir
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @section Scripts {
+                @Scripts.Render("~/bundles/jQ_dataTable")
+                @Scripts.Render("~/bundles/ace_js_fileUpload")
+                <script src="~/Scripts/jQuery/inputmask.js"></script>
+                <script src="~/Scripts/jQuery/jquery.inputmask.js"></script>                
+                <script src="~/Scripts/Custom/Temp/Novo.js"></script>
+            }
+
+            @section Stylesheets {
+                @Styles.Render("~/bundles/ace_css_fileUpload")
+            }

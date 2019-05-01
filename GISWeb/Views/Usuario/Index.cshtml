@@ -1,0 +1,110 @@
+﻿@using GISModel.Entidades
+
+@{
+    ViewBag.Title = "Listagem de Usuários";
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <h3 class="header smaller lighter blue">
+            Listagem de Usuários
+            <a href="@Url.Action("Novo", "Usuario")" class="btn btn-white btn-info btn-bold" style="float: right; margin-top: -2px;">
+                <i class="ace-icon fa fa-plus bigger-120 blue"></i>
+                Novo Usuário
+            </a>
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+
+        @{
+            Html.RenderPartial("_MensagensDeRetorno");
+        }
+
+        @if (ViewBag.Usuarios != null)
+        {
+            <div>
+                <table id="dynamic-table" class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Login</th>
+                            <th>Nome</th>
+                            <th class="hidden-480">E-mail</th>
+                            <th class="hidden-480">Data Cadastro</th>
+                            <th class="hidden-480">Usuário Cadastro</th>
+                            <th width="89px"></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (Usuario iUsr in ViewBag.Usuarios)
+                        {
+                            <tr id="linha-@iUsr.UniqueKey">
+                                <td>@iUsr.Login</td>
+                                <td>@iUsr.Nome</td>
+                                <td class="hidden-480">@iUsr.Email</td>
+                                <td class="hidden-480">@iUsr.DataInclusao</td>
+                                <td class="hidden-480">@iUsr.UsuarioInclusao</td>
+                                <td>
+                                    <div class="hidden-sm hidden-xs action-buttons">
+                                        <a href='#' class="blue" onclick="BuscarPerfis('@iUsr.UniqueKey', '@iUsr.Nome');">
+                                            <i class="ace-icon fa fa-users bigger-130"></i>
+                                        </a>
+
+                                        <a href='@Url.Action("Edicao", "Usuario", new { id = @iUsr.UniqueKey })' class="green">
+                                            <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                        </a>
+
+                                        <a class="red" href="#" onclick="DeletarMenu('@iUsr.UniqueKey', '@iUsr.Nome');">
+                                            <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                        </a>
+                                    </div>
+
+                                    <div class="hidden-md hidden-lg">
+                                        <div class="inline pos-rel">
+                                            <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
+                                                <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                                            </button>
+
+                                            <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                                <li>
+                                                    <a href='@Url.Action("Edicao", "Usuario", new { id = @iUsr.UniqueKey })' class="tooltip-success" data-rel="tooltip" title="Edit">
+                                                        <span class="green">
+                                                            <i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+                                                        </span>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="#" class="tooltip-error" onclick="DeletarMenu('@iUsr.UniqueKey', '@iUsr.Nome');" data-rel="tooltip" title="Delete">
+                                                        <span class="red">
+                                                            <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        }
+
+    </div>
+</div>
+
+<div class="conteudoAjax"></div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jQ_dataTable")
+    @Scripts.Render("~/bundles/jQ_tableTools")
+    <script src="~/Scripts/Custom/Menu/Listagem.js"></script>
+}

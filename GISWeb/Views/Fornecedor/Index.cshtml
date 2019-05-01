@@ -1,0 +1,109 @@
+﻿@using GISModel.Entidades
+
+@{
+    ViewBag.Title = "Listagem de Fornecedores";
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <h3 class="header smaller lighter blue">
+            Listagem dos Fornecedores
+            <a href="@Url.Action("Novo", "Fornecedor")" class="btn btn-white btn-info btn-bold" style="float: right; margin-top: -2px;">
+                <i class="ace-icon fa fa-plus bigger-120 blue"></i>
+                Novo Fornecedor
+            </a>
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+
+        @{
+            Html.RenderPartial("_MensagensDeRetorno");
+        }
+
+        @if (ViewBag.Fornecedores != null && ViewBag.Fornecedores.Count > 0)
+        {
+            <div>
+                <table id="dynamic-table" class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>CNPJ</th>
+                            <th>Nome Fansasia</th>
+                            <th>Data de Cadastro</th>
+                            <th class="hidden-480">Usuário de Cadastro</th>
+                            <th width="89px"></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (Fornecedor iFornecedor in ViewBag.Fornecedores)
+                        {
+                            <tr>
+                                <td>@iFornecedor.CNPJ</td>
+                                <td>@iFornecedor.NomeFantasia</td>
+                                <td>@iFornecedor.DataInclusao</td>
+                                <td class="hidden-480">@iFornecedor.UsuarioInclusao</td>
+                                <td class="align-center">
+                                    <div class="hidden-sm hidden-xs action-buttons">
+                                        <a href='@Url.Action("Edicao", "Fornecedor", new { id = @iFornecedor.UniqueKey })' class="green">
+                                            <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                        </a>
+
+                                        <a class="red" href="#">
+                                            <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                        </a>
+                                    </div>
+
+                                    <div class="hidden-md hidden-lg align-center">
+                                        <div class="inline pos-rel">
+                                            <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
+                                                <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                                            </button>
+
+                                            <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                                <li>
+                                                    <a href='@Url.Action("Edicao", "Fornecedor", new { id = @iFornecedor.UniqueKey })' class="green">
+                                                        <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a class="red" href="#">
+                                                        <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-warning">
+                <strong>
+                    <i class="ace-icon fa fa-meh-o"></i>
+                    Oops!
+                </strong>
+
+                No momento, nenhum fornecedor encontrado.
+                <br>
+            </div>
+        }
+
+
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jQ_dataTable")
+    <script src="~/Scripts/Custom/Fornecedor/Listagem.js"></script>
+}

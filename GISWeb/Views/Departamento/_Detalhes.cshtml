@@ -1,0 +1,34 @@
+﻿@model GISModel.Entidades.Departamento
+
+@if (Model != null)
+{
+
+    <table class="table table-striped table-bordered table-hover">
+        <tr>
+            <td><strong>Código</strong></td>
+            <td>@Model.Codigo</td>
+        </tr>
+        <tr>
+            <td><strong>Sigla</strong></td>
+            <td>@Model.Sigla</td>
+        </tr>
+        <tr>
+            <td><strong>Descrição</strong></td>
+            <td>@Model.Descricao</td>
+        </tr>
+        <tr>
+            <td><strong>Situação</strong></td>
+            <td>@Model.Status</td>
+        </tr>
+        <tr>
+            <td><strong>Empresa</strong></td>
+            <td>@Model.Empresa.NomeFantasia</td>
+        </tr>
+        <tr>
+            <td><strong>Vinculado ao departamento</strong></td>
+            <td>@Model.DepartamentoVinculado</td>
+        </tr>
+    </table>
+
+}
+

@@ -1,0 +1,193 @@
+﻿@using GISModel.Entidades
+@{
+    ViewBag.Title = "Registros de Acidentes";
+}
+
+<h2>Registro de Acidentes</h2>
+
+
+
+<div class="row">
+    <div class="col-xs-12">
+        <h3 class="header smaller lighter blue">
+            
+            <a href="@Url.Action("Novo", "Registro")" class="btn btn-white btn-info btn-bold" style="float: right; margin-top: -2px;">
+                <i class="ace-icon fa fa-plus bigger-120 blue"></i>
+                Cadastrar novo Acidente
+            </a>
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+
+        @{
+        Html.RenderPartial("_MensagensDeRetorno");
+        }
+        <p>
+            @using (Html.BeginForm("AnexaRelatorio", "Registro", FormMethod.Get))
+
+            {
+
+
+            }
+            </p>
+
+            @if (ViewBag.TRegistros != null)
+                {
+                    <div>
+                        <table id="dynamic-table" class="table table-striped table-bordered table-hover">
+                            <thead>
+                        <tr>
+                            <th class="center">
+                                <label class="pos-rel">
+                                    <input type="checkbox" class="ace" />
+                                    <span class="lbl"></span>
+                                </label>
+                            </th>
+                            @*<th>Empregado</th>*@
+                            <th>
+                                <p>Orgao</p>
+                                </th>
+                                <th>
+                                    <p>Data</p>
+                                </th>
+                                <th>
+                                    <p>Horas</p>
+                                </th>
+                                <th>
+                                    <p>Tipo de Acidente</p>
+                                </th>
+                                <th>
+                                    <p>Descrição do Acidente</p>
+                                </th>
+
+                                @*<th class="hidden-480">Descrição</th>*@
+                                <th width="200px">Cadastros</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+
+               @foreach (Registro iRegistro in ViewBag.TRegistros)
+                {
+                    //DateTime filtro = DateTime.Today.AddDays(-2);
+                    //ViewBag.filtro = filtro;
+                    //if (iRegistro.Data <= filtro)
+                    //{
+                    <tr>
+                    <td class="center">
+                        <label class="pos-rel">
+                            <input type="checkbox" class="ace" />
+                            <span class="lbl"></span>
+                        </label>
+                    </td>
+
+                    <td>@iRegistro.Orgao</td>
+                    <td>@iRegistro.Data</td>
+                    <td>@iRegistro.Horas</td>
+                    <td>@iRegistro.ETipoAcidente</td>
+                    <td>@iRegistro.DescAcidente.Substring(0, 20)</td>
+
+
+                  @*<td class="hidden-480">@iDepartamento.Descricao</td>*@
+
+                    <td>
+                    <div class="hidden-sm hidden-xs action-buttons">
+                        <a class="blue" href="@Url.Action("Novo","EmpProprio", new {id=iRegistro.RegistroID } )">
+                            <i title="Empregado Próprio" class="ace-icon  fa fa fa-child bigger-230"></i>
+                        </a>
+
+                        <a href='@Url.Action("Novo", "EmpContratado", new { id = @iRegistro.RegistroID })' class="green">
+                            <i title="Empregado Contratado" class="ace-icon fa fa fa-child bigger-230"></i>
+                        </a>
+
+                        <a class="red2" href='@Url.Action("Novo","AcidenteNBR",new { id=iRegistro.RegistroID})'>
+                            <i title="Codificar" class="ace-icon fa fa-list-alt bigger-230"></i>
+                        </a>
+                        <a class="" href='@Url.Action("Novo","LesDoen",new { id=iRegistro.RegistroID})'>
+                            <i title="Lesões ou Doenças" class="ace-icon  fa fa-wheelchair bigger-230"></i>
+                        </a>
+                        <a class="" href='@Url.Action("Novo","Cat",new { id=iRegistro.RegistroID})'>
+                            <i title="CAT" class="ace-icon fa fa-user-md bigger-230"></i>
+                        </a>
+                        @*<a class="" href='@Url.Action("Details","Registro",new { id=iRegistro.RegistroID})'>
+                            <i title="Detalhes" class="ace-icon fa fa-eye bigger-230"></i>
+                        </a>*@
+                    </div>
+
+                    <div class="hidden-md hidden-lg">
+                        <div class="inline pos-rel">
+                            <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
+                                <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                            </button>
+
+                            <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                <li>
+                                    <a href="@Url.Action("Novo","EmpProprio", new {id=iRegistro.RegistroID } )" class="tooltip-info" data-rel="tooltip" title="Empregado Próprio">
+                                        <span class="blue">
+                                            <i class="ace-icon fa fa fa-child bigger-120"></i>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("Novo", "EmpContratado", new { id = @iRegistro.RegistroID })' class="tooltip-info" data-rel="tooltip" title="Empregado Contratado">
+                                        <span class="green"><i class="ace-icon  fa fa-child bigger-120"></i></span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("Novo","AcidenteNBR",new { id=iRegistro.RegistroID})' class="tooltip-info" data-rel="tooltip" title="Codificar Acidente">
+                                        <span><i class="ace-icon fa fa-list-alt bigger-120"></i></span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <span class="blue">
+                                            <i class="ace-icon fa fa-user-md bigger-120"></i>
+                                        </span>
+                                    </a>
+                                </li>
+
+                                @*<li>
+                                    @Html.ActionLink("Hello", "Edicao", "Empresa", new { i = "123" }, null)
+                                    <a href='@Url.Action("Edicao", "Empregadoes")' class="tooltip-success" data-rel="tooltip" title="Edit">
+                                        <span class="green">
+                                            <i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+                                        </span>
+                                    </a>
+                                </li>*@
+
+                                @*<li>
+                                    <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
+                                        <span class="red">
+                                            <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                        </span>
+                                    </a>
+                                </li>*@
+                            </ul>
+                        </div>
+                    </div>
+                    </td>
+                    </tr>
+        //}
+
+                }
+
+                    </tbody>
+                    </table>
+                </div>
+             }
+
+        <p>Data limite de cadastro: @ViewBag.filtro // Corrigir a regra aqui</p>
+
+    </div>
+</div>
+
+@section Scripts {
+
+}
+
+
+
+

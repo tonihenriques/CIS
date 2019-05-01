@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="6ce28b11-cbce-45fb-b455-536592f3189d" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://ec2-13-58-74-236.us-east-2.compute.amazonaws.com/SST.Services/SVC/Suporte.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="Suporte.disco" MetadataType="Disco" ID="723f9ac4-0755-4a8a-acf1-601d2ff417ea" SourceId="1" SourceUrl="http://ec2-13-58-74-236.us-east-2.compute.amazonaws.com/SST.Services/SVC/Suporte.svc?disco" />
+    <MetadataFile FileName="Suporte.xsd" MetadataType="Schema" ID="4ee80704-e5cf-4fe9-ad33-d5045dc193d1" SourceId="1" SourceUrl="http://ec2-13-58-74-236.us-east-2.compute.amazonaws.com/SST.Services/SVC/Suporte.svc?xsd=xsd1" />
+    <MetadataFile FileName="Suporte.wsdl" MetadataType="Wsdl" ID="ac138ff9-bf83-43a4-812a-3804e9a5449f" SourceId="1" SourceUrl="http://ec2-13-58-74-236.us-east-2.compute.amazonaws.com/SST.Services/SVC/Suporte.svc?wsdl" />
+    <MetadataFile FileName="Suporte1.xsd" MetadataType="Schema" ID="c011e667-72b7-4d7e-af13-0c3e67610d67" SourceId="1" SourceUrl="http://ec2-13-58-74-236.us-east-2.compute.amazonaws.com/SST.Services/SVC/Suporte.svc?xsd=xsd0" />
+    <MetadataFile FileName="Suporte1.wsdl" MetadataType="Wsdl" ID="2eb751d8-98a4-4339-b108-141161f046e5" SourceId="1" SourceUrl="http://ec2-13-58-74-236.us-east-2.compute.amazonaws.com/SST.Services/SVC/Suporte.svc?wsdl=wsdl0" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

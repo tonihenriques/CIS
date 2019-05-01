@@ -1,0 +1,62 @@
+﻿
+@model GISModel.DTO.Inbox.ItemInbox
+
+@using (Ajax.BeginForm("Assumir", "Inbox", null, new AjaxOptions()
+{
+    HttpMethod = "POST",
+    LoadingElementId = "modalAssumirLoading",
+    OnSuccess = "OnSuccessAssumir"
+},
+new
+{
+    @id = "formAprovacao",
+    @class = "form-horizontal"
+}))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(i => i.UniqueKey, new { @Value = ViewBag.UniqueKey })
+    @Html.HiddenFor(i => i.Responsavel, new { @Value = ViewBag.Responsavel })
+    
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12">
+            <h5 class="widget-title lighter smaller" style="vertical-align: top">
+                <i class="ace-icon fa fa-barcode green"></i>
+                Código: <span class="green" style="font-weight: 600; text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.15)">@ViewBag.Codigo </span>
+            </h5>
+
+            <h6 class="widget-title lighter smaller" style="margin-left: 20px; line-height: 10px">
+                <i class="ace-icon fa fa-ticket green"></i>
+                Passo: <span style="font-weight: 600">@ViewBag.Status</span>
+            </h6>
+        </div>
+    </div>
+
+
+    <div class="hr hr-dotted"></div>
+    <div class="space-10"></div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12">
+            <div class="form-group">
+                <span class="form-field-select-3 col-xs-12 no-padding-right">
+                    <i class="ace-icon fa fa-pencil-square-o green"></i>
+                    @Html.LabelFor(i => i.Comentarios)
+
+                    <span class="action-buttons">
+                        &nbsp;
+                        <a>
+                            <i class="ace-icon fa fa-info-circle bigger-110 blue CustomTooltip" title="Esta mensagem será salva no histórico de workflow do incidente e também será exibida na caixa de entrada do usuário do próximo passo do fluxo, caso exista."></i>
+                        </a>
+                    </span>
+                </span>
+                <div class="col-xs-12 col-sm-12">
+                    <div class="clearfix">
+                        @Html.TextAreaFor(i => i.Comentarios, new { @class = "form-control col-xs-12 col-sm-12", @placeholder = "Espaço reservado para suas considerações.", @rows = "3" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}

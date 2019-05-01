@@ -1,0 +1,150 @@
+﻿@model GISModel.Entidades.LesDoen
+
+@{
+    ViewBag.Title = "Lesao/Doença";
+}
+
+<h2>Cadastrar Lesão ou Doença</h2>
+
+<div id="formCadLesaoDoenca">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 widget-container-col ui-sortable">
+            <div class="page-header">
+                <h1>
+                    Codificar Lesão/Doença
+
+                </h1>
+            </div>
+        </div>
+    </div>
+
+    @using (Ajax.BeginForm("Cadastrar", "LesDoen", null, new AjaxOptions { HttpMethod = "POST", OnBegin = "OnBeginCadastrarLesDoen", OnSuccess = "OnSuccessCadastrarLesDoen", }, new { @id = "formCadastroLesDoen", @class = "form-horizontal" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DescricaoLesao, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    @*@Html.LabelFor(model => model.DescricaoLesao, htmlAttributes: new { @class = "chosen-select form-control tag-input-style", @autocomplete = "on", @id = "ddlLesao", @disabled = "disabled" })*@
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EditorFor(model => model.DescricaoLesao, new { htmlAttributes = new { @class = "form-control", @id = "ddlLesao" } })
+                        @Html.ValidationMessageFor(model => model.DescricaoLesao, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.BoletimOcor, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-6 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EnumDropDownListFor(model => model.BoletimOcor, htmlAttributes: new { @class = "form-control", id = "ddlBoletim" })
+                        @Html.ValidationMessageFor(model => model.BoletimOcor, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DataRegistro, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-6 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EditorFor(model => model.DataRegistro, new { htmlAttributes = new { @class = "form-control", id = "ddlData", Disabled = "disabled" } })
+                        @*@Html.ValidationMessageFor(model => model.DataRegistro, "", new { @class = "text-danger" })*@
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PontoLesaoID, "Natureza da Lesão", htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-6 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.DropDownList("PontoLesaoID", null, "", htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.PontoLesaoID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.OrigemLesaoID, "Localização da Lesao", htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-6 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.DropDownList("OrigemLesaoID", null, "", htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.OrigemLesaoID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PontLesSecID, "Natureza Secundária", htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-6 no-padding-right" })
+                    <div class="col-xs-12 co-sm-12">
+                        @Html.DropDownList("PontLesSecID", null, "", htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.PontLesSecID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.OriLeSecID, "Localização Secundária", htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-6 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.DropDownList("OriLeSecID", null, "", htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.OriLeSecID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.RegistroID, "RegistroID", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">*@
+        @*@Html.DropDownList("RegistroID", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.RegistroID, "", new { @class = "text-danger" })*@
+
+        <input type="text" name="RegistroID" id="RegistroID" value=@ViewBag.RegisID hidden />
+
+        @*</div>
+            </div>*@
+
+
+        <br /><br />
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-sm-offset-3 align-center">
+                <button class="btn btn-info" id="btnSalvar" type="submit">
+                    <i class="ace-icon fa fa-check bigger-110"></i>
+                    Salvar
+                </button>
+                &nbsp;
+                <button class="btn btn-warning" type="reset">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    Limpar
+                </button>
+                &nbsp;
+                <a class="btn" href="javascript:history.back()">
+                    <i class="ace-icon fa fa-arrow-left"></i>
+                    Voltar
+                </a>
+            </div>
+        </div>
+
+
+
+
+
+        @*<div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Gravar" class="btn btn-default" />
+                </div>
+            </div>*@
+
+    }
+</div>
+
+@*<div>
+        @Html.ActionLink("Retornar", "Index")
+    </div>*@
+
+@section scripts{
+
+    <script src="~/Scripts/Custom/Lesdoen/Novo.js"></script>
+
+}

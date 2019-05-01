@@ -1,0 +1,102 @@
+﻿@using GISModel.Entidades
+
+@{
+    ViewBag.Title = "Lista de Acidentes";
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <h3 class="header smaller lighter blue">
+            Empresas
+            <a href="@Url.Action("Novo", "Registro")" class="btn btn-white btn-info btn-bold" style="float: right; margin-top: -2px;">
+                <i class="ace-icon fa fa-plus bigger-120 blue"></i>
+              
+            </a>
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+
+        @{
+        Html.RenderPartial("_MensagensDeRetorno");
+        }
+
+        @if (ViewBag.ListaAcidentes != null)
+    {
+        <div>
+            <table id="dynamic-table" class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th class="center">
+                            <label class="pos-rel">
+                                <input type="checkbox" class="ace" />
+                                <span class="lbl"></span>
+                            </label>
+                        </th>
+                        @*<th>Empregado</th>*@
+                        <th>
+                            <p>Orgao</p>
+                        </th>
+                        <th>
+                            <p>Data</p>
+                        </th>
+                        <th>
+                            <p>Horas</p>
+                        </th>
+                        <th>
+                            <p>Tipo de Acidente</p>
+                        </th>
+                        <th>
+                            <p>Descrição do Acidente</p>
+                        </th>
+
+                        @*<th class="hidden-480">Descrição</th>*@
+                        @*<th width="240px">Cadastros</th>*@
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (Registro iRegistro in ViewBag.TRegistros)
+                {
+                    //DateTime filtro = DateTime.Today.AddDays(-2);
+                    //ViewBag.filtro = filtro;
+                    //if (iRegistro.Data <= filtro)
+                    //{
+                    <tr>
+                        <td class="center">
+                            <label class="pos-rel">
+                                <input type="checkbox" class="ace" />
+                                <span class="lbl"></span>
+                            </label>
+                        </td>
+
+                        <td>@iRegistro.Orgao</td>
+                        <td>@iRegistro.Data</td>
+                        <td>@iRegistro.Horas</td>
+                        <td>@iRegistro.ETipoAcidente</td>
+                        <td>@iRegistro.DescAcidente.Substring(0, 20)</td>
+
+
+                        @*<td class="hidden-480">@iDepartamento.Descricao</td>*@
+
+                        
+                    </tr>
+                //}
+
+            }
+
+                </tbody>
+            </table>
+        </div>
+}
+
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jQ_dataTable")
+    <script src="~/Scripts/Custom/Registro/Listagem.js"></script>
+}

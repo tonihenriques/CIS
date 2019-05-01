@@ -1,0 +1,144 @@
+﻿@model GISModel.Entidades.Registro
+
+@*@using GISModel.Entidades*@
+
+@{
+    ViewBag.Title = "Anexar Arquivo";
+}
+
+
+
+<div>
+    <h4>Anexar Arquivo</h4>
+    <hr />
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cidade)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cidade)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DescAcidente)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DescAcidente)
+        </dd>
+
+        <dt>
+            @Html.DisplayFor(model => model.Orgao)
+        </dt>
+
+        <dd>
+            @Html.DisplayNameFor(model => model.Orgao)
+        </dd>
+
+        <dt>
+        </dt>
+        &nbsp;
+        
+        
+        <dd>
+            <a id="txtAnexo" href="" data-id="@ViewBag.Registro">
+                <i class="ace-icon fa fa-cloud-upload" style="font-size:48px;color:red"></i>
+
+            </a>
+            @*<button class="btn btn-outline-primary" data-id="@ViewBag.Registro" id="botao01">Detalhes</button>*@
+
+        </dd>
+
+
+    </dl>
+</div>
+@*<p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.ProprioID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>*@
+
+
+<div class="row">
+    <div class="col-xs-12 col-sm-6 col-sm-offset-3 align-center">
+        @*<button class="btn btn-info" id="btnSalvar" type="submit">
+            <i class="ace-icon fa fa-check bigger-110"></i>
+            Salvar
+        </button>
+        &nbsp;
+        <button class="btn btn-warning" type="reset">
+            <i class="ace-icon fa fa-undo bigger-110"></i>
+            Limpar
+        </button>
+        &nbsp;*@
+        <a class="btn" href="javascript:history.back()">
+            <i class="ace-icon fa fa-arrow-left"></i>
+            Voltar
+        </a>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div id="modalArquivo" class="modal fade" style="z-index: 10001">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="modalArquivoX" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter blue no-margin"><i class="ace-icon fa fa-folder-open orange2"></i> Arquivo referente ao Acidente</h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div id="modalArquivoCorpoLoading" style="float: right; display: none">
+                            ...Carregando
+                            @*<img src="~/Content/Images/ajax-loading.GIF" />*@
+                            <i id="loadingLogin" style="margin-top: 5px;" class="ace-icon fa fa-spinner fa-spin blue bigger-125"></i>
+                        </div>
+                        <div id="modalArquivoCorpo"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <span id="modalArquivoLoading" style="display: none; float: left; padding-top: 6px">
+                            @*<img src="~/Content/Images/ajax-loading.GIF" />*@
+                            <i id="loadingLogin" style="margin-top: 5px;" class="ace-icon fa fa-spinner fa-spin blue bigger-125"></i>
+                        </span>
+
+                        <button id="modalArquivoFechar" class="btn btn-sm btn-default pull-right" data-dismiss="modal">
+                            <i class="ace-icon fa fa-times"></i>
+                            Fechar
+                        </button>
+
+                        <button id="modalArquivoProsseguir" class="btn btn-sm btn-info" style="right: 5px; left: auto">
+                            <i class="ace-icon fa fa-check"></i>
+                            Prosseguir
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jQ_dataTable")
+    @Scripts.Render("~/bundles/ace_js_fileUpload")
+    <script src="~/Scripts/jQuery/inputmask.js"></script>
+    <script src="~/Scripts/jQuery/jquery.inputmask.js"></script>
+    <script src="~/Scripts/Custom/Registro/Anexar.js"></script>
+    <script src="~/Scripts/Custom/Registro/Listagem.js"></script>
+}
+
+@section Stylesheets {
+    @Styles.Render("~/bundles/ace_css_fileUpload")
+}

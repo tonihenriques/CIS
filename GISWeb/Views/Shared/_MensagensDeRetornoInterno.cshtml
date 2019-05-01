@@ -1,0 +1,77 @@
+﻿@using GISHelpers.Utils
+
+<div class="row">
+    <div class="col-sm-12">
+
+        @if (!string.IsNullOrWhiteSpace(Severino.RecuperaCookie("MensagemSucesso")))
+        {
+            <div class="alert alert-success" style="margin-top: 12px;">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="ace-icon fa fa-times"></i>
+                </button>
+
+                <strong>
+                    <i class="ace-icon fa fa-check-circle"></i>
+                    Sucesso!
+                </strong>
+
+                @Html.Raw(Severino.RecuperaCookie("MensagemSucesso", true))
+                <br />
+            </div>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(Severino.RecuperaCookie("MensagemErro")))
+        {
+            <div class="alert alert-danger" style="margin-top: 12px;">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="ace-icon fa fa-times"></i>
+                </button>
+
+                <strong>
+                    <i class="ace-icon fa fa-times-circle"></i>
+                    Oops! Ocorreu algo errado
+                </strong>
+
+                @Html.Raw(Severino.RecuperaCookie("MensagemErro", true))
+                <br />
+            </div>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(Severino.RecuperaCookie("MensagemAlerta")))
+        {
+            <div class="alert alert-warning" style="margin-top: 12px;">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="ace-icon fa fa-times"></i>
+                </button>
+
+                <strong>
+                    <i class="ace-icon fa fa-exclamation-circle"></i>
+                    Alerta!
+                </strong>
+
+                @Html.Raw(Severino.RecuperaCookie("MensagemAlerta", true))
+                <br />
+            </div>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(Severino.RecuperaCookie("MensagemInformacao")))
+        {
+            <div class="alert alert-info" style="margin-top: 12px;">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="ace-icon fa fa-times"></i>
+                </button>
+
+                <strong>
+                    <i class="ace-icon fa fa-info-circle"></i>
+                    Informação
+                </strong>
+
+                @Html.Raw(Severino.RecuperaCookie("MensagemInformacao", true))
+                <br />
+            </div>
+        }
+
+    </div><!-- /.col -->
+
+</div>
+

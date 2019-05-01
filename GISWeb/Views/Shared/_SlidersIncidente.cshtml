@@ -1,0 +1,352 @@
+﻿<div id="modalDetalhesIncidente" class="modal fade" style="overflow: auto">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="modalDetalhesIncidenteX" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter grey no-margin">
+                    <span class="hidden-800">Detalhes </span>
+                    <b><span id="modalDetalhesIncidenteTituloName"></span></b>
+                    <span id="modalDetalhesIncidenteCorpoLoading" style="float: right; font-size: 10px; padding-right: 5px; padding-top: 4px; vertical-align: middle">
+                        <span id="modalDetalhesIncidenteCorpoLoadingTexto" style="padding-right: 5px"></span>
+                        <img src="~/Images/slack_loading.gif" width="25px" />
+                    </span>
+                </h3>
+                <h6 id="modalDetalhesIncidenteTitulo" style="color: #777; font-size: 11px; padding-left: 2px; margin: 5px 0px -5px 0px"></h6>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div id="modalDetalhesIncidenteCorpo"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalAprovar" class="modal fade" style="overflow: auto">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="modalAprovarX" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter grey no-margin"><i class="ace-icon fa fa-random green"></i> Workflow de Aprovação</h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div id="modalAprovarCorpoLoading" style="float: right; display: none">...Carregando <img src="~/Images/slack_loading.gif" width="28px" /></div>
+                        <div id="modalAprovarCorpo"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <span id="modalAprovarLoading" style="display: block; float: left; padding-top: 6px">
+                            <img src="~/Images/slack_loading.gif" width="28px" />
+                        </span>
+
+                        <button id="modalAprovarFechar" class="btn btn-sm btn-default pull-right" data-dismiss="modal">
+                            <i class="ace-icon fa fa-times"></i>
+                            Fechar
+                        </button>
+
+                        <button id="modalAprovarProsseguir" class="btn btn-sm btn-success" style="right: 5px; left: auto">
+                            <i class="ace-icon fa fa-check"></i>
+                            Confirmar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalAssumir" class="modal fade" style="overflow: auto">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="modalAssumirX" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter grey no-margin"><i class="ace-icon fa fa-random green"></i> Assumir Incidente</h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div id="modalAssumirCorpoLoading" style="float: right; display: none">...Carregando <img src="~/Images/slack_loading.gif" width="28px" /></div>
+                        <div id="modalAssumirCorpo"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <span id="modalAssumirLoading" style="display: block; float: left; padding-top: 6px">
+                            <img src="~/Images/slack_loading.gif" width="28px" />
+                        </span>
+
+                        <button id="modalAssumirFechar" class="btn btn-sm btn-default pull-right" data-dismiss="modal">
+                            <i class="ace-icon fa fa-times"></i>
+                            Fechar
+                        </button>
+
+                        <button id="modalAssumirProsseguir" class="btn btn-sm btn-success" style="right: 5px; left: auto">
+                            <i class="ace-icon fa fa-check"></i>
+                            Confirmar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalRejeitar" class="modal fade" style="overflow: auto">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="modalRejeitarX" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter grey no-margin"><i class="ace-icon fa fa-random red"></i> Workflow de Rejeição</h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div id="modalRejeitarCorpoLoading" style="float: right; display: none">...Carregando <img src="~/Images/slack_loading.gif" width="28px" /></div>
+                        <div id="modalRejeitarCorpo"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <span id="modalRejeitarLoading" style="display: none; float: left; padding-top: 6px">
+                            <img src="~/Images/slack_loading.gif" width="28px" />
+                        </span>
+
+                        <button id="modalRejeitarFechar" class="btn btn-sm btn-default pull-right" data-dismiss="modal">
+                            <i class="ace-icon fa fa-times"></i>
+                            Fechar
+                        </button>
+
+                        <button id="modalRejeitarProsseguir" class="btn btn-sm btn-danger" style="right: 5px; left: auto">
+                            <i class="ace-icon fa fa-remove"></i>
+                            Confirmar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalReassign" class="modal fade" style="overflow: auto">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="modalReassignX" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter grey no-margin"><i class="ace-icon fa fa-random blue"></i> Atribuição de Responsabilidade</h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div id="modalReassignCorpoLoading" style="float: right; display: none">...Carregando <img src="~/Images/slack_loading.gif" width="28px" /></div>
+                        <div id="modalReassignCorpo"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <span id="modalReassignLoading" style="display: none; float: left; padding-top: 6px">
+                            <img src="~/Images/slack_loading.gif" width="28px" />
+                        </span>
+
+                        <button id="modalReassignFechar" class="btn btn-sm btn-default pull-right" data-dismiss="modal">
+                            <i class="ace-icon fa fa-times"></i>
+                            Fechar
+                        </button>
+
+                        <button id="modalReassignProsseguir" class="btn btn-sm btn-info" style="right: 5px; left: auto">
+                            <i class="ace-icon fa fa-mail-forward"></i>
+                            Confirmar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalRemoverWf" class="modal fade" style="overflow: auto">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="modalRemoverWfX" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter grey no-margin"><i class="ace-icon fa fa-random red"></i> Remoção do Workflow</h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div id="modalRemoverWfCorpoLoading" style="float: right; display: none">...Carregando <img src="~/Images/slack_loading.gif" width="28px" /></div>
+                        <div id="modalRemoverWfCorpo"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <span id="modalRemoverWfLoading" style="display: none; float: left; padding-top: 6px">
+                            <img src="~/Images/slack_loading.gif" width="28px" />
+                        </span>
+
+                        <button id="modalRemoverWfFechar" class="btn btn-sm btn-default pull-right" data-dismiss="modal">
+                            <i class="ace-icon fa fa-times"></i>
+                            Fechar
+                        </button>
+
+                        <button id="modalRemoverWfProsseguir" class="btn btn-sm btn-danger" style="right: 5px; left: auto">
+                            <i class="ace-icon fa fa-times-circle"></i>
+                            Confirmar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalArquivo" class="modal fade" style="overflow: auto">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="modalArquivoX" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter grey no-margin">
+                    <i class="ace-icon fa fa-file-pdf-o blue"></i>
+                    <i class="ace-icon fa fa-file-text-o blue"></i>
+                    <i class="ace-icon fa fa-file-excel-o blue"></i>
+                    <i class="ace-icon fa fa-file-picture-o blue"></i>
+                    Arquivos
+                </h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div id="modalArquivoCorpoLoading" style="float: right; display: none">...Carregando <img src="~/Images/slack_loading.GIF" width="28px" /></div>
+                        <div id="modalArquivoCorpo"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <span id="modalArquivoLoading" style="display: none; float: left; padding-top: 6px">
+                            <img src="~/Images/slack_loading.gif" width="28px" />
+                        </span>
+
+                        <button id="modalArquivoFechar" class="btn btn-sm btn-default pull-right">
+                            <i class="ace-icon fa fa-times"></i>
+                            Fechar
+                        </button>
+
+                        <button id="modalArquivoProsseguir" class="btn btn-sm btn-info" style="right: 5px; left: auto">
+                            <i class="ace-icon fa fa-check"></i>
+                            Prosseguir
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalNewEmpProp" class="modal fade" style="overflow: auto">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="modalNewEmpPropX" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter grey no-margin"><i class="ace-icon fa fa-random green"></i> Cadastro de Empregado Próprio</h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div id="modalNewEmpPropCorpoLoading" style="float: right; display: none">...Carregando <img src="~/Images/slack_loading.gif" width="28px" /></div>
+                        <div id="modalNewEmpPropCorpo"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <span id="modalNewEmpPropLoading" style="display: none; float: left; padding-top: 6px">
+                            <img src="~/Images/slack_loading.gif" width="28px" />
+                        </span>
+
+                        <button id="modalNewEmpPropFechar" class="btn btn-sm btn-default pull-right" data-dismiss="modal">
+                            <i class="ace-icon fa fa-times"></i>
+                            Fechar
+                        </button>
+
+                        <button id="modalNewEmpPropProsseguir" class="btn btn-sm btn-success" style="right: 5px; left: auto">
+                            <i class="ace-icon fa fa-check"></i>
+                            Confirmar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalNewEmpTerc" class="modal fade" style="overflow: auto">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="modalNewEmpTercX" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter grey no-margin"><i class="ace-icon fa fa-random green"></i> Cadastro de Empregado Terceirizado</h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div id="modalNewEmpTercCorpoLoading" style="float: right; display: none">...Carregando <img src="~/Images/slack_loading.gif" width="28px" /></div>
+                        <div id="modalNewEmpTercCorpo"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <span id="modalNewEmpTercLoading" style="display: none; float: left; padding-top: 6px">
+                            <img src="~/Images/slack_loading.gif" width="28px" />
+                        </span>
+
+                        <button id="modalNewEmpTercFechar" class="btn btn-sm btn-default pull-right" data-dismiss="modal">
+                            <i class="ace-icon fa fa-times"></i>
+                            Fechar
+                        </button>
+
+                        <button id="modalNewEmpTercProsseguir" class="btn btn-sm btn-success" style="right: 5px; left: auto">
+                            <i class="ace-icon fa fa-check"></i>
+                            Confirmar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

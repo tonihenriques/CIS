@@ -1,0 +1,135 @@
+﻿
+@model GISModel.Entidades.TEstabelecimento
+
+@{
+    ViewBag.Title = "Cadastro de Estabelecimento";
+}
+
+<div id="formCadEstabelecimento">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 widget-container-col ui-sortable">
+            <div class="page-header">
+                <h1>
+                    Cadastro de Estabelecimento
+                </h1>
+            </div>
+        </div>
+    </div>
+
+    @using (Ajax.BeginForm("Cadastrar", "Estabelecimento", null, new AjaxOptions { HttpMethod = "POST", OnBegin = "OnBeginCadastrarEstabelecimento", OnSuccess = "OnSuccessCadastrarEstabelecimento", }, new { @id = "formCadastroEstabelecimento", @class = "form-horizontal" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(d => d.Est_Nome, new { @class = "form-field-select-3 col-xs-12 col-sm-6 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EditorFor(d => d.Est_Nome, new { htmlAttributes = new { @class = "col-xs-12 col-sm-12", @id = "" } })
+                        @Html.ValidationMessageFor(d => d.Est_Nome, string.Empty, new { @style = "font-size: 10px; color: #a94442;" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(d => d.Est_Endereco, new { @class = "form-field-select-3 col-xs-12 col-sm-6 no-padding-right", @id = "txtCPF" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EditorFor(d => d.Est_Endereco, new { htmlAttributes = new { @class = "col-xs-12 col-sm-12" } })
+                        @Html.ValidationMessageFor(d => d.Est_Endereco, string.Empty, new { @style = "font-size: 10px; color: #a94442;" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(d => d.IdEmpresa, new { @class = "form-field-select-3 col-xs-12 col-sm-6 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.DropDownListFor(d => d.IdEmpresa, (SelectList)ViewBag.Empresa, "Selecione uma Empresa...", new { @class = "chosen-select form-control tag-input-style", @id = "", @autocomplete = "on" })
+                        @Html.ValidationMessageFor(d => d.IdEmpresa, string.Empty, new { @style = "font-size: 10px; color: #a94442;" })
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-sm-offset-3 align-center">
+                    <button class="btn btn-info" id="btnSalvar" type="submit">
+                        <i class="ace-icon fa fa-check bigger-110"></i>
+                        Salvar
+                    </button>
+                    &nbsp;
+                    <button class="btn btn-warning" type="reset">
+                        <i class="ace-icon fa fa-undo bigger-110"></i>
+                        Limpar
+                    </button>
+                    &nbsp;
+                    <a class="btn" href="javascript:history.back()">
+                        <i class="ace-icon fa fa-arrow-left"></i>
+                        Voltar
+                    </a>
+                </div>
+            </div>
+    }
+
+
+</div> <!-- Fim FormQuery -->
+
+<div id="modalArquivo" class="modal fade" style="z-index: 10001">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="modalArquivoX" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter blue no-margin"><i class="ace-icon fa fa-folder-open orange2"></i> Arquivo referente a Logo-Marca</h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div id="modalArquivoCorpoLoading" style="float: right; display: none">
+                            ...Carregando
+                            <img src="~/Images/slack_loading.gif" width="28px" />
+                            <i id="loadingLogin" style="margin-top: 5px;" class="ace-icon fa fa-spinner fa-spin blue bigger-125"></i>
+                        </div>
+                        <div id="modalArquivoCorpo"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <span id="modalArquivoLoading" style="display: none; float: left; padding-top: 6px">
+                            <img src="~/Images/slack_loading.gif" width="28px" />
+                            <i id="loadingLogin" style="margin-top: 5px;" class="ace-icon fa fa-spinner fa-spin blue bigger-125"></i>
+                        </span>
+
+                        <button id="modalArquivoFechar" class="btn btn-sm btn-default pull-right" data-dismiss="modal">
+                            <i class="ace-icon fa fa-times"></i>
+                            Fechar
+                        </button>
+
+                        <button id="modalArquivoProsseguir" class="btn btn-sm btn-info" style="right: 5px; left: auto">
+                            <i class="ace-icon fa fa-check"></i>
+                            Prosseguir
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    /
+</div>
+
+
+@section Scripts {
+    @*@Scripts.Render("~/bundles/ace_js_fileUpload")*@
+    <script src="~/Scripts/jQuery/inputmask.js"></script>
+    <script src="~/Scripts/jQuery/jquery.inputmask.js"></script>
+    <script src="~/Scripts/Custom/Estabelecimentoes/Novo.js"></script>
+}
+
+@*@section Stylesheets {
+        @Styles.Render("~/bundles/ace_css_fileUpload")
+    }*@
