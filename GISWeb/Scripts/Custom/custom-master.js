@@ -504,7 +504,7 @@ function OnClickNovoEmpTerceiro(origemElemento) {
 
                 $("#modalNewEmpTercProsseguir").off("click").on('click', function (e) {
                     e.preventDefault();
-                    $("#formCadastroEmpregado").submit();
+                    $("#formCadastroContratado").submit();
                 });
 
             }
@@ -515,19 +515,140 @@ function OnClickNovoEmpTerceiro(origemElemento) {
 
 
 function OnBeginCadastrarEmpProprio() {
-    $('.page-content-area').ace_ajax('startLoading');
+    $(".LoadingLayout").show();
+    $('#btnSalvar').hide();
+    $("#formCadastroEmpregado").css({ opacity: "0.5" });
+
+    $('#modalNewEmpPropLoading').show();
+    BloquearDiv("modalNewEmpProp");
 }
 
 function OnSuccessCadastrarEmpProprio(data) {
-    $('.page-content-area').ace_ajax('stopLoading', true);
+    $('#formCadastroEmpregado').removeAttr('style');
+    $(".LoadingLayout").hide();
+    $('#btnSalvar').show();
+
+    $('#modalNewEmpPropLoading').hide();
+    DesbloquearDiv("modalNewEmpProp");
+
     TratarResultadoJSON(data.resultado);
+
+    if (data.resultado.Sucesso != null && data.resultado.Sucesso != undefined && data.resultado.Sucesso != "") {
+        $('#modalNewEmpProp').modal('hide');
+        VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
+    }
 }
 
 function OnBeginCadastrarEmpContratado() {
-    $('.page-content-area').ace_ajax('startLoading');
+    $(".LoadingLayout").show();
+    $('#btnSalvar').hide();
+    $("#formCadastroContratado").css({ opacity: "0.5" });
+    
+    $('#modalNewEmpTercLoading').show();
+    BloquearDiv("modalNewEmpTerc");
 }
 
 function OnSuccessCadastrarEmpContratado(data) {
-    $('.page-content-area').ace_ajax('stopLoading', true);
+    $('#formCadastroContratado').removeAttr('style');
+    $(".LoadingLayout").hide();
+    $('#btnSalvar').show();
+
+    $('#modalNewEmpTercLoading').hide();
+    DesbloquearDiv("modalNewEmpTerc");
+
     TratarResultadoJSON(data.resultado);
+
+    if (data.resultado.Sucesso != null && data.resultado.Sucesso != undefined && data.resultado.Sucesso != "") {
+        $('#modalNewEmpTerc').modal('hide');
+        VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
+    }
+
 }
+
+
+function ExcluirEnvolvidoProprio(ukRel, nomeEnvolvido) {
+
+    var excluir = function () {
+        $('#detalhesIncidenteLoadingTexto').html('...Excluindo envolvido');
+        $('#detalhesIncidenteLoading').show();
+
+        $('#modalDetalhesIncidenteCorpoLoadingTexto').html('...Excluindo envolvido');
+        $('#modalDetalhesIncidenteCorpoLoading').show();
+
+        BloquearDiv("detalhesIncidente");
+
+        $.ajax({
+            method: "POST",
+            url: "/EmpregadoProprio/Excluir",
+            data: { UKRel: ukRel, Nome: nomeEnvolvido },
+            success: function (content) {
+                $('#detalhesIncidenteLoadingTexto').html('');
+                $('#detalhesIncidenteLoading').hide();
+
+                $('#modalDetalhesIncidenteCorpoLoadingTexto').html('');
+                $('#modalDetalhesIncidenteCorpoLoading').hide();
+
+                DesbloquearDiv("detalhesIncidente");
+
+                if (content.resultado.Erro != undefined && content.resultado.Erro != null && content.resultado.Erro != "") {
+                    ExibirMensagemGritter('Oops!', content.resultado.Erro, 'gritter-error');
+                }
+                else {
+                    ExibirMensagemDeSucesso(content.resultado.Sucesso);
+                    VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
+                }
+            }
+        });
+    };
+
+    var msg = "Você está excluindo o envolvido '" + nomeEnvolvido + "' deste incidente.";
+    var classeBotao = "btn-danger";
+    var titulo = "Exclusão de Envolvido Próprio";
+
+    ExibirMensagemDeConfirmacaoSimples(msg, titulo, excluir, classeBotao);
+
+}
+
+function ExcluirEnvolvidoTerceiro(ukRel, nomeEnvolvido) {
+
+    var excluir = function () {
+        $('#detalhesIncidenteLoadingTexto').html('...Excluindo envolvido');
+        $('#detalhesIncidenteLoading').show();
+
+        $('#modalDetalhesIncidenteCorpoLoadingTexto').html('...Excluindo envolvido');
+        $('#modalDetalhesIncidenteCorpoLoading').show();
+
+        BloquearDiv("detalhesIncidente");
+
+        $.ajax({
+            method: "POST",
+            url: "/EmpregadoContratado/Excluir",
+            data: { UKRel: ukRel, Nome: nomeEnvolvido },
+            success: function (content) {
+                $('#detalhesIncidenteLoadingTexto').html('');
+                $('#detalhesIncidenteLoading').hide();
+
+                $('#modalDetalhesIncidenteCorpoLoadingTexto').html('');
+                $('#modalDetalhesIncidenteCorpoLoading').hide();
+
+                DesbloquearDiv("detalhesIncidente");
+
+                if (content.resultado.Erro != undefined && content.resultado.Erro != null && content.resultado.Erro != "") {
+                    ExibirMensagemGritter('Oops!', content.resultado.Erro, 'gritter-error');
+                }
+                else {
+                    ExibirMensagemDeSucesso(content.resultado.Sucesso);
+                    VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
+                }
+            }
+        });
+    };
+
+    var msg = "Você está excluindo o envolvido '" + nomeEnvolvido + "' deste incidente.";
+    var classeBotao = "btn-danger";
+    var titulo = "Exclusão de Envolvido Terceiro";
+
+    ExibirMensagemDeConfirmacaoSimples(msg, titulo, excluir, classeBotao);
+
+}
+

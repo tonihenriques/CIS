@@ -1,10 +1,12 @@
 ﻿using GISCore.Business.Abstract;
 using GISCore.Business.Abstract.Tabelas;
+using GISHelpers.Extensions.System;
 using GISHelpers.Utils;
 using GISModel.DTO.Envolvidos;
 using GISModel.DTO.Incidente;
 using GISModel.DTO.Shared;
 using GISModel.Entidades;
+using GISModel.Entidades.OBJ.Tabelas;
 using GISModel.Entidades.REL;
 using GISWeb.Infraestrutura.Filters;
 using GISWeb.Infraestrutura.Provider.Abstract;
@@ -391,11 +393,24 @@ namespace GISWeb.Controllers
                     vm.Codigo = registro.Codigo;
                     vm.Status = registro.Status;
                     vm.Descricao = registro.Descricao;
+                    vm.AcidenteFatal = registro.AcidenteFatal ? "Sim" : "Não";
+                    
+                    Municipio mun = MunicipioBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.Codigo.Equals(registro.UKMunicipio));
+                    if (mun != null)
+                        vm.Municipio = mun.NomeCompleto;
 
+                    ESocial eso = ESocialBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.Codigo.Equals(registro.UKESocial));
+                    if (eso != null)
+                        vm.ESocial = eso.NomeCompleto;
 
                     vm.Estado = registro.Estado;
                     vm.Logradouro = registro.Logradouro;
                     vm.NumeroLogradouro = registro.NumeroLogradouro;
+                    vm.ETipoAcidente =  registro.ETipoAcidente.GetDisplayName();
+
+                    if (registro.TipoLocalAcidente != 0)
+                        vm.TipoLocalAcidente = registro.TipoLocalAcidente.GetDisplayName();
+
 
                     vm.DataIncidente = registro.DataIncidente.ToString("dd/MM/yyyy");
                     vm.DataInclusao = registro.DataInclusao.ToString();
@@ -409,7 +424,8 @@ namespace GISWeb.Controllers
                                                 Funcao = rel.Funcao,
                                                 NumeroPessoal = envol.NumeroPessoal,
                                                 Nome = envol.Nome,
-                                                UniqueKeyEmpregado = envol.UniqueKey
+                                                UniqueKeyEmpregado = envol.UniqueKey,
+                                                UniqueKeyRel = rel.UniqueKey
                                             }).ToList();
 
                     vm.EnvolvidosTerceiro = (from rel in RegistroEmpregadoContratadoBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UKRegistro.Equals(registro.UniqueKey)).ToList()
@@ -419,7 +435,8 @@ namespace GISWeb.Controllers
                                                  Funcao = rel.Funcao,
                                                  CPF = envol.CPF,
                                                  Nome = envol.Nome,
-                                                 UniqueKeyEmpregado = envol.UniqueKey
+                                                 UniqueKeyEmpregado = envol.UniqueKey,
+                                                 UniqueKeyRel = rel.UniqueKey
                                              }).ToList();
 
                     return PartialView("_Detalhes", vm);

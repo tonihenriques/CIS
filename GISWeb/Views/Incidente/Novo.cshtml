@@ -179,7 +179,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.UKMunicipio, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-6 no-padding-right" })
                     <div class="col-xs-12 col-sm-12">
-                        @Html.DropDownListFor(d => d.UKMunicipio, new SelectList(ViewBag.Municipios, "Codigo", "NomeCompleto"), "Selecione uma opção ...", new { @class = "chosen-select form-control tag-input-style", @autocomplete = "off" })
+                        @Html.DropDownListFor(d => d.UKMunicipio, new SelectList(ViewBag.Municipios, "UniqueKey", "NomeCompleto"), "Selecione uma opção ...", new { @class = "chosen-select form-control tag-input-style", @autocomplete = "off" })
                     </div>
                 </div>
             </div>
@@ -257,7 +257,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.UKESocial, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-6 no-padding-right" })
                     <div class="col-xs-12 col-sm-12">
-                        @Html.DropDownListFor(d => d.UKESocial, new SelectList(ViewBag.ESocial, "Codigo", "NomeCompleto"), "Selecione uma opção ...", new { @class = "chosen-select form-control tag-input-style", @autocomplete = "off" })
+                        @Html.DropDownListFor(d => d.UKESocial, new SelectList(ViewBag.ESocial, "UniqueKey", "NomeCompleto"), "Selecione uma opção ...", new { @class = "chosen-select form-control tag-input-style", @autocomplete = "off" })
                     </div>
                 </div>
             </div>

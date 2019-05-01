@@ -23,44 +23,52 @@ namespace GISWeb.Controllers
 
         #region
 
-            [Inject]
-            public ITipoAtividadeBusiness TipoAtividadeBusiness { get; set; }
+            //[Inject]
+            //public ITipoAtividadeBusiness TipoAtividadeBusiness { get; set; }
+
+            //[Inject]
+            //public INaturezaBusiness NaturezaBusiness { get; set; }
+
+            //[Inject]
+            //public IFuncaoGridsBusiness FuncaoGridsBusiness { get; set; }
+
+            //[Inject]
+            //public IEspecieAcidenteImpessoalBusiness EspecieAcidenteImpessoalBusiness { get; set; }
+
+            //[Inject]
+            //public ITipoAcidentePessoalBusiness TipoAcidentePessoalBusiness { get; set; }
+
+            //[Inject]
+            //public IAgenteAcidenteBusiness AgenteAcidenteBusiness { get; set; }
+
+            //[Inject]
+            //public IFonteLesaoBusiness FonteLesaoBusiness { get; set; }
+
+            //[Inject]
+            //public IFatorPessoalInsegurancaBusiness FatorPessoalInsegurancaBusiness { get; set; }
+
+            //[Inject]
+            //public IAtoInseguroBusiness AtoInseguroBusiness { get; set; }
+
+            //[Inject]
+            //public ICondicaoAmbientalInsegBusiness CondicaoAmbientalInsegBusiness { get; set; }
+
+            //[Inject]
+            //public IPrejuizoMaterialBusiness PrejuizoMaterialBusiness { get; set; }
 
             [Inject]
-            public INaturezaBusiness NaturezaBusiness { get; set; }
+            public INaturezaLesaoBusiness NaturezaLesaoBusiness { get; set; }
 
             [Inject]
-            public IFuncaoGridsBusiness FuncaoGridsBusiness { get; set; }
+            public ILocalizacaoLesaoBusiness LocalizacaoLesaoBusiness { get; set; }
+
 
             [Inject]
-            public IEspecieAcidenteImpessoalBusiness EspecieAcidenteImpessoalBusiness { get; set; }
-
-            [Inject]
-            public ITipoAcidentePessoalBusiness TipoAcidentePessoalBusiness { get; set; }
-
-            [Inject]
-            public IAgenteAcidenteBusiness AgenteAcidenteBusiness { get; set; }
-
-            [Inject]
-            public IFonteLesaoBusiness FonteLesaoBusiness { get; set; }
-
-            [Inject]
-            public IFatorPessoalInsegurancaBusiness FatorPessoalInsegurancaBusiness { get; set; }
-
-            [Inject]
-            public IAtoInseguroBusiness AtoInseguroBusiness { get; set; }
-
-            [Inject]
-            public ICondicaoAmbientalInsegBusiness CondicaoAmbientalInsegBusiness { get; set; }
-
-            [Inject]
-            public IPrejuizoMaterialBusiness PrejuizoMaterialBusiness { get; set; }
+            public ILesaoDoencaBusiness LesaoDoencaBusiness { get; set; }
 
 
 
 
-
-                
             [Inject]
             public IEmpregadoProprioBusiness EmpregadoProprioBusiness { get; set; }
 
@@ -75,10 +83,8 @@ namespace GISWeb.Controllers
 
         #endregion
 
-
         public ActionResult Index()
         {
-
             ViewBag.TEmpProprio = EmpregadoProprioBusiness.Consulta.Where(p => string.IsNullOrEmpty(p.UsuarioExclusao)).ToList();
 
             return View();
@@ -122,17 +128,20 @@ namespace GISWeb.Controllers
             obj.UKIncidente = id;
 
 
-            ViewBag.TiposAtividades = TipoAtividadeBusiness.ListarTodos();
-            ViewBag.Naturezas = NaturezaBusiness.ListarTodos();
-            ViewBag.Funcoes = FuncaoGridsBusiness.ListarTodos();
-            ViewBag.Especies = EspecieAcidenteImpessoalBusiness.ListarTodos();
-            ViewBag.TiposAcidentes = TipoAcidentePessoalBusiness.ListarTodos();
-            ViewBag.Agentes = AgenteAcidenteBusiness.ListarTodos();
-            ViewBag.Fontes = FonteLesaoBusiness.ListarTodos();
-            ViewBag.Fatores = FatorPessoalInsegurancaBusiness.ListarTodos();
-            ViewBag.Atos = AtoInseguroBusiness.ListarTodos();
-            ViewBag.Condicoes = CondicaoAmbientalInsegBusiness.ListarTodos();
-            ViewBag.Prejuizos = PrejuizoMaterialBusiness.ListarTodos();
+            //ViewBag.TiposAtividades = TipoAtividadeBusiness.ListarTodos();
+            //ViewBag.Naturezas = NaturezaBusiness.ListarTodos();
+            //ViewBag.Funcoes = FuncaoGridsBusiness.ListarTodos();
+            //ViewBag.Especies = EspecieAcidenteImpessoalBusiness.ListarTodos();
+            //ViewBag.TiposAcidentes = TipoAcidentePessoalBusiness.ListarTodos();
+            //ViewBag.Agentes = AgenteAcidenteBusiness.ListarTodos();
+            //ViewBag.Fontes = FonteLesaoBusiness.ListarTodos();
+            //ViewBag.Fatores = FatorPessoalInsegurancaBusiness.ListarTodos();
+            //ViewBag.Atos = AtoInseguroBusiness.ListarTodos();
+            //ViewBag.Condicoes = CondicaoAmbientalInsegBusiness.ListarTodos();
+            //ViewBag.Prejuizos = PrejuizoMaterialBusiness.ListarTodos();
+
+            ViewBag.NaturezaLesao = NaturezaLesaoBusiness.ListarTodos();
+            ViewBag.LocalizacaoLesao = LocalizacaoLesaoBusiness.ListarTodos();
 
 
             return PartialView(obj);
@@ -162,32 +171,45 @@ namespace GISWeb.Controllers
                         EmpregadoProprioBusiness.Inserir(empProprio);
                     }
 
-                    LesaoEmpregado lesaoEmp = new LesaoEmpregado() {
+                    LesaoDoenca lesaodoencaTemp = new LesaoDoenca()
+                    {
                         UniqueKey = Guid.NewGuid().ToString(),
-                        TipoAcidente = entidade.TipoAcidente,
-                        Atividade = entidade.Atividade,
-                        UKTipoAtividade = entidade.UKTipoAtividade,
-                        UKNatureza = entidade.UKNatureza,
-                        ConsequenciaLesao = entidade.ConsequenciaLesao,
-                        UKFuncaoGRIDS = entidade.UKFuncaoGRIDS,
-                        UKEspecieAcidImpessoal = entidade.UKEspecieAcidImpessoal,
-                        UKTipoAcidPessoal = entidade.UKTipoAcidPessoal,
-                        UKAgenteAcidente = entidade.UKAgenteAcidente,
-                        UKFonteLesao = entidade.UKFonteLesao,
-                        UKFatorPessoalInseg = entidade.UKFatorPessoalInseg,
-                        UKAtoInseguro = entidade.UKAtoInseguro,
-                        UKCondAmbientalInseg = entidade.UKCondAmbientalInseg,
-                        UKPrejMaterial = entidade.UKPrejMaterial,
-                        Custo = entidade.Custo,
-                        DiasPerdidos = entidade.DiasPerdidos,
-                        DiasDebitados = entidade.DiasDebitados,
-                        DataObito = entidade.DataObito,
+                        DescricaoLesao = entidade.DescricaoLesao,
+                        UKNaturezaLesaoPrincipal = entidade.UKNaturezaLesaoPrincipal,
+                        UKLocalizacaoLesaoPrincipal = entidade.UKLocalizacaoLesaoPrincipal,
+                        UKNaturezaLesaoSecundaria = entidade.UKNaturezaLesaoSecundaria,
+                        UKLocalizacaoLesaoSecundaria = entidade.UKLocalizacaoLesaoSecundaria,
                         DataInclusao = DateTime.Now,
                         UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login
                     };
 
-                    LesaoEmpregadoBusiness.Inserir(lesaoEmp);
+                    LesaoDoencaBusiness.Inserir(lesaodoencaTemp);
 
+                    //LesaoEmpregado lesaoEmp = new LesaoEmpregado() {
+                    //    UniqueKey = Guid.NewGuid().ToString(),
+                    //    TipoAcidente = entidade.TipoAcidente,
+                    //    Atividade = entidade.Atividade,
+                    //    UKTipoAtividade = entidade.UKTipoAtividade,
+                    //    UKNatureza = entidade.UKNatureza,
+                    //    ConsequenciaLesao = entidade.ConsequenciaLesao,
+                    //    UKFuncaoGRIDS = entidade.UKFuncaoGRIDS,
+                    //    UKEspecieAcidImpessoal = entidade.UKEspecieAcidImpessoal,
+                    //    UKTipoAcidPessoal = entidade.UKTipoAcidPessoal,
+                    //    UKAgenteAcidente = entidade.UKAgenteAcidente,
+                    //    UKFonteLesao = entidade.UKFonteLesao,
+                    //    UKFatorPessoalInseg = entidade.UKFatorPessoalInseg,
+                    //    UKAtoInseguro = entidade.UKAtoInseguro,
+                    //    UKCondAmbientalInseg = entidade.UKCondAmbientalInseg,
+                    //    UKPrejMaterial = entidade.UKPrejMaterial,
+                    //    Custo = entidade.Custo,
+                    //    DiasPerdidos = entidade.DiasPerdidos,
+                    //    DiasDebitados = entidade.DiasDebitados,
+                    //    DataObito = entidade.DataObito,
+                    //    DataInclusao = DateTime.Now,
+                    //    UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login
+                    //};
+
+                    //LesaoEmpregadoBusiness.Inserir(lesaoEmp);
 
                     RegistroEmpregadoProprioBusiness.Inserir(new RegistroEmpregadoProprio()
                     {
@@ -195,7 +217,8 @@ namespace GISWeb.Controllers
                         DataInclusao = DateTime.Now,
                         UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login,
                         Funcao = entidade.Funcao,
-                        UKLesaoEmpregado = lesaoEmp.UniqueKey,
+                        //UKLesaoEmpregado = lesaoEmp.UniqueKey,
+                        UKLesaoDoenca = lesaodoencaTemp.UniqueKey,
                         UKRegistro = entidade.UKIncidente,
                         UKEmpregadoProprio = empProprio.UniqueKey
                     });
@@ -266,24 +289,27 @@ namespace GISWeb.Controllers
 
 
         [HttpPost]
-        public ActionResult Terminar(string IdEmpregado)
+        public ActionResult Excluir(string UKRel, string Nome)
         {
 
             try
             {
-                EmpregadoProprio oEmpregado = EmpregadoProprioBusiness.Consulta.FirstOrDefault(p => p.UniqueKey.Equals(IdEmpregado));
+                if (string.IsNullOrEmpty(UKRel))
+                    throw new Exception("Identificação do envolvido não localizado.");
+
+                RegistroEmpregadoProprio oEmpregado = RegistroEmpregadoProprioBusiness.Consulta.FirstOrDefault(p => string.IsNullOrEmpty(p.UsuarioExclusao) && p.UniqueKey.Equals(UKRel));
                 if (oEmpregado == null)
                 {
-                    return Json(new { resultado = new RetornoJSON() { Erro = "Não foi possível excluir o Empregado, pois o mesmo não foi localizado." } });
+                    return Json(new { resultado = new RetornoJSON() { Erro = "Não foi possível excluir o envolvido, pois o mesmo não foi localizado." } });
                 }
                 else
                 {
 
                     oEmpregado.DataExclusao = DateTime.Now;
-                    oEmpregado.UsuarioExclusao = "LoginTeste";
-                    EmpregadoProprioBusiness.Alterar(oEmpregado);
+                    oEmpregado.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                    RegistroEmpregadoProprioBusiness.Alterar(oEmpregado);
 
-                    return Json(new { resultado = new RetornoJSON() { Sucesso = "O empregado de Matrícula:'" + oEmpregado.NumeroPessoal + "' foi excluído com sucesso." } });
+                    return Json(new { resultado = new RetornoJSON() { Sucesso = "O envolvido '" + Nome + "' foi excluído com sucesso." } });
                 }
             }
             catch (Exception ex)
@@ -297,47 +323,8 @@ namespace GISWeb.Controllers
                     return Json(new { resultado = new RetornoJSON() { Erro = ex.GetBaseException().Message } });
                 }
             }
-
-
         }
 
-        [HttpPost]
-        public ActionResult TerminarComRedirect(string IdEmpregado)
-        {
-
-            try
-            {
-                EmpregadoProprio oEmpregado = EmpregadoProprioBusiness.Consulta.FirstOrDefault(p => p.UniqueKey.Equals(IdEmpregado));
-                if (oEmpregado == null)
-                {
-                    return Json(new { resultado = new RetornoJSON() { Erro = "Não foi possível excluir o Empregado, pois o mesmo não foi localizado." } });
-                }
-                else
-                {
-                    oEmpregado.DataExclusao = DateTime.Now;
-                    oEmpregado.UsuarioExclusao = "LoginTeste";
-
-                    EmpregadoProprioBusiness.Alterar(oEmpregado);
-
-                    TempData["MensagemSucesso"] = "O empregado de CPF: '" + oEmpregado.NumeroPessoal + "' foi excluído com sucesso.";
-
-                    return Json(new { resultado = new RetornoJSON() { URL = Url.Action("Index", "EmpProprio") } });
-                }
-            }
-            catch (Exception ex)
-            {
-                if (ex.GetBaseException() == null)
-                {
-                    return Json(new { resultado = new RetornoJSON() { Erro = ex.Message } });
-                }
-                else
-                {
-                    return Json(new { resultado = new RetornoJSON() { Erro = ex.GetBaseException().Message } });
-                }
-            }
-
-
-        }
 
         public ActionResult listar()
         {

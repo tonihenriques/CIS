@@ -89,7 +89,7 @@ else
 
         <div id="detalhesIncidente" data-uniquekey="@Model.UniqueKey" data-codigo="@Model.Codigo">
             <div class="widget-container-col">
-                <div class="widget-box transparent collapsed">
+                <div class="widget-box transparent">
                     <div class="widget-header" style="border-bottom: 1px solid #ddd">
                         <h5 class="widget-title">
                             <i class="ace-icon fa fa-info-circle"></i>
@@ -169,6 +169,17 @@ else
                                             </div>
                                         </div>
 
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Acidente Fatal? </div>
+
+                                            <div class="profile-info-value">
+                                                <span id="labelTitulo">
+                                                    <span>@Model.AcidenteFatal</span>
+                                                </span>
+
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
 
@@ -198,16 +209,40 @@ else
                                                 <span>@Model.LocalAcidente</span>
                                             </div>
                                         </div>
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Tipo Local Acidente </div>
+
+                                            <div class="profile-info-value">
+                                                <span>
+                                                    @Model.TipoLocalAcidente
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        
+
                                     </div>
                                 </div>
 
                             </div> <!-- Row -->
 
-                            <div class="space-10"></div>
+                            <div class="space-4"></div>
 
                             <div class="row">
                                 <div class="col-xs-12 col-sm-6">
                                     <div class="profile-user-info profile-user-info-striped">
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> e-Social </div>
+
+                                            <div class="profile-info-value">
+                                                <span>
+                                                    @Model.ESocial
+                                                </span>
+                                            </div>
+                                        </div>
+
 
                                         <div class="profile-info-row">
                                             <div class="profile-info-name"> Logradouro </div>
@@ -225,15 +260,6 @@ else
                                             </div>
                                         </div>
 
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> Tipo Local Acidente </div>
-
-                                            <div class="profile-info-value">
-                                                <span>
-                                                    @Model.TipoLocalAcidente
-                                                </span>
-                                            </div>
-                                        </div>
 
                                     </div>
                                 </div>
@@ -241,25 +267,7 @@ else
                                 <div class="col-xs-12 col-sm-6">
                                     <div class="profile-user-info profile-user-info-striped">
 
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> e-Social </div>
-
-                                            <div class="profile-info-value">
-                                                <span>
-                                                    @Model.ESocial
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> Descrição </div>
-
-                                            <div class="profile-info-value">
-                                                <span>
-                                                    @Model.Descricao
-                                                </span>
-                                            </div>
-                                        </div>
+                                        
 
                                         <div class="profile-info-row">
                                             <div class="profile-info-name"> Data Criação </div>
@@ -274,6 +282,25 @@ else
 
                                             <div class="profile-info-value">
                                                 <span>@Model.UsuarioInclusao</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div> <!-- Row -->
+
+                            <div class="space-4"></div>
+
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12">
+                                    <div class="profile-user-info profile-user-info-striped">
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Descrição </div>
+
+                                            <div class="profile-info-value">
+                                                <span>@Model.Descricao</span>
                                             </div>
                                         </div>
 
@@ -412,7 +439,7 @@ else
             </div>
 
             <div class="widget-container-col">
-                <div class="widget-box transparent collapsed">
+                <div class="widget-box transparent">
                     <div class="widget-header @classeTitulos" style="border-bottom: 1px solid #ddd">
                         <h5 class="widget-title">
                             <i class="ace-icon fa fa-users"></i>
@@ -469,19 +496,25 @@ else
 
                                                         <td class="center">
                                                             <div class="hidden-sm hidden-xs action-buttons">
-                                                                <a class="blue CustomTooltip" href="#" title="Gerenciar Lesão Doença">
-                                                                    <i class="ace-icon fa fa-search-plus bigger-130"></i>
-                                                                </a>
+                                                                @if (!Model.Status.Contains("Em edição"))
+                                                                {
+                                                                    <a class="red CustomTooltip" href="#" title="Gerenciar Lesão Empregado">
+                                                                        <i class="ace-icon fa fa-life-ring bigger-130"></i>
+                                                                    </a>
+                                                                }
 
-                                                                <a class="blue CustomTooltip" href="#" title="Gerenciar CAT">
-                                                                    <i class="ace-icon fa fa-search-plus bigger-130"></i>
-                                                                </a>
+                                                                @if (!Model.Status.Contains("Em edição") && !Model.Status.Contains("Em Análise"))
+                                                                {
+                                                                    <a class="orange CustomTooltip" href="#" title="Gerenciar CAT">
+                                                                        <i class="ace-icon fa fa-bell bigger-130"></i>
+                                                                    </a>
+                                                                }
 
                                                                 <a href='#' class="green CustomTooltip" title="Editar Empregado">
                                                                     <i class="ace-icon fa fa-pencil bigger-130"></i>
                                                                 </a>
 
-                                                                <a class="red CustomTooltip" href="#" title="Excluir Empregado">
+                                                                <a class="red CustomTooltip" href="#" title="Excluir Empregado" onclick="ExcluirEnvolvidoProprio('@iEmpregado.UniqueKeyRel', '@iEmpregado.Nome'); return false;">
                                                                     <i class="ace-icon fa fa-trash-o bigger-130"></i>
                                                                 </a>
                                                             </div>
@@ -530,19 +563,27 @@ else
 
                                                         <td class="center">
                                                             <div class="hidden-sm hidden-xs action-buttons">
-                                                                <a class="blue CustomTooltip" href="#" title="Gerenciar Lesão Doença">
-                                                                    <i class="ace-icon fa fa-search-plus bigger-130"></i>
-                                                                </a>
 
-                                                                <a class="blue CustomTooltip" href="#" title="Gerenciar CAT">
-                                                                    <i class="ace-icon fa fa-search-plus bigger-130"></i>
-                                                                </a>
+
+                                                                @if (!Model.Status.Contains("Em edição"))
+                                                                {
+                                                                    <a class="red CustomTooltip" href="#" title="Gerenciar Lesão Empregado">
+                                                                        <i class="ace-icon fa fa-life-ring bigger-130"></i>
+                                                                    </a>
+                                                                }
+                                                                
+                                                                @if (!Model.Status.Contains("Em edição") && !Model.Status.Contains("Em Análise"))
+                                                                {
+                                                                    <a class="orange CustomTooltip" href="#" title="Gerenciar CAT">
+                                                                        <i class="ace-icon fa fa-bell bigger-130"></i>
+                                                                    </a>
+                                                                }
 
                                                                 <a href='#' class="green CustomTooltip" title="Editar Empregado">
                                                                     <i class="ace-icon fa fa-pencil bigger-130"></i>
                                                                 </a>
 
-                                                                <a class="red CustomTooltip" href="#" title="Excluir Empregado">
+                                                                <a class="red CustomTooltip" href="#" title="Excluir Empregado" onclick="ExcluirEnvolvidoTerceiro('@iEmpregado.UniqueKeyRel', '@iEmpregado.Nome'); return false;">
                                                                     <i class="ace-icon fa fa-trash-o bigger-130"></i>
                                                                 </a>
                                                             </div>
