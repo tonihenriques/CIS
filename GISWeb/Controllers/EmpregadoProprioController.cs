@@ -23,51 +23,14 @@ namespace GISWeb.Controllers
 
         #region
 
-            //[Inject]
-            //public ITipoAtividadeBusiness TipoAtividadeBusiness { get; set; }
-
-            //[Inject]
-            //public INaturezaBusiness NaturezaBusiness { get; set; }
-
-            //[Inject]
-            //public IFuncaoGridsBusiness FuncaoGridsBusiness { get; set; }
-
-            //[Inject]
-            //public IEspecieAcidenteImpessoalBusiness EspecieAcidenteImpessoalBusiness { get; set; }
-
-            //[Inject]
-            //public ITipoAcidentePessoalBusiness TipoAcidentePessoalBusiness { get; set; }
-
-            //[Inject]
-            //public IAgenteAcidenteBusiness AgenteAcidenteBusiness { get; set; }
-
-            //[Inject]
-            //public IFonteLesaoBusiness FonteLesaoBusiness { get; set; }
-
-            //[Inject]
-            //public IFatorPessoalInsegurancaBusiness FatorPessoalInsegurancaBusiness { get; set; }
-
-            //[Inject]
-            //public IAtoInseguroBusiness AtoInseguroBusiness { get; set; }
-
-            //[Inject]
-            //public ICondicaoAmbientalInsegBusiness CondicaoAmbientalInsegBusiness { get; set; }
-
-            //[Inject]
-            //public IPrejuizoMaterialBusiness PrejuizoMaterialBusiness { get; set; }
-
             [Inject]
             public INaturezaLesaoBusiness NaturezaLesaoBusiness { get; set; }
 
             [Inject]
             public ILocalizacaoLesaoBusiness LocalizacaoLesaoBusiness { get; set; }
 
-
             [Inject]
             public ILesaoDoencaBusiness LesaoDoencaBusiness { get; set; }
-
-
-
 
             [Inject]
             public IEmpregadoProprioBusiness EmpregadoProprioBusiness { get; set; }
@@ -119,30 +82,13 @@ namespace GISWeb.Controllers
 
         }
 
-
-
-
         public ActionResult Novo(string id)
         {
             VMProprio obj = new VMProprio();
             obj.UKIncidente = id;
 
-
-            //ViewBag.TiposAtividades = TipoAtividadeBusiness.ListarTodos();
-            //ViewBag.Naturezas = NaturezaBusiness.ListarTodos();
-            //ViewBag.Funcoes = FuncaoGridsBusiness.ListarTodos();
-            //ViewBag.Especies = EspecieAcidenteImpessoalBusiness.ListarTodos();
-            //ViewBag.TiposAcidentes = TipoAcidentePessoalBusiness.ListarTodos();
-            //ViewBag.Agentes = AgenteAcidenteBusiness.ListarTodos();
-            //ViewBag.Fontes = FonteLesaoBusiness.ListarTodos();
-            //ViewBag.Fatores = FatorPessoalInsegurancaBusiness.ListarTodos();
-            //ViewBag.Atos = AtoInseguroBusiness.ListarTodos();
-            //ViewBag.Condicoes = CondicaoAmbientalInsegBusiness.ListarTodos();
-            //ViewBag.Prejuizos = PrejuizoMaterialBusiness.ListarTodos();
-
             ViewBag.NaturezaLesao = NaturezaLesaoBusiness.ListarTodos();
             ViewBag.LocalizacaoLesao = LocalizacaoLesaoBusiness.ListarTodos();
-
 
             return PartialView(obj);
         }
@@ -249,7 +195,12 @@ namespace GISWeb.Controllers
 
         public ActionResult Edicao(string id)
         {
-            return View(EmpregadoProprioBusiness.Consulta.FirstOrDefault(p => p.UniqueKey.Equals(id)));
+            VMProprio obj = new VMProprio();
+
+            ViewBag.NaturezaLesao = NaturezaLesaoBusiness.ListarTodos();
+            ViewBag.LocalizacaoLesao = LocalizacaoLesaoBusiness.ListarTodos();
+
+            return PartialView(obj);
         }
 
         [HttpPost]

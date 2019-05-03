@@ -388,6 +388,7 @@
     <Content Include="Views\Inbox\_AssumirIncidente.cshtml" />
     <Content Include="Views\Shared\_MensagensDeRetornoInterno.cshtml" />
     <Content Include="Views\Inbox\_RejeitarIncidente.cshtml" />
+    <Content Include="Views\EmpregadoProprio\Edicao.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

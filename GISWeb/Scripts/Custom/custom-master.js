@@ -164,6 +164,16 @@ function AdicionarFuncoesOnClikParaOperacoes() {
         OnClickNovoEmpTerceiro($(this));
     });
 
+    $(".lkEditProprio").off("click").on("click", function (e) {
+        e.preventDefault();
+        OnClickEditarEmpProprio($(this));
+    });
+
+    $(".lkEditTerceiro").off("click").on("click", function (e) {
+        e.preventDefault();
+        OnClickEditarEmpTerceiro($(this));
+    });
+
 }
 
 function AtualizarTelasDetalhes() {
@@ -652,3 +662,103 @@ function ExcluirEnvolvidoTerceiro(ukRel, nomeEnvolvido) {
 
 }
 
+
+function OnClickEditarEmpProprio(origemElemento) {
+
+    $('#modalNewEmpPropCorpo').html('');
+    $('#modalNewEmpPropCorpoLoadingTexto').html('...Carregando formulário. Aguarde!');
+    $('#modalNewEmpPropCorpoLoading').show();
+
+    $.ajax({
+        method: "POST",
+        url: "/EmpregadoProprio/Novo",
+        data: { id: origemElemento.closest("[data-uniquekey]").data("uniquekey") },
+        success: function (content) {
+            $('#modalNewEmpPropCorpoLoading').hide();
+
+            if (content.resultado != null && content.resultado != undefined) {
+
+                if (content.resultado.Erro != null && content.resultado.Erro != undefined && content.resultado.Erro != "") {
+                    var divErro = "" +
+                        "<div class=\"alert alert-danger\">" +
+                        "<strong>" +
+                        "<i class=\"ace-icon fa fa-meh-o\"></i> " +
+                        "Oops! " +
+                        "</strong>" +
+
+                        "<span>" + content.resultado.Erro + "</span>" +
+                        "<br />" +
+                        "</div>";
+
+                    $('#modalNewEmpPropCorpo').html(divErro);
+
+                }
+            } else {
+
+                $('#modalNewEmpPropCorpo').html(content);
+
+                AplicaTooltip();
+
+                Chosen();
+
+                AplicaDatePicker();
+
+                $("#modalNewEmpPropProsseguir").off("click").on('click', function (e) {
+                    e.preventDefault();
+                    $("#formCadastroEmpregado").submit();
+                });
+
+            }
+        }
+    });
+}
+
+function OnClickEditarEmpTerceiro(origemElemento) {
+
+    $('#modalNewEmpPropCorpo').html('');
+    $('#modalNewEmpPropCorpoLoadingTexto').html('...Carregando formulário. Aguarde!');
+    $('#modalNewEmpPropCorpoLoading').show();
+
+    $.ajax({
+        method: "POST",
+        url: "/EmpregadoProprio/Editar",
+        data: { id: origemElemento.closest("[data-uniquekey]").data("uniquekey") },
+        success: function (content) {
+            $('#modalNewEmpPropCorpoLoading').hide();
+
+            if (content.resultado != null && content.resultado != undefined) {
+
+                if (content.resultado.Erro != null && content.resultado.Erro != undefined && content.resultado.Erro != "") {
+                    var divErro = "" +
+                        "<div class=\"alert alert-danger\">" +
+                        "<strong>" +
+                        "<i class=\"ace-icon fa fa-meh-o\"></i> " +
+                        "Oops! " +
+                        "</strong>" +
+
+                        "<span>" + content.resultado.Erro + "</span>" +
+                        "<br />" +
+                        "</div>";
+
+                    $('#modalNewEmpPropCorpo').html(divErro);
+
+                }
+            } else {
+
+                $('#modalNewEmpPropCorpo').html(content);
+
+                AplicaTooltip();
+
+                Chosen();
+
+                AplicaDatePicker();
+
+                $("#modalNewEmpPropProsseguir").off("click").on('click', function (e) {
+                    e.preventDefault();
+                    $("#formCadastroEmpregado").submit();
+                });
+
+            }
+        }
+    });
+}

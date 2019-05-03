@@ -264,14 +264,14 @@ namespace GISWeb.Controllers
 
                     string novoStatus = OperacaoBusiness.RecuperarProximoStatus(obj.Status);
                     List<string> Responsaveis = OperacaoBusiness.RecuperarResponsavelPorStatus(novoStatus);
-                    string sUniqueKey = Guid.NewGuid().ToString();
+                    
                     foreach (string resp in Responsaveis)
                     {
                         Incidente obj2 = new Incidente();
                         PropertyCopy.Copy(obj, obj2);
 
                         obj2.ID = Guid.NewGuid().ToString();
-                        obj2.UniqueKey = sUniqueKey;
+                        obj2.UniqueKey = item.UniqueKey;
 
                         if (novoStatus.Equals("Concluído"))
                         {
@@ -472,14 +472,13 @@ namespace GISWeb.Controllers
 
                     string novoStatus = OperacaoBusiness.RecuperarStatusAnterior(obj.Status);
                     List<string> Responsaveis = OperacaoBusiness.RecuperarResponsavelPorStatus(novoStatus);
-                    string sUniqueKey = Guid.NewGuid().ToString();
+                    
                     foreach (string resp in Responsaveis)
                     {
                         Incidente obj2 = new Incidente();
                         PropertyCopy.Copy(obj, obj2);
 
                         obj2.ID = Guid.NewGuid().ToString();
-                        obj2.UniqueKey = sUniqueKey;
                         obj2.StatusWF = "RS";
                         obj2.MensagemPasso = item.Comentarios;
                         obj2.Status = novoStatus;

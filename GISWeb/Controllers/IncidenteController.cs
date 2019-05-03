@@ -147,7 +147,7 @@ namespace GISWeb.Controllers
                     entidade.UniqueKey = Guid.NewGuid().ToString();
 
                     entidade.UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
-                    entidade.Status = "Em edição";
+                    entidade.Status = "Em Edição";
                     entidade.Responsavel = entidade.UsuarioInclusao;
                     entidade.Codigo = "I-" + DateTime.Now.Year.ToString() + "-" + IncidenteBusiness.GetNextNumber("Incidente", "select max(SUBSTRING(codigo, 8, 6)) from objincidente").ToString().PadLeft(6, '0');
                     entidade.StatusWF = "RS";

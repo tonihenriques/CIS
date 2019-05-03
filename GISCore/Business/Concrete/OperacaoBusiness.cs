@@ -49,7 +49,7 @@ namespace GISCore.Business.Concrete
                     return "Em Análise";
 
                 case "EM ANÁLISE":
-                    return "Em processamento";
+                    return "Em Processamento";
 
                 case "EM PROCESSAMENTO":
                     return "Em Aprovação";
@@ -74,7 +74,7 @@ namespace GISCore.Business.Concrete
                     return "Em Análise";
 
                 case "EM APROVAÇÃO":
-                    return "Em processamento";
+                    return "Em Processamento";
 
                 default:
                     throw new Exception("Status não reconhecido.");

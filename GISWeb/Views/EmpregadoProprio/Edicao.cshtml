@@ -1,0 +1,103 @@
+﻿@model GISModel.DTO.Envolvidos.VMProprio
+
+@{
+    ViewBag.Title = "Edição de Empregado Próprio";
+}
+
+<div id="formEditEmpregadoProprio">
+    @using (Ajax.BeginForm("Atualizar", "EmpregadoProprio", null,
+        new AjaxOptions
+        {
+            HttpMethod = "POST",
+            OnBegin = "OnBeginEditarEmpProprio",
+            OnSuccess = "OnSuccessEditarEmpProprio",
+        }, new { @id = "formEdicaoEmpregado", @class = "form-horizontal" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NumeroPessoal, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EditorFor(model => model.NumeroPessoal, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.NumeroPessoal, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.UniqueKeyEmpregado)
+                        @Html.HiddenFor(model => model.UniqueKeyRel)
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Nome, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Nome, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Funcao, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EditorFor(model => model.Funcao, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Funcao, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DescricaoLesao, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EditorFor(model => model.DescricaoLesao, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Funcao, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.DropDownListFor(d => d.UKNaturezaLesaoPrincipal, new SelectList(ViewBag.NaturezaLesao, "UniqueKey", "NomeCompleto"), "Selecione um tipo de atividade ...", new { @class = "chosen-select form-control tag-input-style", @autocomplete = "off" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Funcao, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.DropDownListFor(d => d.UKLocalizacaoLesaoPrincipal, new SelectList(ViewBag.LocalizacaoLesao, "UniqueKey", "NomeCompleto"), "Selecione um tipo de atividade ...", new { @class = "chosen-select form-control tag-input-style", @autocomplete = "off" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Funcao, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.DropDownListFor(d => d.UKNaturezaLesaoSecundaria, new SelectList(ViewBag.NaturezaLesao, "UniqueKey", "NomeCompleto"), "Selecione um tipo de atividade ...", new { @class = "chosen-select form-control tag-input-style", @autocomplete = "off" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Funcao, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.DropDownListFor(d => d.UKLocalizacaoLesaoSecundaria, new SelectList(ViewBag.LocalizacaoLesao, "UniqueKey", "NomeCompleto"), "Selecione um tipo de atividade ...", new { @class = "chosen-select form-control tag-input-style", @autocomplete = "off" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @Html.HiddenFor(model => model.UKIncidente)
+    }
+</div>

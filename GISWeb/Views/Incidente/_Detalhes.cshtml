@@ -113,7 +113,7 @@ else
                                             @{
                                                 var revStateColor = string.Empty;
 
-                                                if (Model.Status.Contains("Em edição"))
+                                                if (Model.Status.Contains("Em Edição"))
                                                 {
                                                     revStateColor = "#478FCA";
                                                 }
@@ -496,21 +496,21 @@ else
 
                                                         <td class="center">
                                                             <div class="hidden-sm hidden-xs action-buttons">
-                                                                @if (!Model.Status.Contains("Em edição"))
+                                                                @if (!Model.Status.Contains("Em Edição"))
                                                                 {
                                                                     <a class="red CustomTooltip" href="#" title="Gerenciar Lesão Empregado">
                                                                         <i class="ace-icon fa fa-life-ring bigger-130"></i>
                                                                     </a>
                                                                 }
 
-                                                                @if (!Model.Status.Contains("Em edição") && !Model.Status.Contains("Em Análise"))
+                                                                @if (!Model.Status.Contains("Em Edição") && !Model.Status.Contains("Em Análise"))
                                                                 {
                                                                     <a class="orange CustomTooltip" href="#" title="Gerenciar CAT">
                                                                         <i class="ace-icon fa fa-bell bigger-130"></i>
                                                                     </a>
                                                                 }
 
-                                                                <a href='#' class="green CustomTooltip" title="Editar Empregado">
+                                                                <a href='#' class="green CustomTooltip lkEditProprio" title="Editar Empregado" data-target="#modalEditEmpProp" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                                                     <i class="ace-icon fa fa-pencil bigger-130"></i>
                                                                 </a>
 
@@ -565,21 +565,21 @@ else
                                                             <div class="hidden-sm hidden-xs action-buttons">
 
 
-                                                                @if (!Model.Status.Contains("Em edição"))
+                                                                @if (!Model.Status.Contains("Em Edição"))
                                                                 {
                                                                     <a class="red CustomTooltip" href="#" title="Gerenciar Lesão Empregado">
                                                                         <i class="ace-icon fa fa-life-ring bigger-130"></i>
                                                                     </a>
                                                                 }
                                                                 
-                                                                @if (!Model.Status.Contains("Em edição") && !Model.Status.Contains("Em Análise"))
+                                                                @if (!Model.Status.Contains("Em Edição") && !Model.Status.Contains("Em Análise"))
                                                                 {
                                                                     <a class="orange CustomTooltip" href="#" title="Gerenciar CAT">
                                                                         <i class="ace-icon fa fa-bell bigger-130"></i>
                                                                     </a>
                                                                 }
 
-                                                                <a href='#' class="green CustomTooltip" title="Editar Empregado">
+                                                                <a href='#' class="green CustomTooltip lkEditTerceiro" title="Editar Empregado" data-target="#modalEditEmpTerc" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                                                     <i class="ace-icon fa fa-pencil bigger-130"></i>
                                                                 </a>
 
