@@ -1,5 +1,6 @@
 ﻿using GISCore.Business.Abstract;
 using GISCore.Business.Abstract.Tabelas;
+using GISHelpers.Utils;
 using GISModel.DTO.Envolvidos;
 using GISModel.DTO.Shared;
 using GISModel.Entidades;
@@ -195,27 +196,185 @@ namespace GISWeb.Controllers
 
         public ActionResult Edicao(string id)
         {
-            VMProprio obj = new VMProprio();
+            try
+            {
+                VMProprio obj = new VMProprio();
 
-            ViewBag.NaturezaLesao = NaturezaLesaoBusiness.ListarTodos();
-            ViewBag.LocalizacaoLesao = LocalizacaoLesaoBusiness.ListarTodos();
+                RegistroEmpregadoProprio relEmpProprio = RegistroEmpregadoProprioBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(id));
+                if (relEmpProprio == null)
+                {
+                    throw new Exception("Não foi possível buscar o relacionamento entre o empregado e o incidente.");
+                }
+                else
+                {
+                    EmpregadoProprio empProprio = EmpregadoProprioBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(relEmpProprio.UKEmpregadoProprio));
+                    if (empProprio == null)
+                    {
+                        throw new Exception("Não foi possível localicar o empregado próprio através do relacionamento.");
+                    }
+                    else
+                    {
+                        LesaoDoenca lesao = LesaoDoencaBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(relEmpProprio.UKLesaoDoenca));
+                        if (lesao != null)
+                        {
+                            obj.UKLocalizacaoLesaoPrincipal = lesao.UKLocalizacaoLesaoPrincipal;
+                            obj.UKLocalizacaoLesaoSecundaria = lesao.UKLocalizacaoLesaoSecundaria;
+                            obj.UKNaturezaLesaoPrincipal = lesao.UKNaturezaLesaoPrincipal;
+                            obj.UKNaturezaLesaoSecundaria = lesao.UKNaturezaLesaoSecundaria;
+                            obj.DescricaoLesao = lesao.DescricaoLesao;
+                            obj.UKLesaoDoenca = lesao.UniqueKey;
+                        }
 
-            return PartialView(obj);
+                        obj.UKRel = relEmpProprio.UniqueKey;
+                        obj.UKIncidente = relEmpProprio.UKRegistro;
+                        obj.UKEmpregado = relEmpProprio.UKEmpregadoProprio;
+
+                        obj.Funcao = relEmpProprio.Funcao;
+                        
+                        obj.Nome = empProprio.Nome;
+                        obj.NumeroPessoal = empProprio.NumeroPessoal;
+
+                        ViewBag.NaturezaLesao = NaturezaLesaoBusiness.ListarTodos();
+                        ViewBag.LocalizacaoLesao = LocalizacaoLesaoBusiness.ListarTodos();
+                    }
+                }
+
+                return PartialView(obj);
+            }
+            catch (Exception ex)
+            {
+                if (ex.GetBaseException() == null)
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.Message } });
+                }
+                else
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.GetBaseException().Message } });
+                }
+            }
+
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Atualizar(EmpregadoProprio TEmpregado)
+        public ActionResult Atualizar(VMProprio entidade)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    EmpregadoProprioBusiness.Alterar(TEmpregado);
+                    EmpregadoProprio empProprio = EmpregadoProprioBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(entidade.UKEmpregado));
+                    if (empProprio == null)
+                    {
+                        throw new Exception("Não foi possível encontrar o envolvido.");
+                    }
+                    else
+                    {
+                        if (!empProprio.Nome.ToUpper().Equals(entidade.Nome.ToUpper().Trim()))
+                        {
+                            empProprio.DataExclusao = DateTime.Now;
+                            empProprio.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                            EmpregadoProprioBusiness.Alterar(empProprio);
 
-                    TempData["MensagemSucesso"] = "Empregado de Matrícula:'" + TEmpregado.NumeroPessoal + "' foi atualizado com sucesso.";
+                            EmpregadoProprio empProprio2 = new EmpregadoProprio();
+                            empProprio2.UniqueKey = empProprio.UniqueKey;
+                            empProprio2.UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                            empProprio2.NumeroPessoal = empProprio.NumeroPessoal;
+                            empProprio2.Nome = entidade.Nome;
 
-                    return Json(new { resultado = new RetornoJSON() { URL = Url.Action("Index", "EmpProprio") } });
+                            EmpregadoProprioBusiness.Inserir(empProprio2);
+                        }
+                    }
+
+
+                    //##############################################################################################################################################
+
+
+                    RegistroEmpregadoProprio relEmpProprio = RegistroEmpregadoProprioBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(entidade.UKRel));
+                    if (relEmpProprio == null)
+                    {
+                        throw new Exception("Não foi possível encontrar o vínculo entre o envolvimento e o incidente.");
+                    }
+                    
+
+                    if (!string.IsNullOrEmpty(entidade.UKLesaoDoenca))
+                    {
+                        LesaoDoenca lesao = LesaoDoencaBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(entidade.UKLesaoDoenca));
+                        if (lesao == null)
+                        {
+                            throw new Exception("Não foi possível encontrar as informações de lesão / doença.");
+                        }
+                        else
+                        {
+
+                            if (!entidade.DescricaoLesao.ToUpper().Trim().Equals(lesao.DescricaoLesao.ToUpper().Trim()) ||
+                                !entidade.UKLocalizacaoLesaoPrincipal.Equals(lesao.UKLocalizacaoLesaoPrincipal) ||
+                                !entidade.UKLocalizacaoLesaoSecundaria.Equals(lesao.UKLocalizacaoLesaoSecundaria) ||
+                                !entidade.UKNaturezaLesaoPrincipal.Equals(lesao.UKNaturezaLesaoPrincipal) ||
+                                !entidade.UKNaturezaLesaoSecundaria.Equals(lesao.UKNaturezaLesaoSecundaria))
+                            {
+                                lesao.DataExclusao = DateTime.Now;
+                                lesao.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                                LesaoDoencaBusiness.Alterar(lesao);
+
+                                LesaoDoenca lesao2 = new LesaoDoenca();
+                                lesao2.UniqueKey = lesao.UniqueKey;
+                                lesao2.DescricaoLesao = entidade.DescricaoLesao;
+                                lesao2.UKLocalizacaoLesaoPrincipal = entidade.UKLocalizacaoLesaoPrincipal;
+                                lesao2.UKLocalizacaoLesaoSecundaria = entidade.UKLocalizacaoLesaoSecundaria;
+                                lesao2.UKNaturezaLesaoPrincipal = entidade.UKNaturezaLesaoPrincipal;
+                                lesao2.UKNaturezaLesaoSecundaria = entidade.UKNaturezaLesaoSecundaria;
+                                lesao2.UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+
+                                LesaoDoencaBusiness.Inserir(lesao2);
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        LesaoDoenca lesaodoencaTemp = new LesaoDoenca()
+                        {
+                            UniqueKey = Guid.NewGuid().ToString(),
+                            DescricaoLesao = entidade.DescricaoLesao,
+                            UKNaturezaLesaoPrincipal = entidade.UKNaturezaLesaoPrincipal,
+                            UKLocalizacaoLesaoPrincipal = entidade.UKLocalizacaoLesaoPrincipal,
+                            UKNaturezaLesaoSecundaria = entidade.UKNaturezaLesaoSecundaria,
+                            UKLocalizacaoLesaoSecundaria = entidade.UKLocalizacaoLesaoSecundaria,
+                            UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login
+                        };
+
+                        LesaoDoencaBusiness.Inserir(lesaodoencaTemp);
+
+                        entidade.UKLesaoDoenca = lesaodoencaTemp.UniqueKey;
+                    }
+
+
+                    if (!relEmpProprio.Funcao.ToUpper().Trim().Equals(entidade.Funcao.ToUpper().Trim()) ||
+                        !relEmpProprio.UKLesaoDoenca.Equals(entidade.UKLesaoDoenca)) {
+
+                        relEmpProprio.DataExclusao = DateTime.Now;
+                        relEmpProprio.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                        RegistroEmpregadoProprioBusiness.Alterar(relEmpProprio);
+
+                        RegistroEmpregadoProprio relEmpProprio2 = new RegistroEmpregadoProprio();
+                        relEmpProprio2.UniqueKey = relEmpProprio.UniqueKey;
+                        relEmpProprio2.UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                        relEmpProprio2.Funcao = entidade.Funcao;
+                        relEmpProprio2.UKLesaoDoenca = entidade.UKLesaoDoenca;
+                        relEmpProprio2.UKEmpregadoProprio = entidade.UKEmpregado;
+                        relEmpProprio2.UKLesaoEmpregado = entidade.UKLesaoEmpregado;
+                        relEmpProprio2.UKCAT = entidade.UKCAT;
+                        relEmpProprio2.UKRegistro = entidade.UKIncidente;
+
+                        RegistroEmpregadoProprioBusiness.Inserir(relEmpProprio2);
+
+                    }
+
+
+
+                    return Json(new { resultado = new RetornoJSON() { Sucesso = "Empregado próprio '" + entidade.Nome + "' atualizado com sucesso." } });
+
                 }
                 catch (Exception ex)
                 {

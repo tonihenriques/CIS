@@ -424,8 +424,8 @@ namespace GISWeb.Controllers
                                                 Funcao = rel.Funcao,
                                                 NumeroPessoal = envol.NumeroPessoal,
                                                 Nome = envol.Nome,
-                                                UniqueKeyEmpregado = envol.UniqueKey,
-                                                UniqueKeyRel = rel.UniqueKey
+                                                UKEmpregado = envol.UniqueKey,
+                                                UKRel = rel.UniqueKey
                                             }).ToList();
 
                     vm.EnvolvidosTerceiro = (from rel in RegistroEmpregadoContratadoBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UKRegistro.Equals(registro.UniqueKey)).ToList()
@@ -435,8 +435,8 @@ namespace GISWeb.Controllers
                                                  Funcao = rel.Funcao,
                                                  CPF = envol.CPF,
                                                  Nome = envol.Nome,
-                                                 UniqueKeyEmpregado = envol.UniqueKey,
-                                                 UniqueKeyRel = rel.UniqueKey
+                                                 UKEmpregado = envol.UniqueKey,
+                                                 UKRel = rel.UniqueKey
                                              }).ToList();
 
                     return PartialView("_Detalhes", vm);

@@ -156,7 +156,7 @@ namespace GISWeb.Controllers
 
         public ActionResult Edicao(string id)
         {
-            return View(EmpregadoContratadoBusiness.Consulta.FirstOrDefault(p => p.UniqueKey.Equals(id)));
+            return PartialView(EmpregadoContratadoBusiness.Consulta.FirstOrDefault(p => p.UniqueKey.Equals(id)));
         }
 
         [HttpPost]

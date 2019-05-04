@@ -665,16 +665,16 @@ function ExcluirEnvolvidoTerceiro(ukRel, nomeEnvolvido) {
 
 function OnClickEditarEmpProprio(origemElemento) {
 
-    $('#modalNewEmpPropCorpo').html('');
-    $('#modalNewEmpPropCorpoLoadingTexto').html('...Carregando formulário. Aguarde!');
-    $('#modalNewEmpPropCorpoLoading').show();
+    $('#modalEditEmpPropCorpo').html('');
+    $('#modalEditEmpPropCorpoLoadingTexto').html('...Carregando formulário. Aguarde!');
+    $('#modalEditEmpPropCorpoLoading').show();
 
     $.ajax({
         method: "POST",
-        url: "/EmpregadoProprio/Novo",
-        data: { id: origemElemento.closest("[data-uniquekey]").data("uniquekey") },
+        url: "/EmpregadoProprio/Edicao",
+        data: { id: origemElemento.data("uniquekeyrel") },
         success: function (content) {
-            $('#modalNewEmpPropCorpoLoading').hide();
+            $('#modalEditEmpPropCorpoLoading').hide();
 
             if (content.resultado != null && content.resultado != undefined) {
 
@@ -690,12 +690,12 @@ function OnClickEditarEmpProprio(origemElemento) {
                         "<br />" +
                         "</div>";
 
-                    $('#modalNewEmpPropCorpo').html(divErro);
+                    $('#modalEditEmpPropCorpo').html(divErro);
 
                 }
             } else {
 
-                $('#modalNewEmpPropCorpo').html(content);
+                $('#modalEditEmpPropCorpo').html(content);
 
                 AplicaTooltip();
 
@@ -703,9 +703,9 @@ function OnClickEditarEmpProprio(origemElemento) {
 
                 AplicaDatePicker();
 
-                $("#modalNewEmpPropProsseguir").off("click").on('click', function (e) {
+                $("#modalEditEmpPropProsseguir").off("click").on('click', function (e) {
                     e.preventDefault();
-                    $("#formCadastroEmpregado").submit();
+                    $("#formEdicaoEmpregadoProprio").submit();
                 });
 
             }
@@ -715,16 +715,16 @@ function OnClickEditarEmpProprio(origemElemento) {
 
 function OnClickEditarEmpTerceiro(origemElemento) {
 
-    $('#modalNewEmpPropCorpo').html('');
-    $('#modalNewEmpPropCorpoLoadingTexto').html('...Carregando formulário. Aguarde!');
-    $('#modalNewEmpPropCorpoLoading').show();
+    $('#modalEditEmpTercCorpo').html('');
+    $('#modalEditEmpTercCorpoLoadingTexto').html('...Carregando formulário. Aguarde!');
+    $('#modalEditEmpTercCorpoLoading').show();
 
     $.ajax({
         method: "POST",
-        url: "/EmpregadoProprio/Editar",
-        data: { id: origemElemento.closest("[data-uniquekey]").data("uniquekey") },
+        url: "/EmpregadoContratado/Edicao",
+        data: { id: origemElemento.data("uniquekeyrel") },
         success: function (content) {
-            $('#modalNewEmpPropCorpoLoading').hide();
+            $('#modalEditEmpTercCorpoLoading').hide();
 
             if (content.resultado != null && content.resultado != undefined) {
 
@@ -740,12 +740,12 @@ function OnClickEditarEmpTerceiro(origemElemento) {
                         "<br />" +
                         "</div>";
 
-                    $('#modalNewEmpPropCorpo').html(divErro);
+                    $('#modalEditEmpTercCorpo').html(divErro);
 
                 }
             } else {
 
-                $('#modalNewEmpPropCorpo').html(content);
+                $('#modalEditEmpTercCorpo').html(content);
 
                 AplicaTooltip();
 
@@ -753,12 +753,38 @@ function OnClickEditarEmpTerceiro(origemElemento) {
 
                 AplicaDatePicker();
 
-                $("#modalNewEmpPropProsseguir").off("click").on('click', function (e) {
+                $("#modalEditEmpTercProsseguir").off("click").on('click', function (e) {
                     e.preventDefault();
-                    $("#formCadastroEmpregado").submit();
+                    $("#formEdicaoEmpregadoTerc").submit();
                 });
 
             }
         }
     });
+}
+
+
+function OnBeginEditarEmpProprio() {
+    $(".LoadingLayout").show();
+    $('#btnSalvar').hide();
+    $("#formEdicaoEmpregadoProprio").css({ opacity: "0.5" });
+
+    $('#modalEditEmpPropLoading').show();
+    BloquearDiv("modalEditEmpProp");
+}
+
+function OnSuccessEditarEmpProprio(data) {
+    $('#formEdicaoEmpregadoProprio').removeAttr('style');
+    $(".LoadingLayout").hide();
+    $('#btnSalvar').show();
+
+    $('#modalEditEmpPropLoading').hide();
+    DesbloquearDiv("modalEditEmpProp");
+
+    TratarResultadoJSON(data.resultado);
+
+    if (data.resultado.Sucesso != null && data.resultado.Sucesso != undefined && data.resultado.Sucesso != "") {
+        $('#modalEditEmpProp').modal('hide');
+        VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
+    }
 }
