@@ -394,25 +394,41 @@ namespace GISWeb.Controllers
                     vm.Status = registro.Status;
                     vm.Descricao = registro.Descricao;
                     vm.AcidenteFatal = registro.AcidenteFatal ? "Sim" : "Não";
-                    
-                    Municipio mun = MunicipioBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.Codigo.Equals(registro.UKMunicipio));
+                    vm.AcidenteGraveIP102 = registro.AcidenteGraveIP102 ? "Sim" : "Não";
+                    vm.Centro = registro.Centro.GetDisplayName();
+                    vm.Regional = registro.Regional.ToString();
+                    vm.NumeroSmart = registro.NumeroSmart;
+                    vm.TipoEntrada = registro.ETipoEntrada.GetDisplayName();
+
+                    Municipio mun = MunicipioBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(registro.UKMunicipio));
                     if (mun != null)
                         vm.Municipio = mun.NomeCompleto;
 
-                    ESocial eso = ESocialBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.Codigo.Equals(registro.UKESocial));
+                    ESocial eso = ESocialBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(registro.UKESocial));
                     if (eso != null)
-                        vm.ESocial = eso.NomeCompleto;
+                    {
+                        vm.ESocial = eso.Codigo;
+                        ViewBag.ESocialDesc = eso.Descricao;
+                    }
+                        
 
                     vm.Estado = registro.Estado;
                     vm.Logradouro = registro.Logradouro;
                     vm.NumeroLogradouro = registro.NumeroLogradouro;
                     vm.ETipoAcidente =  registro.ETipoAcidente.GetDisplayName();
+                    vm.LocalAcidente = registro.LocalAcidente;
+
+
+                    Departamento dep = DepartamentoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(registro.UKOrgao));
+                    if (dep != null)
+                        vm.Orgao = dep.Sigla;
 
                     if (registro.TipoLocalAcidente != 0)
                         vm.TipoLocalAcidente = registro.TipoLocalAcidente.GetDisplayName();
 
 
                     vm.DataIncidente = registro.DataIncidente.ToString("dd/MM/yyyy");
+                    vm.HoraIncidente = registro.DataIncidente.ToString("HH:mm");
                     vm.DataInclusao = registro.DataInclusao.ToString();
                     vm.UsuarioInclusao = registro.UsuarioInclusao;
 

@@ -158,12 +158,33 @@ else
                                             </div>
                                         </div>
 
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Nº SMART </div>
+
+                                            <div class="profile-info-value">
+                                                <span>@Model.NumeroSmart</span>
+                                            </div>
+                                        </div>
+
+
                                         <div class="profile-info-row">
                                             <div class="profile-info-name"> Data Incidente </div>
 
                                             <div class="profile-info-value">
                                                 <span id="labelTitulo">
                                                     <span>@Model.DataIncidente</span>
+                                                </span>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Hora Incidente </div>
+
+                                            <div class="profile-info-value">
+                                                <span id="labelTitulo">
+                                                    <span>@Model.HoraIncidente</span>
                                                 </span>
 
                                             </div>
@@ -180,11 +201,30 @@ else
                                             </div>
                                         </div>
 
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Acidente Fatal? </div>
+
+                                            <div class="profile-info-value">
+                                                <span id="labelTitulo">
+                                                    <span>@Model.AcidenteGraveIP102</span>
+                                                </span>
+
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
 
                                 <div class="col-xs-12 col-sm-6">
                                     <div class="profile-user-info profile-user-info-striped">
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Estado </div>
+
+                                            <div class="profile-info-value">
+                                                <span>@Model.Estado</span>
+                                            </div>
+                                        </div>
 
                                         <div class="profile-info-row">
                                             <div class="profile-info-name"> Município </div>
@@ -195,10 +235,18 @@ else
                                         </div>
 
                                         <div class="profile-info-row">
-                                            <div class="profile-info-name"> Estado </div>
+                                            <div class="profile-info-name"> Regional </div>
 
                                             <div class="profile-info-value">
-                                                <span>@Model.Estado</span>
+                                                <span>@Model.Regional</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Órgão </div>
+
+                                            <div class="profile-info-value">
+                                                <span>@Model.Orgao</span>
                                             </div>
                                         </div>
 
@@ -220,7 +268,7 @@ else
                                             </div>
                                         </div>
 
-                                        
+
 
                                     </div>
                                 </div>
@@ -234,10 +282,20 @@ else
                                     <div class="profile-user-info profile-user-info-striped">
 
                                         <div class="profile-info-row">
-                                            <div class="profile-info-name"> e-Social </div>
+                                            <div class="profile-info-name"> Tipo Entrada </div>
 
                                             <div class="profile-info-value">
                                                 <span>
+                                                    @Model.TipoEntrada
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> e-Social </div>
+
+                                            <div class="profile-info-value">
+                                                <span class="CustomTooltip" title="@ViewBag.ESocialDesc">
                                                     @Model.ESocial
                                                 </span>
                                             </div>
@@ -267,7 +325,13 @@ else
                                 <div class="col-xs-12 col-sm-6">
                                     <div class="profile-user-info profile-user-info-striped">
 
-                                        
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Centro </div>
+
+                                            <div class="profile-info-value">
+                                                <span>@Model.Centro</span>
+                                            </div>
+                                        </div>
 
                                         <div class="profile-info-row">
                                             <div class="profile-info-name"> Data Criação </div>

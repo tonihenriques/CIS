@@ -17,6 +17,9 @@ namespace GISModel.DTO.Incidente
 
 
 
+        public string NumeroSmart { get; set; }
+
+
         public string ETipoAcidente { get; set; }
 
 
@@ -25,6 +28,9 @@ namespace GISModel.DTO.Incidente
         public string Diretoria { get; set; }
 
         public string DataIncidente { get; set; }
+
+        public string HoraIncidente { get; set; }
+
 
         public string Municipio { get; set; }
 
@@ -48,6 +54,11 @@ namespace GISModel.DTO.Incidente
 
         public string AcidenteFatal { get; set; }
 
+        public string TipoEntrada { get; set; }
+
+        public string Centro { get; set; }
+
+        public string Regional { get; set; }
 
 
 

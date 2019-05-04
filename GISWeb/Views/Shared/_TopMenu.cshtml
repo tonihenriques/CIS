@@ -16,13 +16,13 @@
         <div class="sidebar-shortcuts" id="sidebar-shortcuts">
             <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
 
-                <a class="btn btn-warning" href="@path/QuaseIncidente/Novo" title="Cadastrar quase incidente com pessoa">
+                @*<a class="btn btn-warning" href="@path/QuaseIncidente/Novo" title="Cadastrar quase incidente com pessoa">
                     <i class="ace-icon fa fa-plus"></i>
-                </a>
+                </a>*@
 
-                <a class="btn btn-success" href="@path/QuaseIncidente/NovoVeiculo" title="Cadastrar quase incidente com veículo">
+                @*<a class="btn btn-success" href="@path/QuaseIncidente/NovoVeiculo" title="Cadastrar quase incidente com veículo">
                     <i class="ace-icon fa fa-plus"></i>
-                </a>
+                </a>*@
 
                 <a class="btn btn-danger" href="@path/Incidente/Novo" title="Novo incidente com pessoa">
                     <i class="ace-icon fa fa-plus-square"></i>
@@ -98,13 +98,13 @@
                         <b class="arrow"></b>
                     </li>
 
-                    <li class="hover">
+                    @*<li class="hover">
                         <a href="@path/Usuario/">
                             <i class="menu-icon fa fa-caret-right"></i>
                             Meus Quase Incidentes
                         </a>
                         <b class="arrow"></b>
-                    </li>
+                    </li>*@
 
                     <li class="hover">
                         <a href="#" class="dropdown-toggle">
@@ -124,13 +124,13 @@
                                 <b class="arrow"></b>
                             </li>
 
-                            <li class="hover">
+                            @*<li class="hover">
                                 <a href="@path/Empresa/">
                                     <i class="menu-icon fa fa-caret-right"></i>
                                     Quase Incidentes
                                 </a>
                                 <b class="arrow"></b>
-                            </li>
+                            </li>*@
                         </ul>
                     </li>
 
@@ -284,7 +284,7 @@
             }
 
 
-            @if (permissoes.Any(a => a.Perfil.Equals("Relatorios")))
+            @if (permissoes.Any(a => a.Perfil.Equals("Administrador")))
             {
 
                 <li class="hover">

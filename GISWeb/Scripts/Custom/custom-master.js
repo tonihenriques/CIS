@@ -788,3 +788,28 @@ function OnSuccessEditarEmpProprio(data) {
         VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
     }
 }
+
+function OnBeginEditarEmpTerceiro() {
+    $(".LoadingLayout").show();
+    $('#btnSalvar').hide();
+    $("#formEdicaoEmpregadoTerc").css({ opacity: "0.5" });
+
+    $('#modalEditEmpTercLoading').show();
+    BloquearDiv("modalEditEmpTerc");
+}
+
+function OnSuccessEditarEmpTerceiro(data) {
+    $('#formEdicaoEmpregadoTerc').removeAttr('style');
+    $(".LoadingLayout").hide();
+    $('#btnSalvar').show();
+
+    $('#modalEditEmpTercLoading').hide();
+    DesbloquearDiv("modalEditEmpTerc");
+
+    TratarResultadoJSON(data.resultado);
+
+    if (data.resultado.Sucesso != null && data.resultado.Sucesso != undefined && data.resultado.Sucesso != "") {
+        $('#modalEditEmpTerc').modal('hide');
+        VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
+    }
+}

@@ -9,7 +9,10 @@ namespace GISCore.Business.Concrete
     {
         public override void Inserir(EmpregadoContratado pEmpContratado)
         {
-            pEmpContratado.UniqueKey = Guid.NewGuid().ToString();
+            if (string.IsNullOrEmpty(pEmpContratado.UniqueKey))
+            {
+                pEmpContratado.UniqueKey = Guid.NewGuid().ToString();
+            }
 
             base.Inserir(pEmpContratado);
         }
