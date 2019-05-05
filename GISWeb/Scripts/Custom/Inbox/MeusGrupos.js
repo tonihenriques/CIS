@@ -21,7 +21,15 @@ function AtualizarIncidentes() {
 
     $("#result_incidente").html("");
     $(".LoadingLayout").show();
-    $('.page-content-area').ace_ajax('startLoading');
+
+    if (EstaNoModalVisualizarDetalhesIncidente()) {
+        $("#modalDetalhesIncidenteCorpoLoading").show();
+        $('#modalDetalhesIncidenteCorpoLoadingTexto').html('...Atualizando tela');
+        BloquearDiv("modalDetalhesIncidente");
+    }
+    else {
+        $('.page-content-area').ace_ajax('startLoading');
+    }
 
     $.ajax({
         method: "POST",
@@ -30,11 +38,20 @@ function AtualizarIncidentes() {
         error: function (erro) {
             $(".LoadingLayout").hide();
             $('.page-content-area').ace_ajax('stopLoading', true);
-            ExibirMensagemGritter('Oops! Erro inesperado', erro.responseText, 'gritter-error')
+
+            $("#modalDetalhesIncidenteCorpoLoading").hide();
+            $('#modalDetalhesIncidenteCorpoLoadingTexto').html('');
+            DesbloquearDiv("modalDetalhesIncidente");
+
+            ExibirMensagemGritter('Oops! Erro inesperado', erro.responseText, 'gritter-error');
         },
         success: function (content) {
             $(".LoadingLayout").hide();
             $('.page-content-area').ace_ajax('stopLoading', true);
+
+            $("#modalDetalhesIncidenteCorpoLoading").hide();
+            $('#modalDetalhesIncidenteCorpoLoadingTexto').html('');
+            DesbloquearDiv("modalDetalhesIncidente");
 
             if (content.resultado != null && content.resultado != undefined) {
                 TratarResultadoJSON(content.resultado);

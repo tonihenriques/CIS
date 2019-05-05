@@ -6,12 +6,14 @@ using GISModel.DTO.Envolvidos;
 using GISModel.DTO.Incidente;
 using GISModel.DTO.Shared;
 using GISModel.Entidades;
+using GISModel.Entidades.OBJ;
 using GISModel.Entidades.OBJ.Tabelas;
 using GISModel.Entidades.REL;
 using GISWeb.Infraestrutura.Filters;
 using GISWeb.Infraestrutura.Provider.Abstract;
 using Ninject;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -28,6 +30,15 @@ namespace GISWeb.Controllers
     {
 
         #region
+
+            [Inject]
+            public ICatBusiness CATBusiness { get; set; }
+
+            [Inject]
+            public ILesaoDoencaBusiness LesaoDoencaBusiness { get; set; }
+
+            [Inject]
+            public ILesaoEmpregadoBusiness LesaoEmpregadoBusiness { get; set; }
 
             [Inject]
             public IArquivoBusiness ArquivoBusiness { get; set; }
@@ -212,22 +223,123 @@ namespace GISWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult Terminar(string RegistroID)
+        public ActionResult Terminar(string id)
         {
             try
             {
-                Incidente oRegistro = IncidenteBusiness.Consulta.FirstOrDefault(p => p.UniqueKey.Equals(RegistroID));
+                if (string.IsNullOrEmpty(id))
+                    throw new Exception("A identificação do incidente não foi localizado entre os parâmetros.");
+
+                Incidente oRegistro = IncidenteBusiness.Consulta.FirstOrDefault(p => string.IsNullOrEmpty(p.UsuarioExclusao) && p.UniqueKey.Equals(id));
                 if (oRegistro == null)
                 {
-                    return Json(new { resultado = new RetornoJSON() { Erro = "Não foi possível excluir o Empregado, pois o mesmo não foi localizado." } });
+                    return Json(new { resultado = new RetornoJSON() { Erro = "Não foi possível excluir o incidente, pois o mesmo não foi localizado." } });
                 }
                 else
                 {
-                    oRegistro.DataExclusao = DateTime.Now;
-                    oRegistro.UsuarioExclusao = "LoginTeste";
-                    IncidenteBusiness.Alterar(oRegistro);
+                    //Registro
+                    oRegistro.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                    IncidenteBusiness.Terminar(oRegistro);
 
-                    return Json(new { resultado = new RetornoJSON() { Sucesso = "O Registro:'" + oRegistro.UniqueKey + "' foi excluído com sucesso." } });
+                    //Arquivos
+                    List<Arquivo> arqs = ArquivoBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UKObjeto.Equals(id)).ToList();
+                    if (arqs?.Count > 0)
+                    {
+                        foreach (Arquivo arq in arqs)
+                        {
+                            arq.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                            ArquivoBusiness.Terminar(arq);
+                        }
+                    }
+
+                    //Envolvidos
+                    List<RegistroEmpregadoContratado> empTerc = RegistroEmpregadoContratadoBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UKRegistro.Equals(id)).ToList();
+                    if (empTerc?.Count > 0)
+                    {
+                        foreach (RegistroEmpregadoContratado regContratado in empTerc)
+                        {
+                            //CAT
+                            if (!string.IsNullOrEmpty(regContratado.UKCAT))
+                            {
+                                CAT catTemp = CATBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(regContratado.UKCAT));
+                                if (catTemp != null)
+                                {
+                                    catTemp.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                                    CATBusiness.Terminar(catTemp);
+                                }
+                            }
+
+                            //Lesao Doença
+                            if (!string.IsNullOrEmpty(regContratado.UKLesaoDoenca))
+                            {
+                                LesaoDoenca lesao = LesaoDoencaBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(regContratado.UKLesaoDoenca));
+                                if (lesao != null)
+                                {
+                                    lesao.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                                    LesaoDoencaBusiness.Terminar(lesao);
+                                }
+                            }
+
+                            //Lesao Empregado
+                            if (!string.IsNullOrEmpty(regContratado.UKLesaoEmpregado))
+                            {
+                                LesaoEmpregado lesaoEmp = LesaoEmpregadoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(regContratado.UKLesaoEmpregado));
+                                if (lesaoEmp != null)
+                                {
+                                    lesaoEmp.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                                    LesaoEmpregadoBusiness.Terminar(lesaoEmp);
+                                }
+                            }
+
+                            regContratado.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                            RegistroEmpregadoContratadoBusiness.Terminar(regContratado);
+                        }
+                    }
+
+                    List<RegistroEmpregadoProprio> empProprio = RegistroEmpregadoProprioBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UKRegistro.Equals(id)).ToList();
+                    if (empProprio?.Count > 0)
+                    {
+                        foreach (RegistroEmpregadoProprio regProprio in empProprio)
+                        {
+                            //CAT
+                            if (!string.IsNullOrEmpty(regProprio.UKCAT))
+                            {
+                                CAT catTemp = CATBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(regProprio.UKCAT));
+                                if (catTemp != null)
+                                {
+                                    catTemp.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                                    CATBusiness.Terminar(catTemp);
+                                }
+                            }
+
+                            //Lesao Doença
+                            if (!string.IsNullOrEmpty(regProprio.UKLesaoDoenca))
+                            {
+                                LesaoDoenca lesao = LesaoDoencaBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(regProprio.UKLesaoDoenca));
+                                if (lesao != null)
+                                {
+                                    lesao.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                                    LesaoDoencaBusiness.Terminar(lesao);
+                                }
+                            }
+
+                            //Lesao Empregado
+                            if (!string.IsNullOrEmpty(regProprio.UKLesaoEmpregado))
+                            {
+                                LesaoEmpregado lesaoEmp = LesaoEmpregadoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(regProprio.UKLesaoEmpregado));
+                                if (lesaoEmp != null)
+                                {
+                                    lesaoEmp.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                                    LesaoEmpregadoBusiness.Terminar(lesaoEmp);
+                                }
+                            }
+
+                            regProprio.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                            RegistroEmpregadoProprioBusiness.Terminar(regProprio);
+                        }
+                    }
+
+                    return Json(new { resultado = new RetornoJSON() { Sucesso = "O incidente " + oRegistro.Codigo + " foi excluído com sucesso." } });
                 }
             }
             catch (Exception ex)
@@ -455,6 +567,12 @@ namespace GISWeb.Controllers
                                                  UKRel = rel.UniqueKey
                                              }).ToList();
 
+                    vm.Operacoes = OperacaoBusiness.RecuperarTodasPermitidas(CustomAuthorizationProvider.UsuarioAutenticado.Login, CustomAuthorizationProvider.UsuarioAutenticado.Permissoes, registro);
+
+                    registro.Operacoes = vm.Operacoes;
+
+                    ViewBag.Incidente = registro;
+
                     return PartialView("_Detalhes", vm);
                 }
             }
@@ -483,7 +601,7 @@ namespace GISWeb.Controllers
                 if (fichaPersistida == null)
                     throw new Exception("As informações fornecidas para montagem do menu de operações não são válidas.");
 
-                fichaPersistida.Operacoes = OperacaoBusiness.RecuperarTodasPermitidas(CustomAuthorizationProvider.UsuarioAutenticado.Login, fichaPersistida);
+                fichaPersistida.Operacoes = OperacaoBusiness.RecuperarTodasPermitidas(CustomAuthorizationProvider.UsuarioAutenticado.Login, CustomAuthorizationProvider.UsuarioAutenticado.Permissoes, fichaPersistida);
 
                 return PartialView("_MenuOperacoes", fichaPersistida);
             }

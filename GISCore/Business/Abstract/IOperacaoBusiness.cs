@@ -1,4 +1,5 @@
 ﻿using GISModel.DTO;
+using GISModel.DTO.Permissoes;
 using GISModel.Entidades;
 using System.Collections.Generic;
 
@@ -7,7 +8,7 @@ namespace GISCore.Business.Abstract
     public interface IOperacaoBusiness : IBaseBusiness<EntidadeBase>
     {
 
-        OperacaoCollection RecuperarTodasPermitidas(string usuarioLogado, Incidente entidade);
+        OperacaoCollection RecuperarTodasPermitidas(string usuarioLogado, List<VMPermissao> permissoes, Incidente entidade);
 
         string RecuperarProximoStatus(string statusAtual);
 

@@ -174,17 +174,22 @@ function AdicionarFuncoesOnClikParaOperacoes() {
         OnClickEditarEmpTerceiro($(this));
     });
 
+    $(".lnkExcluirIncidente").off("click").on("click", function (e) {
+        e.preventDefault();
+        OnClickExcluirIncidente($(this));
+    });
+
 }
 
 function AtualizarTelasDetalhes() {
     if (EstaNaCaixaDeEntrada()) {
         if (EstaNoModalVisualizarDetalhesIncidente())
-            OnClickVisualizarDetalhes($('#modalDetalhesFichaCorpo'));
+            VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
 
         AtualizarIncidentes();
     } else if (EstaNaPesquisaIncidente()) {
         if (EstaNoModalVisualizarDetalhesIncidente())
-            OnClickVisualizarDetalhes($('#modalDetalhesFichaCorpo'));
+            VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
 
         AtualizarRowPesquisa();
     }
@@ -199,7 +204,7 @@ function EstaNaPesquisaIncidente() {
 }
 
 function EstaNoModalVisualizarDetalhesIncidente() {
-    return ($('#modalDetalhesFicha').data('bs.modal') || { isShown: false }).isShown;
+    return ($('#modalDetalhesIncidente').data('bs.modal') || { isShown: false }).isShown;
 }
 
 function InitDropZoneSingle(elementoClicado) {
@@ -812,4 +817,52 @@ function OnSuccessEditarEmpTerceiro(data) {
         $('#modalEditEmpTerc').modal('hide');
         VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
     }
+}
+
+function OnClickExcluirIncidente(origemElemento) {
+    var msgInformativa = "Você está excluindo este incidente.";
+
+    var callback = function () {
+
+        if (EstaNoModalVisualizarDetalhesIncidente()) {
+            $("#modalDetalhesIncidenteCorpoLoading").show();
+            $('#modalDetalhesIncidenteCorpoLoadingTexto').html('...Excluindo incidente');
+            BloquearDiv("modalDetalhesIncidente");
+        }
+        else {
+            $('.page-content-area').ace_ajax('startLoading');
+        }
+        
+        $.ajax({
+            method: "POST",
+            url: "/Incidente/Terminar",
+            data: { id: origemElemento.closest("[data-uniquekey]").attr("data-uniquekey") },
+            success: function (content) {
+                
+                if (EstaNoModalVisualizarDetalhesIncidente()) {
+                    $("#modalDetalhesIncidenteCorpoLoading").hide();
+                    $('#modalDetalhesIncidenteCorpoLoadingTexto').html('');
+                    DesbloquearDiv("modalDetalhesIncidente");
+                }
+                else {
+                    $('.page-content-area').ace_ajax('stopLoading', true);
+                }
+
+                TratarResultadoJSON(content.resultado);
+
+                if (content.resultado.Sucesso != null && content.resultado.Sucesso != undefined && content.resultado.Sucesso != "") {
+                    if (EstaNoModalVisualizarDetalhesIncidente()) {
+                        $('#modalDetalhesIncidente').modal('hide');
+                    }
+
+                    if (EstaNaCaixaDeEntrada()) {
+                        AtualizarIncidentes();
+                    }
+                }
+                
+            }
+        });
+    };
+
+    ExibirMensagemDeConfirmacaoSimples(msgInformativa, "Exclusão", callback, "btn-danger");
 }

@@ -70,10 +70,11 @@ namespace GISModel.DTO.Incidente
 
         public List<Arquivo> Arquivos { get; set; }
 
-
         public List<VMProprio> EnvolvidosProprio { get; set; }
 
         public List<VMTerceiro> EnvolvidosTerceiro { get; set; }
+
+        public OperacaoCollection Operacoes { get; set; }
 
     }
 }

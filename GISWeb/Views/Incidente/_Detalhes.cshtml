@@ -1,6 +1,8 @@
 ﻿@using GISModel.DTO.Incidente
 @using GISModel.Entidades
 @using GISModel.DTO.Envolvidos
+@using GISModel.Enums
+
 
 @model VMIncidente
 
@@ -73,7 +75,7 @@ else
         {
             classeTitulos = "blue";
         }
-        
+
         //if (Model.RevState == SPFRevState.SUPERSEDED)
         //{
         //    classeTitulos = "orange2";
@@ -97,6 +99,70 @@ else
                                 <b>INFORMAÇÕES PRINCIPAIS</b>
                             </a>
                         </h5>
+
+
+
+                        <div class="widget-toolbar no-border" style="height: 38px; padding-top: 5px;">
+                            <div class="btn-group pull-right">
+
+                                @if (Model.Operacoes.Contains(Operacao.Aprovar))
+                                {
+                                    <button class="btn btn-xs btn-success lnkAprovar" data-target="#modalAprovar" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        Aprovar
+                                    </button>
+
+                                    Model.Operacoes.Remove(Operacao.Aprovar);
+
+                                    if (Model.Operacoes.Contains(Operacao.Reprovar))
+                                    {
+                                        <button class="btn btn-xs btn-danger lnkReprovar" data-target="#modalRejeitar" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                            <i class="ace-icon fa fa-remove"></i>
+                                            Reprovar
+                                        </button>
+
+                                        Model.Operacoes.Remove(Operacao.Reprovar);
+                                    }
+                                }
+                                else if (Model.Operacoes.Contains(Operacao.Assumir))
+                                {
+                                    <button class="btn btn-xs btn-info lnkAssumir" data-target="#modalAssumir" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-claim="true">
+                                        <i class="ace-icon fa fa-arrow-circle-down"></i>
+                                        Assumir
+                                    </button>
+
+                                    Model.Operacoes.Remove(Operacao.Assumir);
+                                }
+                                else if (Model.Operacoes.Contains(Operacao.Encaminhar))
+                                {
+                                    <button class="btn btn-xs btn-info lnkAtribuir" data-target="#modalEncaminhar" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-claim="false">
+                                        <i class="ace-icon fa fa-random"></i>
+                                        Atribuir
+                                    </button>
+
+                                    Model.Operacoes.Remove(Operacao.Encaminhar);
+                                }
+                                else
+                                {
+                                    <button class="btn btn-xs btn-default" data-toggle="dropdown" aria-expanded="false">
+                                        <i class=" ace-icon fa fa-bars">
+                                        </i>
+                                        Menu
+                                    </button>
+                                }
+
+                                <button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                    <span class="ace-icon fa fa-caret-down icon-only"></span>
+                                </button>
+
+                                <ul class="dropdown-menu dropdown-only-icon dropdown-yellow2 dropdown-menu-right dropdown-caret dropdown-close">
+                                    @{ 
+                                        Html.RenderPartial("~/Views/Incidente/_MenuOperacoes.cshtml", ((Incidente)ViewBag.Incidente));
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+
                     </div>
 
 
@@ -635,7 +701,7 @@ else
                                                                         <i class="ace-icon fa fa-life-ring bigger-130"></i>
                                                                     </a>
                                                                 }
-                                                                
+
                                                                 @if (!Model.Status.Contains("Em Edição") && !Model.Status.Contains("Em Análise"))
                                                                 {
                                                                     <a class="orange CustomTooltip" href="#" title="Gerenciar CAT">

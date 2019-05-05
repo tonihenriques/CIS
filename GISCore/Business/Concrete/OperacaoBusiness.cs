@@ -1,5 +1,6 @@
 ﻿using GISCore.Business.Abstract;
 using GISModel.DTO;
+using GISModel.DTO.Permissoes;
 using GISModel.Entidades;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace GISCore.Business.Concrete
     public class OperacaoBusiness : BaseBusiness<EntidadeBase>, IOperacaoBusiness
     {
 
-        public OperacaoCollection RecuperarTodasPermitidas(string usuarioLogado, Incidente entidade)
+        public OperacaoCollection RecuperarTodasPermitidas(string usuarioLogado, List<VMPermissao> permissoes, Incidente entidade)
         {
             var operacoes = new OperacaoCollection();
 
@@ -34,7 +35,11 @@ namespace GISCore.Business.Concrete
             }
             else 
             {
-                operacoes.Add(GISModel.Enums.Operacao.Assumir);
+                if (permissoes.Where(a => a.Perfil.Equals(entidade.Responsavel)).Count() > 0)
+                {
+                    operacoes.Add(GISModel.Enums.Operacao.Assumir);
+                }
+
                 operacoes.Add(GISModel.Enums.Operacao.HistoricoWorkflow);
             }
             return operacoes;
