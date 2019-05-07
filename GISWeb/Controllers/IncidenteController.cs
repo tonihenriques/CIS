@@ -73,6 +73,9 @@ namespace GISWeb.Controllers
             [Inject]
             public ICustomAuthorizationProvider CustomAuthorizationProvider { get; set; }
 
+            [Inject]
+            public INivelHierarquicoBusiness NivelHierarquicoBusiness { get; set; }
+
         #endregion
 
         public ActionResult Index()
@@ -142,9 +145,96 @@ namespace GISWeb.Controllers
             return View();
         }
 
-        public ActionResult Edicao(string id)
+        public ActionResult Edicao(string uniquekey)
         {
-            return View(IncidenteBusiness.Consulta.FirstOrDefault(p => p.UniqueKey.Equals(id)));
+            try
+            {
+                Incidente obj = IncidenteBusiness.Consulta.FirstOrDefault(p => string.IsNullOrEmpty(p.UsuarioExclusao) && p.UniqueKey.Equals(uniquekey));
+
+                if (obj == null)
+                {
+                    throw new Exception("Não foi possível encontrar o incidente a partir da identificação.");
+                }
+
+                ViewBag.ESocial = ESocialBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao)).ToList();
+                ViewBag.Departamentos = DepartamentoBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao)).ToList();
+                ViewBag.Municipios = MunicipioBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao)).ToList().OrderBy(b => b.Descricao);
+
+                if (!string.IsNullOrEmpty(obj.UKOrgao))
+                {
+                    obj.UKDiretoria = BuscarDiretoriaPorOrgao(obj.UKOrgao);
+                }
+
+                return PartialView(obj);
+            }
+            catch (Exception ex)
+            {
+                if (ex.GetBaseException() == null)
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.Message } });
+                }
+                else
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.GetBaseException().Message } });
+                }
+            }
+            
+        }
+
+        public string BuscarDiretoriaPorOrgao(string ukDepartamento)
+        {
+           
+            Departamento dep = DepartamentoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(ukDepartamento));
+            if (dep == null)
+            {
+                throw new Exception("Não foi possível encontrar o departamento a partir da identificação.");
+            }
+            else
+            {
+                NivelHierarquico nh = NivelHierarquicoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(dep.UKNivelHierarquico));
+                if (nh == null)
+                {
+                    throw new Exception("Não foi possível recuperar o nível hierarquico do departamento selecionado.");
+                }
+                else
+                {
+                    if (nh.Nome.Equals("Diretoria"))
+                    {
+                        return dep.Sigla;
+                    }
+                    else if (nh.Nome.Equals("Superintendência"))
+                    {
+                        Departamento depDir = DepartamentoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(dep.UKDepartamentoVinculado));
+                        if (depDir == null)
+                        {
+                            throw new Exception("Não foi possível encontrar o órgão vinculado a Superintendência selecionada.");
+                        }
+                        else
+                        {
+                            return depDir.Sigla;
+                        }
+                    }
+                    else if (nh.Nome.Equals("Gerência"))
+                    {
+                        Departamento depDir = (from dSup in DepartamentoBusiness.Consulta.Where(p => string.IsNullOrEmpty(p.UsuarioExclusao) && p.UniqueKey.Equals(dep.UKDepartamentoVinculado)).ToList()
+                                                join dDir in DepartamentoBusiness.Consulta.Where(p => string.IsNullOrEmpty(p.UsuarioExclusao)).ToList() on dSup.UKDepartamentoVinculado equals dDir.UniqueKey
+                                                select dDir).ToList().FirstOrDefault();
+                        if (depDir == null)
+                        {
+                            throw new Exception("Não foi possível encontrar o órgão vinculado a Gerência selecionada.");
+                        }
+                        else
+                        {
+                            return depDir.Sigla;
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Nível hierarquico do departamento selecionado não conhecido.");
+                    }
+                }
+            }
+
         }
 
         [HttpPost]
@@ -162,6 +252,7 @@ namespace GISWeb.Controllers
                     entidade.Responsavel = entidade.UsuarioInclusao;
                     entidade.Codigo = "I-" + DateTime.Now.Year.ToString() + "-" + IncidenteBusiness.GetNextNumber("Incidente", "select max(SUBSTRING(codigo, 8, 6)) from objincidente").ToString().PadLeft(6, '0');
                     entidade.StatusWF = "RS";
+                    entidade.DataAtualizacao = DateTime.Now;
                     IncidenteBusiness.Inserir(entidade);
 
                     Severino.GravaCookie("MensagemSucesso", "O incidente foi cadastrado com sucesso.", 10);
@@ -191,17 +282,33 @@ namespace GISWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Atualizar(Incidente TRegistro)
+        public ActionResult Atualizar(Incidente entidade)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    IncidenteBusiness.Alterar(TRegistro);
+                    Incidente obj = IncidenteBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(entidade.UniqueKey));
+                    if (obj == null)
+                    {
+                        throw new Exception("Não foi possível localizar o incidente a ser atualizado.");
+                    }
 
-                    TempData["MensagemSucesso"] = "Registro Atualizado com Sucesso.";
+                    obj.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                    IncidenteBusiness.Terminar(obj);
 
-                    return Json(new { resultado = new RetornoJSON() { URL = Url.Action("Index", "Registro") } });
+                    entidade.UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                    entidade.DataInclusao = obj.DataInclusao;
+                    entidade.DataAtualizacao = DateTime.Now;
+
+                    entidade.UKDiretoria = null;
+                    entidade.Codigo = obj.Codigo;
+                    entidade.Status = obj.Status;
+                    entidade.StatusWF = obj.StatusWF;
+                    entidade.Responsavel = obj.Responsavel;
+                    IncidenteBusiness.Inserir(entidade);
+
+                    return Json(new { resultado = new RetornoJSON() { Sucesso = "Incidente " + entidade.Codigo + " atualizado com Sucesso." } });
                 }
                 catch (Exception ex)
                 {
@@ -214,7 +321,6 @@ namespace GISWeb.Controllers
                         return Json(new { resultado = new RetornoJSON() { Erro = ex.GetBaseException().Message } });
                     }
                 }
-
             }
             else
             {
@@ -511,6 +617,7 @@ namespace GISWeb.Controllers
                     vm.Regional = registro.Regional.ToString();
                     vm.NumeroSmart = registro.NumeroSmart;
                     vm.TipoEntrada = registro.ETipoEntrada.GetDisplayName();
+                    
 
                     Municipio mun = MunicipioBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(registro.UKMunicipio));
                     if (mun != null)
@@ -541,7 +648,13 @@ namespace GISWeb.Controllers
 
                     vm.DataIncidente = registro.DataIncidente.ToString("dd/MM/yyyy");
                     vm.HoraIncidente = registro.DataIncidente.ToString("HH:mm");
-                    vm.DataInclusao = registro.DataInclusao.ToString();
+                    vm.DataInclusao = registro.DataInclusao.ToString("dd/MM/yyyy HH:mm");
+
+                    if (registro.DataAtualizacao != null)
+                    {
+                        vm.DataAtualizacao = ((DateTime)registro.DataAtualizacao).ToString("dd/MM/yyyy HH:mm");
+                    }
+                    
                     vm.UsuarioInclusao = registro.UsuarioInclusao;
 
                     vm.Arquivos = ArquivoBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UKObjeto.Equals(uniquekey)).ToList();

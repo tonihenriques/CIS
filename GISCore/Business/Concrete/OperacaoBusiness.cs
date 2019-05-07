@@ -23,7 +23,7 @@ namespace GISCore.Business.Concrete
                 //operacoes.Add(GISModel.Enums.Operacao.Encaminhar);
                 operacoes.Add(GISModel.Enums.Operacao.AlterarDados);
                 operacoes.Add(GISModel.Enums.Operacao.HistoricoWorkflow);
-
+                
                 if (entidade.Status.ToUpper().Equals("EM EDIÇÃO"))
                 {
                     operacoes.Add(GISModel.Enums.Operacao.Excluir);

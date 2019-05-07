@@ -67,7 +67,7 @@ namespace GISModel.Entidades
         [Display(Name = "Data Boletim de Ocorrência")]
         public DateTime? DataBoletimOcorrencia { get; set; }
 
-        [Display(Name = "Acidente grave (IP 10.2)?")]
+        [Display(Name = "Acid. grave (IP 10.2)?")]
         public bool AcidenteGraveIP102 { get; set; }
 
 
@@ -93,6 +93,11 @@ namespace GISModel.Entidades
 
         [Display(Name = "Fonte da Lesão")]
         public string UKFonteLesao { get; set; }
+
+
+        [Display(Name = "Data Atualização")]
+        public DateTime? DataAtualizacao { get; set; }
+
 
 
         public string Status { get; set; }

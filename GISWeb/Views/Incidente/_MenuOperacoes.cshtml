@@ -18,7 +18,6 @@
                     );
 
                 var qtdDividers = Convert.ToInt32(possuiAlgumMetodoWF) + Convert.ToInt32(possuiAlgumMetodoCorp) + -1;
-
 }
 
 @*####################   WORKFLOW   ####################*@
@@ -94,16 +93,16 @@
 
 @if (possuiAlgumMetodoCorp)
 {
-    @*if (Model.Operacoes.Contains(Operacao.AlterarDados))
+    if (Model.Operacoes.Contains(Operacao.AlterarDados))
     {
         <li class="action-buttons">
-            <a href="#" class="lnkExcluirFicha CustomTooltip" title="Alterar">
+            <a href="#" class="lnkAlterarDados CustomTooltip" title="Alterar" data-target="#modalEditIncidente" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                 <span class="blue">
                     <i class="ace-icon fa fa-pencil bigger-150"></i>
                 </span>
             </a>
         </li>
-    }*@
+    }
 
     if (Model.Operacoes.Contains(Operacao.Excluir))
     {

@@ -32,7 +32,9 @@ namespace GISCore.Repository.Concrete
             if (string.IsNullOrEmpty(entidade.UniqueKey))
                 entidade.UniqueKey = Guid.NewGuid().ToString();
 
-            entidade.DataInclusao = DateTime.Now;
+            if (entidade.DataInclusao == null || entidade.DataInclusao.CompareTo(DateTime.MinValue) == 0 || entidade.DataInclusao.CompareTo(DateTime.MaxValue) == 0)
+                entidade.DataInclusao = DateTime.Now;
+            
             entidade.DataExclusao = DateTime.MaxValue;
 
             Context.Entry(entidade).State = EntityState.Added;

@@ -66,6 +66,7 @@ namespace GISModel.DTO.Incidente
 
         public string DataInclusao { get; set; }
 
+        public string DataAtualizacao { get; set; }
 
 
         public List<Arquivo> Arquivos { get; set; }

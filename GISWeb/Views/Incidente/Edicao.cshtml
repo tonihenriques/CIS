@@ -1,0 +1,296 @@
+﻿@using GISModel.Entidades
+@model Incidente
+
+
+@using (Ajax.BeginForm("Atualizar", "Incidente", null,
+    new AjaxOptions {
+        HttpMethod = "POST",
+        OnBegin = "OnBeginAtualizarIncidente",
+        OnSuccess = "OnSuccessAtualizarIncidente",
+        OnFailure = "OnFailureAtualizarIncidente",
+    }, new { @id = "formAtualizarAcidente", @class = "form-horizontal", @autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.NumeroSmart, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                <div class="col-xs-12 col-sm-12">
+                    @Html.TextBoxFor(model => model.NumeroSmart, htmlAttributes: new { @class = "form-control" })
+                    @Html.HiddenFor(model => model.UniqueKey)
+                    @Html.HiddenFor(model => model.UKDiretoria)
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-2">
+            <div class="form-group">
+
+                <label class="form-field-select-3 col-xs-12 col-sm-12 no-padding-right" for="DataIncidente">Data do Incidente</label>
+
+                <div class="col-xs-12 col-sm-12">
+
+                    <div class="input-group">
+                        <input class="form-control date-picker" name="DataIncidente" id="DataIncidente" type="text" data-date-format="dd-mm-yyyy" value="@Model.DataIncidente.ToString("dd/MM/yyyy")">
+                        <span class="input-group-addon">
+                            <i class="fa fa-calendar bigger-110"></i>
+                        </span>
+                    </div>
+
+                    @Html.ValidationMessageFor(model => model.DataIncidente, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-2">
+            <div class="form-group">
+                <label class="form-field-select-3 col-xs-12 col-sm-12 no-padding-right" for="HoraIncidente">Horário do Incidente</label>
+                <div class="col-xs-12 col-sm-12">
+                    <div class="input-group bootstrap-timepicker">
+                        <input id="timepicker1" type="text" class="form-control" value="@Model.DataIncidente.ToString("HH:mm")">
+                        <span class="input-group-addon">
+                            <i class="fa fa-clock-o bigger-110"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-2">
+            <div class="form-group">
+                @Html.LabelFor(model => model.AcidenteFatal, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                <div class="col-xs-12 col-sm-12">
+                    <div class="checkbox">
+                        <label>
+                            @{
+                                string isChecked1 = string.Empty;
+                                if (Model.AcidenteFatal)
+                                {
+                                    isChecked1 = " checked=\"checked\" ";
+                                }
+                            }
+
+                            <input name="AcidenteFatal" id="AcidenteFatal" class="ace ace-checkbox-2" type="checkbox" @isChecked1>
+                            <span class="lbl"> </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-xs-12 col-sm-2">
+            <div class="form-group">
+                @Html.LabelFor(model => model.AcidenteGraveIP102, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                <div class="col-xs-12 col-sm-12">
+                    <div class="checkbox">
+                        <label>
+                            @{ 
+                                string isChecked2 = string.Empty;
+                                if (Model.AcidenteGraveIP102)
+                                {
+                                    isChecked2 = " checked=\"checked\" ";
+                                }
+                            }
+                            <input name="AcidenteGraveIP102" id="AcidenteGraveIP102" class="ace ace-checkbox-2" type="checkbox" @isChecked2>
+                            <span class="lbl"> </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.ETipoEntrada, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                <div class="col-xs-12 col-sm-12">
+                    @Html.EnumDropDownListFor(model => model.ETipoEntrada, "Tipo de Entrada ...", htmlAttributes: new { @class = "chosen-select form-control" })
+                    @Html.ValidationMessageFor(model => model.ETipoEntrada, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Centro, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                <div class="col-xs-12 col-sm-12">
+                    @Html.EnumDropDownListFor(model => model.Centro, "Selecione um centro ...", htmlAttributes: new { @class = "chosen-select form-control" })
+                    @Html.ValidationMessageFor(model => model.Centro, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Regional, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                <div class="col-xs-12 col-sm-12">
+                    @Html.EnumDropDownListFor(model => model.Regional, "Selecione uma regional ...", htmlAttributes: new { @class = "chosen-select form-control" })
+                    @Html.ValidationMessageFor(model => model.Regional, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.UKDiretoria, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                <div class="col-xs-12 col-sm-12">
+                    @Html.EditorFor(model => model.UKDiretoria, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.UKOrgao, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                <div class="col-xs-12 col-sm-12">
+                    @Html.DropDownListFor(d => d.UKOrgao, new SelectList(ViewBag.Departamentos, "UniqueKey", "Sigla"), "Selecione um órgão ...", new { @class = "chosen-select form-control tag-input-style", @autocomplete = "off" })
+                    @Html.ValidationMessageFor(model => model.UKOrgao, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.ETipoAcidente, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                <div class="col-xs-12 col-sm-12">
+                    @Html.EnumDropDownListFor(model => model.ETipoAcidente, "Selecione um tipo ...", htmlAttributes: new { @class = "chosen-select form-control" })
+
+                    @Html.ValidationMessageFor(model => model.ETipoAcidente, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                @Html.LabelFor(model => model.LocalAcidente, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                <div class="col-xs-12 col-sm-12">
+                    @Html.TextBoxFor(model => model.LocalAcidente, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                @Html.LabelFor(model => model.TipoLocalAcidente, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                <div class="col-xs-12 col-sm-12">
+                    @Html.EnumDropDownListFor(model => model.TipoLocalAcidente, "Selecione um tipo ...", htmlAttributes: new { @class = "chosen-select form-control" })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                @Html.LabelFor(model => model.UKMunicipio, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                <div class="col-xs-12 col-sm-12">
+                    @Html.DropDownListFor(d => d.UKMunicipio, new SelectList(ViewBag.Municipios, "UniqueKey", "NomeCompleto"), "Selecione uma opção ...", new { @class = "chosen-select form-control tag-input-style", @autocomplete = "off" })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Estado, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                <div class="col-xs-12 col-sm-12">
+                    @Html.TextBoxFor(model => model.Estado, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Logradouro, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                <div class="col-xs-12 col-sm-12">
+                    @Html.TextBoxFor(model => model.Logradouro, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                @Html.LabelFor(model => model.NumeroLogradouro, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                <div class="col-xs-12 col-sm-12">
+                    @Html.TextBoxFor(model => model.NumeroLogradouro, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                @Html.LabelFor(model => model.NumeroBoletimOcorrencia, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                <div class="col-xs-12 col-sm-12">
+                    @Html.TextBoxFor(model => model.NumeroBoletimOcorrencia, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <div class="form-group">
+
+                    <label class="form-field-select-3 col-xs-12 col-sm-12 no-padding-right" for="DataIncidente">Data Boletim de Ocorrência</label>
+
+                    <div class="col-xs-12 col-sm-12">
+
+                        <div class="input-group">
+                            @{ 
+                                string dtBoletim = string.Empty;
+                                if (Model.DataBoletimOcorrencia != null)
+                                {
+                                    dtBoletim = ((DateTime)Model.DataBoletimOcorrencia).ToString("dd/MM/yyyy");
+                                }
+                            }
+                            <input class="form-control date-picker" name="DataBoletimOcorrencia" id="DataBoletimOcorrencia" type="text" data-date-format="dd-mm-yyyy" value="@dtBoletim">
+                            <span class="input-group-addon">
+                                <i class="fa fa-calendar bigger-110"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.UKESocial, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                <div class="col-xs-12 col-sm-12">
+                    @Html.DropDownListFor(d => d.UKESocial, new SelectList(ViewBag.ESocial, "UniqueKey", "NomeCompleto"), "Selecione uma opção ...", new { @class = "chosen-select form-control tag-input-style", @autocomplete = "off" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Descricao, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                <div class="col-xs-12 col-sm-12">
+                    @Html.TextAreaFor(model => model.Descricao, new { @class = "col-xs-12 col-sm-12", @rows = 3 })
+                    @Html.ValidationMessageFor(model => model.Descricao, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+}

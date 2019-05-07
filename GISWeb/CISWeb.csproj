@@ -390,6 +390,7 @@
     <Content Include="Views\Inbox\_RejeitarIncidente.cshtml" />
     <Content Include="Views\EmpregadoProprio\Edicao.cshtml" />
     <Content Include="Views\EmpregadoContratado\Edicao.cshtml" />
+    <Content Include="Views\Incidente\Edicao.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

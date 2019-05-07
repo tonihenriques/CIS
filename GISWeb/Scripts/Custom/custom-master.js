@@ -179,6 +179,11 @@ function AdicionarFuncoesOnClikParaOperacoes() {
         OnClickExcluirIncidente($(this));
     });
 
+    $(".lnkAlterarDados").off("click").on("click", function (e) {
+        e.preventDefault();
+        OnClickAlterarDados($(this));
+    });
+
 }
 
 function AtualizarTelasDetalhes() {
@@ -194,6 +199,8 @@ function AtualizarTelasDetalhes() {
         AtualizarRowPesquisa();
     }
 }
+
+
 
 function EstaNaCaixaDeEntrada() {
     return $('#widgetBodyInbox').length !== 0;
@@ -865,4 +872,195 @@ function OnClickExcluirIncidente(origemElemento) {
     };
 
     ExibirMensagemDeConfirmacaoSimples(msgInformativa, "Exclusão", callback, "btn-danger");
+}
+
+
+
+function OnClickAlterarDados(elementoclicado) {
+
+    var codigoIncidente = $(elementoclicado).closest("[data-codigo]").attr("data-codigo");
+    var ukIncidente = $(elementoclicado).closest("[data-uniquekey]").attr("data-uniquekey");
+
+    $('#modalEditIncidenteTituloName').html('[<a href="#" class="lnkRevisaoEspecifica blue" data-target="#modalObterLinkEsp" data-toggle="modal">' + codigoIncidente + '</a>]');
+
+    $("#modalEditIncidenteProsseguir").hide();
+
+    $('#modalEditIncidenteTitulo').html('');
+    $('#modalEditIncidenteTitulo').hide();
+
+    $('#modalEditIncidenteCorpo').attr('data-codigo', codigoIncidente);
+    $('#modalEditIncidenteCorpo').attr('data-uniquekey', ukIncidente);
+    $('#modalEditIncidenteCorpo').html("");
+
+    $('#modalEditIncidenteX').show();
+    $('#mmodalEditIncidenteCorpo').html('');
+    $('#modalEditIncidenteLoadingTexto').html('...Carregando dados do incidente');
+    $('#modalEditIncidenteLoading').show();
+
+    $.post('/Incidente/Edicao', { uniquekey: ukIncidente }, function (content) {
+        $('#modalEditIncidenteCorpoLoading').hide();
+        $("#modalEditIncidenteLoading").hide();
+
+        if (content.resultado != null && content.resultado != undefined) {
+            if (content.resultado.Erro != null && content.resultado.Erro != undefined && content.resultado.Erro != "") {
+
+                
+
+                var divErro = "" +
+                    "<div class=\"alert alert-danger\">" +
+                    "<strong>" +
+                    "<i class=\"ace-icon fa fa-meh-o\"></i> " +
+                    "Oops! " +
+                    "</strong>" +
+
+                    "<span>" + content.resultado.Erro + "</span>" +
+                    "<br />" +
+                    "</div>";
+
+                $('#modalEditIncidenteCorpo').html(divErro);
+
+            }
+        } else {
+
+            $('#modalEditIncidenteCorpo').html(content);
+            AplicaTooltip();
+
+            $("#modalEditIncidenteProsseguir").show();
+
+            $.validator.unobtrusive.parse(document);
+
+            DatePTBR();
+
+            Chosen();
+
+            var date = new Date();
+            date.setDate(date.getDate());
+
+            $('.date-picker').datepicker({
+                autoclose: true,
+                todayHighlight: true,
+                language: 'pt-BR',
+                maxDate: date
+            }).next().on(ace.click_event, function () {
+                $(this).prev().focus();
+            });
+
+            $('#timepicker1').timepicker({
+                minuteStep: 1,
+                showSeconds: false,
+                showMeridian: false,
+                disableFocus: true,
+                icons: {
+                    up: 'fa fa-chevron-up',
+                    down: 'fa fa-chevron-down'
+                }
+            }).on('focus', function () {
+                $('#timepicker1').timepicker('showWidget');
+            }).next().on(ace.click_event, function () {
+                $(this).prev().focus();
+            });
+            
+
+            $("#UKOrgao").change(function () {
+
+                if ($(this).val() == "") {
+                    $("#UKDiretoria").val("");
+                }
+                else {
+
+                    $(".LoadingLayout").show();
+                    //$('.page-content-area').ace_ajax('startLoading');
+
+                    $.ajax({
+                        method: "POST",
+                        url: "/Departamento/BuscarDiretoriaPorOrgao",
+                        data: { ukDepartamento: $(this).val() },
+                        error: function (erro) {
+                            $(".LoadingLayout").hide();
+                            //$('.page-content-area').ace_ajax('stopLoading', true);
+                            ExibirMensagemGritter('Oops! Erro inesperado', erro.responseText, 'gritter-error');
+                        },
+                        success: function (content) {
+                            //$('.page-content-area').ace_ajax('stopLoading', true);
+                            $(".LoadingLayout").hide();
+
+                            var resultado = content.resultado;
+
+                            if (resultado.Erro != null && resultado.Erro != undefined && resultado.Erro != "") {
+                                ExibirMensagemDeErro(resultado.Erro);
+                            }
+                            else if (resultado.Alerta != null && resultado.Alerta != undefined && resultado.Alerta != "") {
+                                ExibirMensagemDeAlerta(resultado.Alerta);
+                            }
+                            else {
+                                if (resultado.Conteudo.indexOf("$") != -1) {
+                                    $("#UKDiretoria").val(resultado.Conteudo.substring(resultado.Conteudo.indexOf("$") + 1));
+                                }
+                                else {
+                                    $("#UKDiretoria").val(resultado.Conteudo);
+                                }
+                            }
+
+                        }
+                    });
+
+                }
+
+            });
+
+
+            $("#modalEditIncidenteProsseguir").off("click").on("click", function (e) {
+                $("#formAtualizarAcidente").submit();
+            });
+
+        }
+    });
+
+}
+
+function OnBeginAtualizarIncidente(jqXHR, settings) {
+    $("#modalEditIncidenteLoading").show();
+    $("#formAtualizarAcidente").css({ opacity: "0.5" });
+    BloquearDiv("modalEditIncidente");
+
+    if ($("#AcidenteFatal").prop("checked") == true) {
+        $("#AcidenteFatal").val(true);
+    }
+    else {
+        $("#AcidenteFatal").val(false);
+    }
+
+    if ($("#AcidenteGraveIP102").prop("checked") == true) {
+        $("#AcidenteGraveIP102").val(true);
+    }
+    else {
+        $("#AcidenteGraveIP102").val(false);
+    }
+
+
+    var form = $("#formAtualizarAcidente");
+    settings.data = form.serialize();
+
+
+}
+
+function OnSuccessAtualizarIncidente(data) {
+    $('#formAtualizarAcidente').removeAttr('style');
+    $("#modalEditIncidenteLoading").hide();
+    DesbloquearDiv("modalEditIncidente");
+
+    TratarResultadoJSON(data.resultado);
+
+    if (data.resultado.Sucesso != null && data.resultado.Sucesso != undefined && data.resultado.Sucesso != "") {
+        $('#modalEditIncidente').modal('hide');
+        VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
+    }
+}
+
+function OnFailureAtualizarIncidente() {
+    $('#formAtualizarAcidente').removeAttr('style');
+    $("#modalEditIncidenteLoading").hide();
+    DesbloquearDiv("modalEditIncidente");
+
+    ExibirMensagemDeErro("Erro ao tentar atualizar o incidente. Tente novamente.");
 }

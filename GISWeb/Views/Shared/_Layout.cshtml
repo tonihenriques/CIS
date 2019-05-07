@@ -103,6 +103,8 @@
     <![endif]-->
     @Scripts.Render("~/bundles/ace_js_master")
 
+    @RenderSection("Scripts", required: false)
+
     <script src="~/Scripts/Custom/custom-functions.js"></script>
     <script src="~/Scripts/Custom/custom-master.js"></script>
 
@@ -139,7 +141,7 @@
     </script>
 
     @Scripts.Render("~/bundles/jqueryval")
-    @RenderSection("Scripts", required: false)
+
 
 
 </body>

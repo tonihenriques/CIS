@@ -13166,7 +13166,7 @@ li.item-default {
   background-color: transparent;
   border-top: 1px dotted #D5E4F1;
   display: table-cell;
-  width: 110px;
+  width: 140px;
   vertical-align: middle;
 }
 .profile-info-value {
@@ -13434,7 +13434,7 @@ li.item-default {
 }
 @media only screen and (max-width: 480px) {
   .profile-info-name {
-    width: 80px;
+    width: 100px;
   }
   .profile-user-info-striped .profile-info-name {
     float: none;
