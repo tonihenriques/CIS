@@ -391,6 +391,8 @@
     <Content Include="Views\EmpregadoProprio\Edicao.cshtml" />
     <Content Include="Views\EmpregadoContratado\Edicao.cshtml" />
     <Content Include="Views\Incidente\Edicao.cshtml" />
+    <Content Include="Views\Incidente\NovaCodificacao.cshtml" />
+    <Content Include="Views\Incidente\EditarCodificacao.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

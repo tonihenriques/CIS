@@ -27,7 +27,7 @@ namespace GISModel.Entidades.REL
 
 
 
-        public string UKLesaoEmpregado { get; set; }
+        public string UKCodificacao { get; set; }
 
         public string UKLesaoDoenca { get; set; }
 

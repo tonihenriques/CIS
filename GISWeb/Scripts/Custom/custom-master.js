@@ -181,7 +181,17 @@ function AdicionarFuncoesOnClikParaOperacoes() {
 
     $(".lnkAlterarDados").off("click").on("click", function (e) {
         e.preventDefault();
-        OnClickAlterarDados($(this));
+        OnClickNovaCodificacao($(this));
+    });
+
+    $(".lkNovaCodificacao").off("click").on("click", function (e) {
+        e.preventDefault();
+        OnClickNovaCodificacao($(this));
+    });
+
+    $(".lkEditarCodificacao").off("click").on("click", function (e) {
+        e.preventDefault();
+        OnClickEditarCodificacao($(this));
     });
 
 }
@@ -1064,3 +1074,162 @@ function OnFailureAtualizarIncidente() {
 
     ExibirMensagemDeErro("Erro ao tentar atualizar o incidente. Tente novamente.");
 }
+
+
+
+function OnClickNovaCodificacao(origemElemento) {
+
+    $('#modalNovaCodificacaoCorpo').html('');
+    $('#modalNovaCodificacaoCorpoLoadingTexto').html('...Carregando formulário. Aguarde!');
+    $('#modalNovaCodificacaoCorpoLoading').show();
+
+    $.ajax({
+        method: "POST",
+        url: "/Incidente/NovaCodificacao",
+        data: { UKRelEnvolvido: origemElemento.data("uniquekeyrel"), Tipo: origemElemento.data("tipo") },
+        success: function (content) {
+            $('#modalNovaCodificacaoCorpoLoading').hide();
+
+            if (content.resultado != null && content.resultado != undefined) {
+
+                if (content.resultado.Erro != null && content.resultado.Erro != undefined && content.resultado.Erro != "") {
+                    var divErro = "" +
+                        "<div class=\"alert alert-danger\">" +
+                        "<strong>" +
+                        "<i class=\"ace-icon fa fa-meh-o\"></i> " +
+                        "Oops! " +
+                        "</strong>" +
+
+                        "<span>" + content.resultado.Erro + "</span>" +
+                        "<br />" +
+                        "</div>";
+
+                    $('#modalNovaCodificacaoCorpo').html(divErro);
+
+                }
+            } else {
+
+                $('#modalNovaCodificacaoCorpo').html(content);
+
+                AplicaTooltip();
+
+                Chosen();
+
+                AplicaDatePicker();
+
+                $("#modalNovaCodificacaoProsseguir").off("click").on('click', function (e) {
+                    e.preventDefault();
+                    $("#formCadastroCodificacao").submit();
+                });
+
+            }
+        }
+    });
+}
+
+function OnBeginCadastrarCodificacao(jqXHR, settings) {
+    $("#formCadastroCodificacao").css({ opacity: "0.5" });
+    $("#modalNovaCodificacaoLoading").show();
+    BloquearDiv("modalNovaCodificacao");
+}
+
+function OnSuccessCadastrarCodificacao(data) {
+    $('#formCadastroCodificacao').removeAttr('style');
+    $("#modalNovaCodificacaoLoading").hide();
+    DesbloquearDiv("modalNovaCodificacao");
+
+    TratarResultadoJSON(data.resultado);
+
+    if (data.resultado.Sucesso != null && data.resultado.Sucesso != undefined && data.resultado.Sucesso != "") {
+        $('#modalNovaCodificacao').modal('hide');
+        VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
+    }
+}
+
+function OnFailureCadastrarCodificacao() {
+    $('#formCadastroCodificacao').removeAttr('style');
+    $("#modalNovaCodificacaoLoading").hide();
+    DesbloquearDiv("modalNovaCodificacao");
+
+    ExibirMensagemDeErro("Erro ao tentar cadastrar a codificação do incidente. Tente novamente.");
+}
+
+
+
+function OnClickEditarCodificacao(origemElemento) {
+
+    $('#modalEditarCodificacaoCorpo').html('');
+    $('#modalEditarCodificacaoCorpoLoadingTexto').html('...Carregando formulário. Aguarde!');
+    $('#modalEditarCodificacaoCorpoLoading').show();
+
+    $.ajax({
+        method: "POST",
+        url: "/Incidente/EditarCodificacao",
+        data: { UKRelEnvolvido: origemElemento.data("uniquekeyrel"), Tipo: origemElemento.data("tipo"), UKCodificacao: origemElemento.data("ukcodificacao") },
+        success: function (content) {
+            $('#modalEditarCodificacaoCorpoLoading').hide();
+
+            if (content.resultado != null && content.resultado != undefined) {
+
+                if (content.resultado.Erro != null && content.resultado.Erro != undefined && content.resultado.Erro != "") {
+                    var divErro = "" +
+                        "<div class=\"alert alert-danger\">" +
+                        "<strong>" +
+                        "<i class=\"ace-icon fa fa-meh-o\"></i> " +
+                        "Oops! " +
+                        "</strong>" +
+
+                        "<span>" + content.resultado.Erro + "</span>" +
+                        "<br />" +
+                        "</div>";
+
+                    $('#modalEditarCodificacaoCorpo').html(divErro);
+
+                }
+            } else {
+
+                $('#modalEditarCodificacaoCorpo').html(content);
+
+                AplicaTooltip();
+
+                Chosen();
+
+                AplicaDatePicker();
+
+                $("#modalEditarCodificacaoProsseguir").off("click").on('click', function (e) {
+                    e.preventDefault();
+                    $("#formEditarCodificacao").submit();
+                });
+
+            }
+        }
+    });
+}
+
+function OnBeginEditarCodificacao(jqXHR, settings) {
+    $("#formEditarCodificacao").css({ opacity: "0.5" });
+    $("#modalEditarCodificacaoLoading").show();
+    BloquearDiv("modalEditarCodificacao");
+}
+
+function OnSuccessEditarCodificacao(data) {
+    $('#formEditarCodificacao').removeAttr('style');
+    $("#modalEditarCodificacaoLoading").hide();
+    DesbloquearDiv("modalEditarCodificacao");
+
+    TratarResultadoJSON(data.resultado);
+
+    if (data.resultado.Sucesso != null && data.resultado.Sucesso != undefined && data.resultado.Sucesso != "") {
+        $('#modalEditarCodificacao').modal('hide');
+        VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
+    }
+}
+
+function OnFailureEditarCodificacao() {
+    $('#formEditarCodificacao').removeAttr('style');
+    $("#modalEditarCodificacaoLoading").hide();
+    DesbloquearDiv("modalEditarCodificacao");
+
+    ExibirMensagemDeErro("Erro ao tentar cadastrar a codificação do incidente. Tente novamente.");
+}
+

@@ -636,9 +636,18 @@ else
                                                             <div class="hidden-sm hidden-xs action-buttons">
                                                                 @if (!Model.Status.Contains("Em Edição"))
                                                                 {
-                                                                    <a class="red CustomTooltip" href="#" title="Gerenciar Lesão Empregado">
-                                                                        <i class="ace-icon fa fa-life-ring bigger-130"></i>
-                                                                    </a>
+                                                                    if (string.IsNullOrEmpty(iEmpregado.UKCodificacao))
+                                                                    {
+                                                                        <a class="red CustomTooltip lkNovaCodificacao" href="#" data-tipo="Proprio" data-uniquekeyrel="@iEmpregado.UKRel" title="Cadastrar Codificação" data-target="#modalNovaCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                            <i class="ace-icon fa fa-life-ring bigger-130"></i>
+                                                                        </a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a class="red CustomTooltip lkEditarCodificacao" href="#" data-tipo="Proprio" data-ukcodificacao="@iEmpregado.UKCodificacao" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar Codificação" data-target="#modalEditarCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                            <i class="ace-icon fa fa-life-ring bigger-130"></i>
+                                                                        </a>
+                                                                    }
                                                                 }
 
                                                                 @if (!Model.Status.Contains("Em Edição") && !Model.Status.Contains("Em Análise"))
@@ -705,9 +714,19 @@ else
 
                                                                 @if (!Model.Status.Contains("Em Edição"))
                                                                 {
-                                                                    <a class="red CustomTooltip" href="#" title="Gerenciar Lesão Empregado">
-                                                                        <i class="ace-icon fa fa-life-ring bigger-130"></i>
-                                                                    </a>
+                                                                    if (string.IsNullOrEmpty(iEmpregado.UKCodificacao))
+                                                                    {
+                                                                        <a class="red CustomTooltip lkNovaCodificacao" href="#" data-tipo="Contratado" data-uniquekeyrel="@iEmpregado.UKRel" title="Cadastrar Codificação" data-target="#modalNovaCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                            <i class="ace-icon fa fa-life-ring bigger-130"></i>
+                                                                        </a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a class="red CustomTooltip lkEditarCodificacao" href="#" data-tipo="Contratado" data-ukcodificacao="@iEmpregado.UKCodificacao" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar Codificação" data-target="#modalEditarCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                            <i class="ace-icon fa fa-life-ring bigger-130"></i>
+                                                                        </a>
+                                                                    }
+
                                                                 }
 
                                                                 @if (!Model.Status.Contains("Em Edição") && !Model.Status.Contains("Em Análise"))

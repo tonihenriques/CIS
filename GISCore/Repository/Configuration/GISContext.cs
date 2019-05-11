@@ -83,7 +83,7 @@ namespace GISCore.Repository.Configuration
 
         public DbSet<LesaoDoenca> LesaoDoenca { get; set; }
 
-        public DbSet<LesaoEmpregado> LesaoEmpregado { get; set; }
+        public DbSet<Codificacao> Codificacao { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
 

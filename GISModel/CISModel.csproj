@@ -84,13 +84,14 @@
     <Compile Include="DTO\Envolvidos\VMTerceiro.cs" />
     <Compile Include="DTO\Inbox\ItemInbox.cs" />
     <Compile Include="DTO\Incidente\VMIncidente.cs" />
+    <Compile Include="DTO\Incidente\VMNovaCodificacao.cs" />
     <Compile Include="DTO\Menu\PerfilMenuViewModel.cs" />
     <Compile Include="DTO\OperacaoCollection.cs" />
     <Compile Include="DTO\Permissoes\UsuarioPerfilViewModel.cs" />
     <Compile Include="DTO\Permissoes\VMPermissao.cs" />
     <Compile Include="DTO\Shared\RetornoJSON.cs" />
     <Compile Include="Entidades\Acesso.cs" />
-    <Compile Include="Entidades\OBJ\LesaoEmpregado.cs" />
+    <Compile Include="Entidades\OBJ\Codificacao.cs" />
     <Compile Include="Entidades\OBJ\Tabelas\EspecieAcidenteImpessoal.cs" />
     <Compile Include="Entidades\OBJ\Tabelas\FonteLesao.cs" />
     <Compile Include="Entidades\OBJ\IncidenteVeiculo.cs" />

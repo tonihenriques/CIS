@@ -37,7 +37,7 @@ namespace GISWeb.Controllers
             public IEmpregadoProprioBusiness EmpregadoProprioBusiness { get; set; }
 
             [Inject]
-            public ILesaoEmpregadoBusiness LesaoEmpregadoBusiness { get; set; }
+            public ICodificacaoBusiness LesaoEmpregadoBusiness { get; set; }
 
             [Inject]
             public IBaseBusiness<RegistroEmpregadoProprio> RegistroEmpregadoProprioBusiness { get; set; }
@@ -363,7 +363,7 @@ namespace GISWeb.Controllers
                         relEmpProprio2.Funcao = entidade.Funcao;
                         relEmpProprio2.UKLesaoDoenca = entidade.UKLesaoDoenca;
                         relEmpProprio2.UKEmpregadoProprio = entidade.UKEmpregado;
-                        relEmpProprio2.UKLesaoEmpregado = entidade.UKLesaoEmpregado;
+                        relEmpProprio2.UKCodificacao = entidade.UKCodificacao;
                         relEmpProprio2.UKCAT = entidade.UKCAT;
                         relEmpProprio2.UKRegistro = entidade.UKIncidente;
 

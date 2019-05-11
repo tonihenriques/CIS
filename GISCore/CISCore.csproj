@@ -74,7 +74,7 @@
     <Compile Include="Business\Abstract\IFornecedorBusiness.cs" />
     <Compile Include="Business\Abstract\IIncidenteBusiness.cs" />
     <Compile Include="Business\Abstract\ILesaoDoencaBusiness.cs" />
-    <Compile Include="Business\Abstract\ILesaoEmpregadoBusiness.cs" />
+    <Compile Include="Business\Abstract\ICodificacaoBusiness.cs" />
     <Compile Include="Business\Abstract\INivelHierarquicoBusiness.cs" />
     <Compile Include="Business\Abstract\IOperacaoBusiness.cs" />
     <Compile Include="Business\Abstract\IPerfilBusiness.cs" />
@@ -105,7 +105,7 @@
     <Compile Include="Business\Concrete\FerramentasBusiness.cs" />
     <Compile Include="Business\Concrete\FornecedorBusiness.cs" />
     <Compile Include="Business\Concrete\LesaoDoencaBusiness.cs" />
-    <Compile Include="Business\Concrete\LesaoEmpregadoBusiness.cs" />
+    <Compile Include="Business\Concrete\CodificacaoBusiness.cs" />
     <Compile Include="Business\Concrete\NivelHierarquicoBusiness.cs" />
     <Compile Include="Business\Concrete\OperacaoBusiness.cs" />
     <Compile Include="Business\Concrete\PerfilBusiness.cs" />

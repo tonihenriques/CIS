@@ -1,12 +1,18 @@
 ﻿using GISModel.Enums;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GISModel.Entidades.OBJ
+namespace GISModel.DTO.Incidente
 {
-    [Table("OBJLesaoEmpregado")]
-    public class LesaoEmpregado : EntidadeBase
+    public class VMNovaCodificacao
     {
+
+        public string UniqueKey { get; set; }
+
+        public string UKRelEnvolvido { get; set; }
+
+        public string Tipo { get; set; }
+
+
 
         [Display(Name = "Tipo Acidente")]
         public ETipoAcidente TipoAcidente { get; set; }

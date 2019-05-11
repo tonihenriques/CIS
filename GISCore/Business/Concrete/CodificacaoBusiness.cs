@@ -4,10 +4,10 @@ using System;
 
 namespace GISCore.Business.Concrete
 {
-    public class LesaoEmpregadoBusiness : BaseBusiness<LesaoEmpregado>, ILesaoEmpregadoBusiness
+    public class CodificacaoBusiness : BaseBusiness<Codificacao>, ICodificacaoBusiness
     {
 
-        public override void Inserir(LesaoEmpregado entidade)
+        public override void Inserir(Codificacao entidade)
         {
             if (string.IsNullOrEmpty(entidade.UniqueKey))
             {

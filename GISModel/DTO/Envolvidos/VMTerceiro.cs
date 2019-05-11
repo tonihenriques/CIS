@@ -11,7 +11,7 @@ namespace GISModel.DTO.Envolvidos
 
         public string UKEmpregado { get; set; }
 
-        public string UKLesaoEmpregado { get; set; }
+        public string UKCodificacao { get; set; }
 
         public string UKIncidente { get; set; }
 

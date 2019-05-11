@@ -32,13 +32,55 @@ namespace GISWeb.Controllers
         #region
 
             [Inject]
+            public ITipoAtividadeBusiness TipoAtividadeBusiness { get; set; }
+
+            [Inject]
+            public INaturezaBusiness NaturezaBusiness { get; set; }
+
+            [Inject]
+            public IFuncaoGridsBusiness FuncaoGridsBusiness { get; set; }
+
+            [Inject]
+            public IEspecieAcidenteImpessoalBusiness EspecieAcidenteImpessoalBusiness { get; set; }
+
+            [Inject]
+            public ITipoAcidentePessoalBusiness TipoAcidentePessoalBusiness { get; set; }
+
+            [Inject]
+            public IAgenteAcidenteBusiness AgenteAcidenteBusiness { get; set; }
+
+            [Inject]
+            public IFonteLesaoBusiness FonteLesaoBusiness { get; set; }
+
+            [Inject]
+            public IFatorPessoalInsegurancaBusiness FatorPessoalInsegurancaBusiness { get; set; }
+
+            [Inject]
+            public IAtoInseguroBusiness AtoInseguroBusiness { get; set; }
+
+            [Inject]
+            public ICondicaoAmbientalInsegBusiness CondicaoAmbientalInsegBusiness { get; set; }
+
+            [Inject]
+            public IPrejuizoMaterialBusiness PrejuizoMaterialBusiness { get; set; }
+
+
+            [Inject]
+            public ICodificacaoBusiness CodificacaoBusiness { get; set; }
+
+
+
+
+
+
+            [Inject]
             public ICatBusiness CATBusiness { get; set; }
 
             [Inject]
             public ILesaoDoencaBusiness LesaoDoencaBusiness { get; set; }
 
             [Inject]
-            public ILesaoEmpregadoBusiness LesaoEmpregadoBusiness { get; set; }
+            public ICodificacaoBusiness LesaoEmpregadoBusiness { get; set; }
 
             [Inject]
             public IArquivoBusiness ArquivoBusiness { get; set; }
@@ -387,9 +429,9 @@ namespace GISWeb.Controllers
                             }
 
                             //Lesao Empregado
-                            if (!string.IsNullOrEmpty(regContratado.UKLesaoEmpregado))
+                            if (!string.IsNullOrEmpty(regContratado.UKCodificacao))
                             {
-                                LesaoEmpregado lesaoEmp = LesaoEmpregadoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(regContratado.UKLesaoEmpregado));
+                                Codificacao lesaoEmp = LesaoEmpregadoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(regContratado.UKCodificacao));
                                 if (lesaoEmp != null)
                                 {
                                     lesaoEmp.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
@@ -430,9 +472,9 @@ namespace GISWeb.Controllers
                             }
 
                             //Lesao Empregado
-                            if (!string.IsNullOrEmpty(regProprio.UKLesaoEmpregado))
+                            if (!string.IsNullOrEmpty(regProprio.UKCodificacao))
                             {
-                                LesaoEmpregado lesaoEmp = LesaoEmpregadoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(regProprio.UKLesaoEmpregado));
+                                Codificacao lesaoEmp = LesaoEmpregadoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(regProprio.UKCodificacao));
                                 if (lesaoEmp != null)
                                 {
                                     lesaoEmp.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
@@ -666,7 +708,9 @@ namespace GISWeb.Controllers
                                                 NumeroPessoal = envol.NumeroPessoal,
                                                 Nome = envol.Nome,
                                                 UKEmpregado = envol.UniqueKey,
-                                                UKRel = rel.UniqueKey
+                                                UKRel = rel.UniqueKey,
+                                                UKCodificacao = rel.UKCodificacao,
+                                                UKCAT = rel.UKCAT
                                             }).ToList();
 
                     vm.EnvolvidosTerceiro = (from rel in RegistroEmpregadoContratadoBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UKRegistro.Equals(registro.UniqueKey)).ToList()
@@ -677,7 +721,9 @@ namespace GISWeb.Controllers
                                                  CPF = envol.CPF,
                                                  Nome = envol.Nome,
                                                  UKEmpregado = envol.UniqueKey,
-                                                 UKRel = rel.UniqueKey
+                                                 UKRel = rel.UniqueKey,
+                                                 UKCodificacao = rel.UKCodificacao,
+                                                 UKCAT = rel.UKCAT
                                              }).ToList();
 
                     vm.Operacoes = OperacaoBusiness.RecuperarTodasPermitidas(CustomAuthorizationProvider.UsuarioAutenticado.Login, CustomAuthorizationProvider.UsuarioAutenticado.Permissoes, registro);
@@ -724,6 +770,322 @@ namespace GISWeb.Controllers
                 return Content(ex.Message, "text/html");
             }
         }
+
+
+        public ActionResult NovaCodificacao(string UKRelEnvolvido, string Tipo)
+        {
+
+            ViewBag.TiposAtividades = TipoAtividadeBusiness.ListarTodos();
+            ViewBag.Naturezas = NaturezaBusiness.ListarTodos();
+            ViewBag.Funcoes = FuncaoGridsBusiness.ListarTodos();
+            ViewBag.Especies = EspecieAcidenteImpessoalBusiness.ListarTodos();
+            ViewBag.TiposAcidentes = TipoAcidentePessoalBusiness.ListarTodos();
+            ViewBag.Agentes = AgenteAcidenteBusiness.ListarTodos();
+            ViewBag.Fontes = FonteLesaoBusiness.ListarTodos();
+            ViewBag.Fatores = FatorPessoalInsegurancaBusiness.ListarTodos();
+            ViewBag.Atos = AtoInseguroBusiness.ListarTodos();
+            ViewBag.Condicoes = CondicaoAmbientalInsegBusiness.ListarTodos();
+            ViewBag.Prejuizos = PrejuizoMaterialBusiness.ListarTodos();
+
+            VMNovaCodificacao obj = new VMNovaCodificacao()
+            {
+                UKRelEnvolvido = UKRelEnvolvido,
+                Tipo = Tipo
+            };
+
+            return PartialView(obj);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CadastrarCodificacao(VMNovaCodificacao entidade)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    Codificacao cod = new Codificacao()
+                    {
+                        UniqueKey = Guid.NewGuid().ToString(),
+                        UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login,
+                        TipoAcidente = entidade.TipoAcidente,
+                        Atividade = entidade.Atividade,
+                        UKTipoAtividade = entidade.UKTipoAtividade,
+                        UKNatureza = entidade.UKNatureza,
+                        ConsequenciaLesao = entidade.ConsequenciaLesao,
+                        UKFuncaoGRIDS = entidade.UKFuncaoGRIDS,
+                        UKEspecieAcidImpessoal = entidade.UKEspecieAcidImpessoal,
+                        UKTipoAcidPessoal = entidade.UKTipoAcidPessoal,
+                        UKAgenteAcidente = entidade.UKAgenteAcidente,
+                        UKFonteLesao = entidade.UKFonteLesao,
+                        UKFatorPessoalInseg = entidade.UKFatorPessoalInseg,
+                        UKAtoInseguro = entidade.UKAtoInseguro,
+                        UKCondAmbientalInseg = entidade.UKCondAmbientalInseg,
+                        UKPrejMaterial = entidade.UKPrejMaterial,
+                        Custo = entidade.Custo,
+                        DiasPerdidos = entidade.DiasPerdidos,
+                        DiasDebitados = entidade.DiasDebitados,
+                        DataObito = entidade.DataObito
+                    };
+
+                    CodificacaoBusiness.Inserir(cod);
+
+
+
+                    //Atualizar rel com ukcodificacao
+                    if (entidade.Tipo.Equals("Proprio"))
+                    {
+                        RegistroEmpregadoProprio rel = RegistroEmpregadoProprioBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(entidade.UKRelEnvolvido));
+                        if (rel != null)
+                        {
+                            rel.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                            RegistroEmpregadoProprioBusiness.Terminar(rel);
+
+                            RegistroEmpregadoProprio rel2 = new RegistroEmpregadoProprio();
+
+                            rel2.UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                            rel2.DataInclusao = DateTime.Now;
+
+                            rel2.UKRegistro = rel.UKRegistro;
+                            rel2.UKEmpregadoProprio = rel.UKEmpregadoProprio;
+                            rel2.Funcao = rel.Funcao;
+                            rel2.UKCodificacao = cod.UniqueKey;
+                            rel2.UKLesaoDoenca = rel.UKLesaoDoenca;
+                            rel2.UKCAT = rel.UKCAT;
+                            
+                            rel2.UniqueKey = rel.UniqueKey;
+                            
+                            RegistroEmpregadoProprioBusiness.Inserir(rel2);
+                        }
+                    }
+                    else
+                    {
+                        RegistroEmpregadoContratado rel = RegistroEmpregadoContratadoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(entidade.UKRelEnvolvido));
+                        if (rel != null) {
+                            rel.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                            RegistroEmpregadoContratadoBusiness.Terminar(rel);
+
+                            RegistroEmpregadoContratado rel2 = new RegistroEmpregadoContratado();
+
+                            rel2.UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                            rel2.DataInclusao = DateTime.Now;
+
+                            rel2.UKRegistro = rel.UKRegistro;
+                            rel2.UKEmpregadoContratado = rel.UKEmpregadoContratado;
+                            rel2.Funcao = rel.Funcao;
+                            rel2.UKCodificacao = cod.UniqueKey;
+                            rel2.UKLesaoDoenca = rel.UKLesaoDoenca;
+                            rel2.UKCAT = rel.UKCAT;
+
+                            rel2.UniqueKey = rel.UniqueKey;
+
+                            rel2.UKFornecedor = rel.UKFornecedor;
+
+                            RegistroEmpregadoContratadoBusiness.Inserir(rel2);
+                        }
+                    }
+                    
+                    return Json(new { resultado = new RetornoJSON() { Sucesso = "Codificação cadastrada com sucesso" } });
+                }
+                catch (Exception ex)
+                {
+                    if (ex.GetBaseException() == null)
+                    {
+                        return Json(new { resultado = new RetornoJSON() { Erro = ex.Message } });
+                    }
+                    else
+                    {
+                        return Json(new { resultado = new RetornoJSON() { Erro = ex.GetBaseException().Message } });
+                    }
+                }
+
+            }
+            else
+            {
+                return Json(new { resultado = TratarRetornoValidacaoToJSON() });
+            }
+        }
+
+
+
+        public ActionResult EditarCodificacao(string UKRelEnvolvido, string Tipo, string UKCodificacao)
+        {
+
+            try {
+
+                if (string.IsNullOrEmpty(UKCodificacao))
+                    throw new Exception("Parâmetro que identifica a codifição não encontrado.");
+
+                Codificacao cod = CodificacaoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(UKCodificacao));
+                if (cod == null)
+                    throw new Exception("Não foi possível encontrar a codificação.");
+
+                ViewBag.TiposAtividades = TipoAtividadeBusiness.ListarTodos();
+                ViewBag.Naturezas = NaturezaBusiness.ListarTodos();
+                ViewBag.Funcoes = FuncaoGridsBusiness.ListarTodos();
+                ViewBag.Especies = EspecieAcidenteImpessoalBusiness.ListarTodos();
+                ViewBag.TiposAcidentes = TipoAcidentePessoalBusiness.ListarTodos();
+                ViewBag.Agentes = AgenteAcidenteBusiness.ListarTodos();
+                ViewBag.Fontes = FonteLesaoBusiness.ListarTodos();
+                ViewBag.Fatores = FatorPessoalInsegurancaBusiness.ListarTodos();
+                ViewBag.Atos = AtoInseguroBusiness.ListarTodos();
+                ViewBag.Condicoes = CondicaoAmbientalInsegBusiness.ListarTodos();
+                ViewBag.Prejuizos = PrejuizoMaterialBusiness.ListarTodos();
+
+                VMNovaCodificacao obj = new VMNovaCodificacao()
+                {
+                    UKRelEnvolvido = UKRelEnvolvido,
+                    Tipo = Tipo,
+                    UniqueKey = cod.UniqueKey,
+                    TipoAcidente = cod.TipoAcidente,
+                    Atividade = cod.Atividade,
+                    UKTipoAtividade = cod.UKTipoAtividade,
+                    UKNatureza = cod.UKNatureza,
+                    ConsequenciaLesao = cod.ConsequenciaLesao,
+                    UKFuncaoGRIDS = cod.UKFuncaoGRIDS,
+                    UKEspecieAcidImpessoal = cod.UKEspecieAcidImpessoal,
+                    UKTipoAcidPessoal = cod.UKTipoAcidPessoal,
+                    UKAgenteAcidente = cod.UKAgenteAcidente,
+                    UKFonteLesao = cod.UKFonteLesao,
+                    UKFatorPessoalInseg = cod.UKFatorPessoalInseg,
+                    UKAtoInseguro = cod.UKAtoInseguro,
+                    UKCondAmbientalInseg = cod.UKCondAmbientalInseg,
+                    UKPrejMaterial = cod.UKPrejMaterial,
+                    Custo = cod.Custo,
+                    DiasPerdidos = cod.DiasPerdidos,
+                    DiasDebitados = cod.DiasDebitados,
+                    DataObito = cod.DataObito
+                };
+
+                return PartialView(obj);
+
+            }
+            catch (Exception ex)
+            {
+                if (ex.GetBaseException() == null)
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.Message } });
+                }
+                else
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.GetBaseException().Message } });
+                }
+            }
+
+            
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AtualizarCodificacao(VMNovaCodificacao entidade)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    Codificacao cod = new Codificacao()
+                    {
+                        UniqueKey = Guid.NewGuid().ToString(),
+                        UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login,
+                        TipoAcidente = entidade.TipoAcidente,
+                        Atividade = entidade.Atividade,
+                        UKTipoAtividade = entidade.UKTipoAtividade,
+                        UKNatureza = entidade.UKNatureza,
+                        ConsequenciaLesao = entidade.ConsequenciaLesao,
+                        UKFuncaoGRIDS = entidade.UKFuncaoGRIDS,
+                        UKEspecieAcidImpessoal = entidade.UKEspecieAcidImpessoal,
+                        UKTipoAcidPessoal = entidade.UKTipoAcidPessoal,
+                        UKAgenteAcidente = entidade.UKAgenteAcidente,
+                        UKFonteLesao = entidade.UKFonteLesao,
+                        UKFatorPessoalInseg = entidade.UKFatorPessoalInseg,
+                        UKAtoInseguro = entidade.UKAtoInseguro,
+                        UKCondAmbientalInseg = entidade.UKCondAmbientalInseg,
+                        UKPrejMaterial = entidade.UKPrejMaterial,
+                        Custo = entidade.Custo,
+                        DiasPerdidos = entidade.DiasPerdidos,
+                        DiasDebitados = entidade.DiasDebitados,
+                        DataObito = entidade.DataObito
+                    };
+
+                    CodificacaoBusiness.Inserir(cod);
+
+
+
+                    //Atualizar rel com ukcodificacao
+                    if (entidade.Tipo.Equals("Proprio"))
+                    {
+                        RegistroEmpregadoProprio rel = RegistroEmpregadoProprioBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(entidade.UKRelEnvolvido));
+                        if (rel != null)
+                        {
+                            rel.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                            RegistroEmpregadoProprioBusiness.Terminar(rel);
+
+                            RegistroEmpregadoProprio rel2 = new RegistroEmpregadoProprio();
+
+                            rel2.UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                            rel2.DataInclusao = DateTime.Now;
+
+                            rel2.UKRegistro = rel.UKRegistro;
+                            rel2.UKEmpregadoProprio = rel.UKEmpregadoProprio;
+                            rel2.Funcao = rel.Funcao;
+                            rel2.UKCodificacao = cod.UniqueKey;
+                            rel2.UKLesaoDoenca = rel.UKLesaoDoenca;
+                            rel2.UKCAT = rel.UKCAT;
+
+                            rel2.UniqueKey = rel.UniqueKey;
+
+                            RegistroEmpregadoProprioBusiness.Inserir(rel2);
+                        }
+                    }
+                    else
+                    {
+                        RegistroEmpregadoContratado rel = RegistroEmpregadoContratadoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(entidade.UKRelEnvolvido));
+                        if (rel != null)
+                        {
+                            rel.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                            RegistroEmpregadoContratadoBusiness.Terminar(rel);
+
+                            RegistroEmpregadoContratado rel2 = new RegistroEmpregadoContratado();
+
+                            rel2.UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                            rel2.DataInclusao = DateTime.Now;
+
+                            rel2.UKRegistro = rel.UKRegistro;
+                            rel2.UKEmpregadoContratado = rel.UKEmpregadoContratado;
+                            rel2.Funcao = rel.Funcao;
+                            rel2.UKCodificacao = cod.UniqueKey;
+                            rel2.UKLesaoDoenca = rel.UKLesaoDoenca;
+                            rel2.UKCAT = rel.UKCAT;
+
+                            rel2.UniqueKey = rel.UniqueKey;
+
+                            rel2.UKFornecedor = rel.UKFornecedor;
+
+                            RegistroEmpregadoContratadoBusiness.Inserir(rel2);
+                        }
+                    }
+
+                    return Json(new { resultado = new RetornoJSON() { Sucesso = "Codificação cadastrada com sucesso" } });
+                }
+                catch (Exception ex)
+                {
+                    if (ex.GetBaseException() == null)
+                    {
+                        return Json(new { resultado = new RetornoJSON() { Erro = ex.Message } });
+                    }
+                    else
+                    {
+                        return Json(new { resultado = new RetornoJSON() { Erro = ex.GetBaseException().Message } });
+                    }
+                }
+
+            }
+            else
+            {
+                return Json(new { resultado = TratarRetornoValidacaoToJSON() });
+            }
+        }
+
 
     }
 }
