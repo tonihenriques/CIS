@@ -983,9 +983,20 @@ namespace GISWeb.Controllers
             {
                 try
                 {
+                    if (string.IsNullOrEmpty(entidade.UniqueKey))
+                        throw new Exception("Parâmetro que identifica a codificação a ser editada não encontrado.");
+
+                    Codificacao codAntiga = CodificacaoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(entidade.UniqueKey));
+                    if (codAntiga == null) 
+                        throw new Exception("Não foi possível encontrar a codificação a ser atualizada.");
+
+                    codAntiga.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                    CodificacaoBusiness.Terminar(codAntiga);
+
+
                     Codificacao cod = new Codificacao()
                     {
-                        UniqueKey = Guid.NewGuid().ToString(),
+                        UniqueKey = entidade.UniqueKey,
                         UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login,
                         TipoAcidente = entidade.TipoAcidente,
                         Atividade = entidade.Atividade,
@@ -1065,7 +1076,7 @@ namespace GISWeb.Controllers
                         }
                     }
 
-                    return Json(new { resultado = new RetornoJSON() { Sucesso = "Codificação cadastrada com sucesso" } });
+                    return Json(new { resultado = new RetornoJSON() { Sucesso = "Codificação atualizada com sucesso" } });
                 }
                 catch (Exception ex)
                 {

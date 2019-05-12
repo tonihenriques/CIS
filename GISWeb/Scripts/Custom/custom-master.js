@@ -181,7 +181,7 @@ function AdicionarFuncoesOnClikParaOperacoes() {
 
     $(".lnkAlterarDados").off("click").on("click", function (e) {
         e.preventDefault();
-        OnClickNovaCodificacao($(this));
+        OnClickAlterarDados($(this));
     });
 
     $(".lkNovaCodificacao").off("click").on("click", function (e) {
