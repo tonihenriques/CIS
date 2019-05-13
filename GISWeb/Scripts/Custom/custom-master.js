@@ -194,6 +194,18 @@ function AdicionarFuncoesOnClikParaOperacoes() {
         OnClickEditarCodificacao($(this));
     });
 
+
+    $(".lkNovaCAT").off("click").on("click", function (e) {
+        e.preventDefault();
+        OnClickNovaCAT($(this));
+    });
+
+    $(".lkEditarCAT").off("click").on("click", function (e) {
+        e.preventDefault();
+        OnClickEditarCAT($(this));
+    });
+
+
 }
 
 function AtualizarTelasDetalhes() {
@@ -1231,5 +1243,167 @@ function OnFailureEditarCodificacao() {
     DesbloquearDiv("modalEditarCodificacao");
 
     ExibirMensagemDeErro("Erro ao tentar cadastrar a codificação do incidente. Tente novamente.");
+}
+
+
+
+
+
+
+
+function OnClickNovaCAT(origemElemento) {
+
+    $('#modalNovaCATCorpo').html('');
+    $('#modalNovaCATCorpoLoadingTexto').html('...Carregando formulário. Aguarde!');
+    $('#modalNovaCATCorpoLoading').show();
+
+    $.ajax({
+        method: "POST",
+        url: "/Incidente/NovaCAT",
+        data: { UKRelEnvolvido: origemElemento.data("uniquekeyrel"), Tipo: origemElemento.data("tipo") },
+        success: function (content) {
+            $('#modalNovaCATCorpoLoading').hide();
+
+            if (content.resultado != null && content.resultado != undefined) {
+
+                if (content.resultado.Erro != null && content.resultado.Erro != undefined && content.resultado.Erro != "") {
+                    var divErro = "" +
+                        "<div class=\"alert alert-danger\">" +
+                        "<strong>" +
+                        "<i class=\"ace-icon fa fa-meh-o\"></i> " +
+                        "Oops! " +
+                        "</strong>" +
+
+                        "<span>" + content.resultado.Erro + "</span>" +
+                        "<br />" +
+                        "</div>";
+
+                    $('#modalNovaCATCorpo').html(divErro);
+
+                }
+            } else {
+
+                $('#modalNovaCATCorpo').html(content);
+
+                AplicaTooltip();
+
+                Chosen();
+
+                AplicaDatePicker();
+
+                $("#modalNovaCATProsseguir").off("click").on('click', function (e) {
+                    e.preventDefault();
+                    $("#formCadastroCAT").submit();
+                });
+
+            }
+        }
+    });
+}
+
+function OnBeginCadastrarCAT(jqXHR, settings) {
+    $("#formCadastroCAT").css({ opacity: "0.5" });
+    $("#modalNovaCATLoading").show();
+    BloquearDiv("modalNovaCAT");
+}
+
+function OnSuccessCadastrarCAT(data) {
+    $('#formCadastroCAT').removeAttr('style');
+    $("#modalNovaCATLoading").hide();
+    DesbloquearDiv("modalNovaCAT");
+
+    TratarResultadoJSON(data.resultado);
+
+    if (data.resultado.Sucesso != null && data.resultado.Sucesso != undefined && data.resultado.Sucesso != "") {
+        $('#modalNovaCAT').modal('hide');
+        VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
+    }
+}
+
+function OnFailureCadastrarCAT() {
+    $('#formCadastroCAT').removeAttr('style');
+    $("#modalNovaCATLoading").hide();
+    DesbloquearDiv("modalNovaCAT");
+
+    ExibirMensagemDeErro("Erro ao tentar cadastrar a CAT do incidente. Tente novamente.");
+}
+
+
+
+function OnClickEditarCAT(origemElemento) {
+
+    $('#modalEditarCATCorpo').html('');
+    $('#modalEditarCATCorpoLoadingTexto').html('...Carregando formulário. Aguarde!');
+    $('#modalEditarCATCorpoLoading').show();
+
+    $.ajax({
+        method: "POST",
+        url: "/Incidente/EditarCAT",
+        data: { UKRelEnvolvido: origemElemento.data("uniquekeyrel"), Tipo: origemElemento.data("tipo"), UKCAT: origemElemento.data("ukcat") },
+        success: function (content) {
+            $('#modalEditarCATCorpoLoading').hide();
+
+            if (content.resultado != null && content.resultado != undefined) {
+
+                if (content.resultado.Erro != null && content.resultado.Erro != undefined && content.resultado.Erro != "") {
+                    var divErro = "" +
+                        "<div class=\"alert alert-danger\">" +
+                        "<strong>" +
+                        "<i class=\"ace-icon fa fa-meh-o\"></i> " +
+                        "Oops! " +
+                        "</strong>" +
+
+                        "<span>" + content.resultado.Erro + "</span>" +
+                        "<br />" +
+                        "</div>";
+
+                    $('#modalEditarCATCorpo').html(divErro);
+
+                }
+            } else {
+
+                $('#modalEditarCATCorpo').html(content);
+
+                AplicaTooltip();
+
+                Chosen();
+
+                AplicaDatePicker();
+
+                $("#modalEditarCATProsseguir").off("click").on('click', function (e) {
+                    e.preventDefault();
+                    $("#formEditarCAT").submit();
+                });
+
+            }
+        }
+    });
+}
+
+function OnBeginEditarCAT(jqXHR, settings) {
+    $("#formEditarCAT").css({ opacity: "0.5" });
+    $("#modalEditarCATLoading").show();
+    BloquearDiv("modalEditarCAT");
+}
+
+function OnSuccessEditarCAT(data) {
+    $('#formEditarCAT').removeAttr('style');
+    $("#modalEditarCATLoading").hide();
+    DesbloquearDiv("modalEditarCAT");
+
+    TratarResultadoJSON(data.resultado);
+
+    if (data.resultado.Sucesso != null && data.resultado.Sucesso != undefined && data.resultado.Sucesso != "") {
+        $('#modalEditarCAT').modal('hide');
+        VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
+    }
+}
+
+function OnFailureEditarCAT() {
+    $('#formEditarCAT').removeAttr('style');
+    $("#modalEditarCATLoading").hide();
+    DesbloquearDiv("modalEditarCAT");
+
+    ExibirMensagemDeErro("Erro ao tentar atualizar a CAT do incidente. Tente novamente.");
 }
 

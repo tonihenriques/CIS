@@ -393,6 +393,8 @@
     <Content Include="Views\Incidente\Edicao.cshtml" />
     <Content Include="Views\Incidente\NovaCodificacao.cshtml" />
     <Content Include="Views\Incidente\EditarCodificacao.cshtml" />
+    <Content Include="Views\Incidente\EditarCAT.cshtml" />
+    <Content Include="Views\Incidente\NovaCAT.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

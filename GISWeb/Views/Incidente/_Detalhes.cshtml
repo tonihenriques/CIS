@@ -636,15 +636,15 @@ else
                                                             <div class="hidden-sm hidden-xs action-buttons">
                                                                 @if (!Model.Status.Contains("Em Edição"))
                                                                 {
-                                                                    if (string.IsNullOrEmpty(iEmpregado.UKCodificacao))
+                                                                    if (string.IsNullOrEmpty(iEmpregado.UKCAT))
                                                                     {
-                                                                        <a class="red CustomTooltip lkNovaCodificacao" href="#" data-tipo="Proprio" data-uniquekeyrel="@iEmpregado.UKRel" title="Cadastrar Codificação" data-target="#modalNovaCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                        <a class="orange CustomTooltip lkNovaCAT" href="#" title="Gerenciar CAT" data-tipo="Proprio" data-uniquekeyrel="@iEmpregado.UKRel" title="Cadastrar CAT" data-target="#modalNovaCAT" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                                                             <i class="ace-icon fa fa-life-ring bigger-130"></i>
                                                                         </a>
                                                                     }
                                                                     else
                                                                     {
-                                                                        <a class="red CustomTooltip lkEditarCodificacao" href="#" data-tipo="Proprio" data-ukcodificacao="@iEmpregado.UKCodificacao" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar Codificação" data-target="#modalEditarCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                        <a class="orange CustomTooltip lkEditarCAT" href="#" title="Gerenciar CAT" data-tipo="Proprio" data-ukcat="@iEmpregado.UKCAT" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar CAT" data-target="#modalEditarCAT" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                                                             <i class="ace-icon fa fa-life-ring bigger-130"></i>
                                                                         </a>
                                                                     }
@@ -652,9 +652,19 @@ else
 
                                                                 @if (!Model.Status.Contains("Em Edição") && !Model.Status.Contains("Em Análise"))
                                                                 {
-                                                                    <a class="orange CustomTooltip" href="#" title="Gerenciar CAT">
-                                                                        <i class="ace-icon fa fa-bell bigger-130"></i>
-                                                                    </a>
+                                                                    if (string.IsNullOrEmpty(iEmpregado.UKCodificacao))
+                                                                    {
+                                                                        <a class="red CustomTooltip lkNovaCodificacao" href="#" data-tipo="Proprio" data-uniquekeyrel="@iEmpregado.UKRel" title="Cadastrar Codificação" data-target="#modalNovaCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                            
+                                                                            <i class="ace-icon fa fa-bell bigger-130"></i>
+                                                                        </a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a class="red CustomTooltip lkEditarCodificacao" href="#" data-tipo="Proprio" data-ukcodificacao="@iEmpregado.UKCodificacao" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar Codificação" data-target="#modalEditarCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                            <i class="ace-icon fa fa-bell bigger-130"></i>
+                                                                        </a>
+                                                                    }
                                                                 }
 
                                                                 <a href='#' class="green CustomTooltip lkEditProprio" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar Empregado" data-target="#modalEditEmpProp" data-toggle="modal" data-backdrop="static" data-keyboard="false">
@@ -710,30 +720,37 @@ else
 
                                                         <td class="center">
                                                             <div class="hidden-sm hidden-xs action-buttons">
-
-
                                                                 @if (!Model.Status.Contains("Em Edição"))
                                                                 {
-                                                                    if (string.IsNullOrEmpty(iEmpregado.UKCodificacao))
+                                                                    if (string.IsNullOrEmpty(iEmpregado.UKCAT))
                                                                     {
-                                                                        <a class="red CustomTooltip lkNovaCodificacao" href="#" data-tipo="Contratado" data-uniquekeyrel="@iEmpregado.UKRel" title="Cadastrar Codificação" data-target="#modalNovaCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                        <a class="orange CustomTooltip lkNovaCAT" href="#" title="Gerenciar CAT" data-tipo="Contratado" data-uniquekeyrel="@iEmpregado.UKRel" title="Cadastrar CAT" data-target="#modalNovaCAT" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                                                             <i class="ace-icon fa fa-life-ring bigger-130"></i>
                                                                         </a>
                                                                     }
                                                                     else
                                                                     {
-                                                                        <a class="red CustomTooltip lkEditarCodificacao" href="#" data-tipo="Contratado" data-ukcodificacao="@iEmpregado.UKCodificacao" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar Codificação" data-target="#modalEditarCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                        <a class="orange CustomTooltip lkEditarCAT" href="#" title="Gerenciar CAT" data-tipo="Contratado" data-ukcat="@iEmpregado.UKCAT" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar CAT" data-target="#modalEditarCAT" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                                                             <i class="ace-icon fa fa-life-ring bigger-130"></i>
                                                                         </a>
                                                                     }
-
                                                                 }
 
                                                                 @if (!Model.Status.Contains("Em Edição") && !Model.Status.Contains("Em Análise"))
                                                                 {
-                                                                    <a class="orange CustomTooltip" href="#" title="Gerenciar CAT">
-                                                                        <i class="ace-icon fa fa-bell bigger-130"></i>
-                                                                    </a>
+                                                                    if (string.IsNullOrEmpty(iEmpregado.UKCodificacao))
+                                                                    {
+                                                                        <a class="red CustomTooltip lkNovaCodificacao" href="#" data-tipo="Contratado" data-uniquekeyrel="@iEmpregado.UKRel" title="Cadastrar Codificação" data-target="#modalNovaCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                            <i class="ace-icon fa fa-bell bigger-130"></i>
+                                                                        </a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a class="red CustomTooltip lkEditarCodificacao" href="#" data-tipo="Contratado" data-ukcodificacao="@iEmpregado.UKCodificacao" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar Codificação" data-target="#modalEditarCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                            
+                                                                            <i class="ace-icon fa fa-bell bigger-130"></i>
+                                                                        </a>
+                                                                    }
                                                                 }
 
                                                                 <a href='#' class="green CustomTooltip lkEditTerceiro" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar Empregado" data-target="#modalEditEmpTerc" data-toggle="modal" data-backdrop="static" data-keyboard="false">

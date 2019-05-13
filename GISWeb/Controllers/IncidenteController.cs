@@ -908,6 +908,7 @@ namespace GISWeb.Controllers
 
 
 
+
         public ActionResult EditarCodificacao(string UKRelEnvolvido, string Tipo, string UKCodificacao)
         {
 
@@ -1097,6 +1098,311 @@ namespace GISWeb.Controllers
             }
         }
 
+
+
+
+        public ActionResult NovaCAT(string UKRelEnvolvido, string Tipo)
+        {
+
+            VMNovaCAT obj = new VMNovaCAT()
+            {
+                UKRelEnvolvido = UKRelEnvolvido,
+                Tipo = Tipo
+            };
+
+            return PartialView(obj);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CadastrarCAT(VMNovaCAT entidade)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    CAT cat = new CAT()
+                    {
+                        UniqueKey = Guid.NewGuid().ToString(),
+                        UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login,
+                        NumeroCat = entidade.NumeroCat,
+                        DataRegistro = entidade.DataRegistro,
+                        ETipoRegistrador = entidade.ETipoRegistrador,
+                        ETipoCAT = entidade.ETipoCAT,
+                        ETipoIniciativa = entidade.ETipoIniciativa,
+                        CodigoCNS = entidade.CodigoCNS,
+                        DataAtendimento = entidade.DataAtendimento,
+                        HoraAtendimento = entidade.HoraAtendimento,
+                        Internacao = entidade.Internacao,
+                        DuracaoTratamento = entidade.DuracaoTratamento,
+                        Afatamento = entidade.Afatamento,
+                        Diagnostico = entidade.Diagnostico,
+                        Observacao = entidade.Observacao,
+                        CID = entidade.CID,
+                        NomeMedico = entidade.NomeMedico,
+                        EOrgaoClasse = entidade.EOrgaoClasse,
+                        NumOrgClasse = entidade.NumOrgClasse,
+                        EUnidadeFederacao = entidade.EUnidadeFederacao
+                    };
+
+                    CATBusiness.Inserir(cat);
+
+
+
+                    //Atualizar rel com ukcodificacao
+                    if (entidade.Tipo.Equals("Proprio"))
+                    {
+                        RegistroEmpregadoProprio rel = RegistroEmpregadoProprioBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(entidade.UKRelEnvolvido));
+                        if (rel != null)
+                        {
+                            rel.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                            RegistroEmpregadoProprioBusiness.Terminar(rel);
+
+                            RegistroEmpregadoProprio rel2 = new RegistroEmpregadoProprio();
+
+                            rel2.UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                            rel2.DataInclusao = DateTime.Now;
+
+                            rel2.UKRegistro = rel.UKRegistro;
+                            rel2.UKEmpregadoProprio = rel.UKEmpregadoProprio;
+                            rel2.Funcao = rel.Funcao;
+                            rel2.UKCodificacao = rel.UKCodificacao;                            
+                            rel2.UKLesaoDoenca = rel.UKLesaoDoenca;
+                            rel2.UKCAT = cat.UniqueKey;
+
+                            rel2.UniqueKey = rel.UniqueKey;
+
+                            RegistroEmpregadoProprioBusiness.Inserir(rel2);
+                        }
+                    }
+                    else
+                    {
+                        RegistroEmpregadoContratado rel = RegistroEmpregadoContratadoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(entidade.UKRelEnvolvido));
+                        if (rel != null)
+                        {
+                            rel.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                            RegistroEmpregadoContratadoBusiness.Terminar(rel);
+
+                            RegistroEmpregadoContratado rel2 = new RegistroEmpregadoContratado();
+
+                            rel2.UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                            rel2.DataInclusao = DateTime.Now;
+
+                            rel2.UKRegistro = rel.UKRegistro;
+                            rel2.UKEmpregadoContratado = rel.UKEmpregadoContratado;
+                            rel2.Funcao = rel.Funcao;
+                            rel2.UKCodificacao = rel.UKCodificacao;
+                            rel2.UKLesaoDoenca = rel.UKLesaoDoenca;
+                            rel2.UKCAT = cat.UniqueKey;
+
+                            rel2.UniqueKey = rel.UniqueKey;
+
+                            rel2.UKFornecedor = rel.UKFornecedor;
+
+                            RegistroEmpregadoContratadoBusiness.Inserir(rel2);
+                        }
+                    }
+
+                    return Json(new { resultado = new RetornoJSON() { Sucesso = "CAT cadastrada com sucesso" } });
+                }
+                catch (Exception ex)
+                {
+                    if (ex.GetBaseException() == null)
+                    {
+                        return Json(new { resultado = new RetornoJSON() { Erro = ex.Message } });
+                    }
+                    else
+                    {
+                        return Json(new { resultado = new RetornoJSON() { Erro = ex.GetBaseException().Message } });
+                    }
+                }
+
+            }
+            else
+            {
+                return Json(new { resultado = TratarRetornoValidacaoToJSON() });
+            }
+        }
+
+
+
+        public ActionResult EditarCAT(string UKRelEnvolvido, string Tipo, string UKCAT)
+        {
+
+            try
+            {
+
+                if (string.IsNullOrEmpty(UKCAT))
+                    throw new Exception("Parâmetro que identifica a CAT não encontrado.");
+
+                CAT cat = CATBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(UKCAT));
+                if (cat == null)
+                    throw new Exception("Não foi possível encontrar a codificação.");
+
+                VMNovaCAT obj = new VMNovaCAT()
+                {
+                    UKRelEnvolvido = UKRelEnvolvido,
+                    Tipo = Tipo,
+                    UniqueKey = cat.UniqueKey,
+                    NumeroCat = cat.NumeroCat,
+                    DataRegistro = cat.DataRegistro,
+                    ETipoRegistrador = cat.ETipoRegistrador,
+                    ETipoCAT = cat.ETipoCAT,
+                    ETipoIniciativa = cat.ETipoIniciativa,
+                    CodigoCNS = cat.CodigoCNS,
+                    DataAtendimento = cat.DataAtendimento,
+                    HoraAtendimento = cat.HoraAtendimento,
+                    Internacao = cat.Internacao,
+                    DuracaoTratamento = cat.DuracaoTratamento,
+                    Afatamento = cat.Afatamento,
+                    Diagnostico = cat.Diagnostico,
+                    Observacao = cat.Observacao,
+                    CID = cat.CID,
+                    NomeMedico = cat.NomeMedico,
+                    EOrgaoClasse = cat.EOrgaoClasse,
+                    NumOrgClasse = cat.NumOrgClasse,
+                    EUnidadeFederacao = cat.EUnidadeFederacao
+                };
+
+                return PartialView(obj);
+
+            }
+            catch (Exception ex)
+            {
+                if (ex.GetBaseException() == null)
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.Message } });
+                }
+                else
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.GetBaseException().Message } });
+                }
+            }
+
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AtualizarCAT(VMNovaCAT entidade)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    if (string.IsNullOrEmpty(entidade.UniqueKey))
+                        throw new Exception("Parâmetro que identifica a CAT a ser editada não encontrado.");
+
+                    CAT catAntiga = CATBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(entidade.UniqueKey));
+                    if (catAntiga == null)
+                        throw new Exception("Não foi possível encontrar a CAT a ser atualizada.");
+
+                    catAntiga.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                    CATBusiness.Terminar(catAntiga);
+
+
+                    CAT cat = new CAT()
+                    {
+                        UniqueKey = entidade.UniqueKey,
+                        UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login,
+                        NumeroCat = entidade.NumeroCat,
+                        DataRegistro = entidade.DataRegistro,
+                        ETipoRegistrador = entidade.ETipoRegistrador,
+                        ETipoCAT = entidade.ETipoCAT,
+                        ETipoIniciativa = entidade.ETipoIniciativa,
+                        CodigoCNS = entidade.CodigoCNS,
+                        DataAtendimento = entidade.DataAtendimento,
+                        HoraAtendimento = entidade.HoraAtendimento,
+                        Internacao = entidade.Internacao,
+                        DuracaoTratamento = entidade.DuracaoTratamento,
+                        Afatamento = entidade.Afatamento,
+                        Diagnostico = entidade.Diagnostico,
+                        Observacao = entidade.Observacao,
+                        CID = entidade.CID,
+                        NomeMedico = entidade.NomeMedico,
+                        EOrgaoClasse = entidade.EOrgaoClasse,
+                        NumOrgClasse = entidade.NumOrgClasse,
+                        EUnidadeFederacao = entidade.EUnidadeFederacao
+                    };
+
+                    CATBusiness.Inserir(cat);
+
+
+
+                    //Atualizar rel com ukcodificacao
+                    if (entidade.Tipo.Equals("Proprio"))
+                    {
+                        RegistroEmpregadoProprio rel = RegistroEmpregadoProprioBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(entidade.UKRelEnvolvido));
+                        if (rel != null)
+                        {
+                            rel.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                            RegistroEmpregadoProprioBusiness.Terminar(rel);
+
+                            RegistroEmpregadoProprio rel2 = new RegistroEmpregadoProprio();
+
+                            rel2.UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                            rel2.DataInclusao = DateTime.Now;
+
+                            rel2.UKRegistro = rel.UKRegistro;
+                            rel2.UKEmpregadoProprio = rel.UKEmpregadoProprio;
+                            rel2.Funcao = rel.Funcao;
+                            rel2.UKCodificacao = rel.UKCodificacao;
+                            rel2.UKLesaoDoenca = rel.UKLesaoDoenca;
+                            rel2.UKCAT = cat.UniqueKey;
+
+                            rel2.UniqueKey = rel.UniqueKey;
+
+                            RegistroEmpregadoProprioBusiness.Inserir(rel2);
+                        }
+                    }
+                    else
+                    {
+                        RegistroEmpregadoContratado rel = RegistroEmpregadoContratadoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(entidade.UKRelEnvolvido));
+                        if (rel != null)
+                        {
+                            rel.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                            RegistroEmpregadoContratadoBusiness.Terminar(rel);
+
+                            RegistroEmpregadoContratado rel2 = new RegistroEmpregadoContratado();
+
+                            rel2.UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                            rel2.DataInclusao = DateTime.Now;
+
+                            rel2.UKRegistro = rel.UKRegistro;
+                            rel2.UKEmpregadoContratado = rel.UKEmpregadoContratado;
+                            rel2.Funcao = rel.Funcao;
+                            rel2.UKCodificacao = rel.UKCodificacao;
+                            rel2.UKLesaoDoenca = rel.UKLesaoDoenca;
+                            rel2.UKCAT = cat.UniqueKey;
+
+                            rel2.UniqueKey = rel.UniqueKey;
+
+                            rel2.UKFornecedor = rel.UKFornecedor;
+
+                            RegistroEmpregadoContratadoBusiness.Inserir(rel2);
+                        }
+                    }
+
+                    return Json(new { resultado = new RetornoJSON() { Sucesso = "CAT atualizada com sucesso" } });
+                }
+                catch (Exception ex)
+                {
+                    if (ex.GetBaseException() == null)
+                    {
+                        return Json(new { resultado = new RetornoJSON() { Erro = ex.Message } });
+                    }
+                    else
+                    {
+                        return Json(new { resultado = new RetornoJSON() { Erro = ex.GetBaseException().Message } });
+                    }
+                }
+
+            }
+            else
+            {
+                return Json(new { resultado = TratarRetornoValidacaoToJSON() });
+            }
+        }
 
     }
 }

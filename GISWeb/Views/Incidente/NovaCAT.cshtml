@@ -1,0 +1,206 @@
+﻿
+@model GISModel.DTO.Incidente.VMNovaCAT
+
+@{
+    ViewBag.Title = "Cadastro da CAT";
+}
+
+<div id="formCadEmpregadoProprio">
+    @using (Ajax.BeginForm("CadastrarCAT", "Incidente", null,
+        new AjaxOptions
+        {
+            HttpMethod = "POST",
+            OnBegin = "OnBeginCadastrarCAT",
+            OnSuccess = "OnSuccessCadastrarCAT",
+        }, new { @id = "formCadastroCAT", @class = "form-horizontal" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NumeroCat, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EditorFor(model => model.NumeroCat, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DataRegistro, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EditorFor(model => model.DataRegistro, new { htmlAttributes = new { @class = "date-picker form-control" } })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ETipoRegistrador, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EnumDropDownListFor(model => model.ETipoRegistrador, "Selecione um tipo...", htmlAttributes: new { @class = "chosen-select form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ETipoCAT, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EnumDropDownListFor(model => model.ETipoCAT, "Selecione um tipo...", htmlAttributes: new { @class = "chosen-select form-control" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ETipoIniciativa, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EnumDropDownListFor(model => model.ETipoIniciativa, "Selecione um tipo...", htmlAttributes: new { @class = "chosen-select form-control" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CodigoCNS, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EditorFor(model => model.CodigoCNS, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DataAtendimento, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EditorFor(model => model.DataAtendimento, new { htmlAttributes = new { @class = "date-picker form-control" } })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+
+                    <label class="form-field-select-3 col-xs-12 col-sm-12 no-padding-right" for="DataIncidente">Hora Atendimento</label>
+
+                    <div class="col-xs-12 col-sm-12">
+                        <div class="input-group">
+                            <input class="form-control date-picker" name="HoraAtendimento" id="HoraAtendimento" type="text" data-date-format="dd-mm-yyyy">
+                            <span class="input-group-addon">
+                                <i class="fa fa-calendar bigger-110"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Internacao, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EnumDropDownListFor(model => model.Internacao, "Internação...", htmlAttributes: new { @class = "chosen-select form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DuracaoTratamento, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EditorFor(model => model.DuracaoTratamento, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Afatamento, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EnumDropDownListFor(model => model.Afatamento, "Afastamento...", htmlAttributes: new { @class = "chosen-select form-control" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Diagnostico, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EditorFor(model => model.Diagnostico, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Observacao, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EditorFor(model => model.Diagnostico, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CID, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EditorFor(model => model.CID, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NomeMedico, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EditorFor(model => model.NomeMedico, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.EOrgaoClasse, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EnumDropDownListFor(model => model.Afatamento, "Afastamento...", htmlAttributes: new { @class = "chosen-select form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NumOrgClasse, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EditorFor(model => model.NumOrgClasse, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.EUnidadeFederacao, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EnumDropDownListFor(model => model.EUnidadeFederacao, "Afastamento...", htmlAttributes: new { @class = "chosen-select form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @Html.HiddenFor(model => model.UKRelEnvolvido)
+        @Html.HiddenFor(model => model.Tipo)
+
+    }
+</div>

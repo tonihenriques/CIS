@@ -1,22 +1,21 @@
 ﻿using GISModel.Enums;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
-
-namespace GISModel.Entidades
+namespace GISModel.DTO.Incidente
 {
-    [Table("OBJCAT")]
-    public class CAT : EntidadeBase
+    public class VMNovaCAT
     {
-        
-        [Display(Name ="Número da CAT")]
+        public string UniqueKey { get; set; }
+
+        public string UKRelEnvolvido { get; set; }
+
+        public string Tipo { get; set; }
+
+
+        [Display(Name = "Número da CAT")]
         public string NumeroCat { get; set; }
 
-        [Display(Name ="Data do Registro")]
+        [Display(Name = "Data do Registro")]
         public string DataRegistro { get; set; }
 
         [Display(Name = "Tipo de Registrador")]
@@ -66,11 +65,6 @@ namespace GISModel.Entidades
 
         [Display(Name = "Un. da Fed. do Órgão de Classe ")]
         public EUnidadeFederacao EUnidadeFederacao { get; set; }
-
-        [Display(Name = "Incidente")]
-        public string UKIncidente { get; set; }
-        
-        public virtual Incidente Incidente { get; set; }
 
     }
 }
