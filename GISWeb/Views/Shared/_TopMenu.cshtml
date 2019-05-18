@@ -98,14 +98,6 @@
                         <b class="arrow"></b>
                     </li>
 
-                    @*<li class="hover">
-                        <a href="@path/Usuario/">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            Meus Quase Incidentes
-                        </a>
-                        <b class="arrow"></b>
-                    </li>*@
-
                     <li class="hover">
                         <a href="#" class="dropdown-toggle">
                             <i class="menu-icon ace-icon fa fa-search"></i>
@@ -117,20 +109,42 @@
 
                         <ul class="submenu">
                             <li class="hover">
-                                <a href="@path/Departamento/">
+                                <a href="#" class="dropdown-toggle">
                                     <i class="menu-icon fa fa-caret-right"></i>
-                                    Incidentes
+                                    <span class="menu-text"> Incidentes </span>
+                                    <b class="arrow fa fa-angle-down"></b>
                                 </a>
+
                                 <b class="arrow"></b>
+
+                                <ul class="submenu">
+                                    <li class="hover">
+                                        <a href="@path/Incidente/PesquisaDadosBase">
+                                            <i class="menu-icon fa fa-caret-right"></i>
+                                            Por Dados Base
+                                        </a>
+                                        <b class="arrow"></b>
+                                    </li>
+
+                                    <li class="hover">
+                                        <a href="@path/Incidente/PesquisaCodificacao">
+                                            <i class="menu-icon fa fa-caret-right"></i>
+                                            Por Codificação
+                                        </a>
+                                        <b class="arrow"></b>
+                                    </li>
+
+                                    <li class="hover">
+                                        <a href="@path/Incidente/PesquisaCAT">
+                                            <i class="menu-icon fa fa-caret-right"></i>
+                                            Por CAT
+                                        </a>
+                                        <b class="arrow"></b>
+                                    </li>
+                                </ul>
+
                             </li>
 
-                            @*<li class="hover">
-                                <a href="@path/Empresa/">
-                                    <i class="menu-icon fa fa-caret-right"></i>
-                                    Quase Incidentes
-                                </a>
-                                <b class="arrow"></b>
-                            </li>*@
                         </ul>
                     </li>
 

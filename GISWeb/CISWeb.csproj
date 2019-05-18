@@ -230,6 +230,7 @@
     <Content Include="Scripts\Custom\Inbox\Inbox.js" />
     <Content Include="Scripts\Custom\Inbox\MeusGrupos.js" />
     <Content Include="Scripts\Custom\Inbox\Pessoal.js" />
+    <Content Include="Scripts\Custom\Incidente\Pesquisa.js" />
     <Content Include="Scripts\Custom\Lesdoen\Edicao.js" />
     <Content Include="Scripts\Custom\Lesdoen\Listagem.js" />
     <Content Include="Scripts\Custom\Lesdoen\Novo.js" />
@@ -395,6 +396,9 @@
     <Content Include="Views\Incidente\EditarCodificacao.cshtml" />
     <Content Include="Views\Incidente\EditarCAT.cshtml" />
     <Content Include="Views\Incidente\NovaCAT.cshtml" />
+    <Content Include="Views\Incidente\PesquisaDadosBase.cshtml" />
+    <Content Include="Views\Incidente\PesquisaCodificacao.cshtml" />
+    <Content Include="Views\Incidente\PesquisaCAT.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

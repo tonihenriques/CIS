@@ -14,6 +14,7 @@ using GISWeb.Infraestrutura.Provider.Abstract;
 using Ninject;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -1402,6 +1403,100 @@ namespace GISWeb.Controllers
             {
                 return Json(new { resultado = TratarRetornoValidacaoToJSON() });
             }
+        }
+
+
+
+
+
+        public ActionResult PesquisaDadosBase()
+        {
+            ViewBag.ESocial = ESocialBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao)).ToList();
+
+            ViewBag.Departamentos = DepartamentoBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao)).ToList();
+
+            ViewBag.Municipios = MunicipioBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao)).ToList().OrderBy(b => b.Descricao);
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PesquisaDadosBase(VMPesquisaIncidenteBase entidade)
+        {
+            string sWhere = string.Empty;
+
+            if (string.IsNullOrEmpty(entidade.NumeroSmart))
+                sWhere += " and NumeroSmart like '%" + entidade.NumeroSmart + "%'";
+
+            if (!string.IsNullOrEmpty(entidade.DataIncidente))
+                sWhere += " and DataIncidente like '" + entidade.DataIncidente + "%'";
+
+            if (!string.IsNullOrEmpty(entidade.AcidenteFatal))
+            {
+                if (entidade.AcidenteFatal.Equals("Sim"))
+                {
+                    sWhere += " and AcidenteFatal = 1";
+                }
+                else
+                {
+                    sWhere += " and AcidenteFatal = 0";
+                }                
+            }
+                
+
+            string sql = @"select UniqueKey, DataIncidente, AcidenteFatal, AcidenteGraveIP102, ETipoEntrada, ETipoAcidente 
+                           from OBJIncidente
+                           where 1 = 1 " + sWhere;
+
+            DataTable result = IncidenteBusiness.GetDataTable(sql);
+
+
+            return PartialView();
+        }
+
+
+
+
+        
+        public ActionResult PesquisaCodificacao()
+        {
+            ViewBag.TiposAtividades = TipoAtividadeBusiness.ListarTodos();
+            ViewBag.Naturezas = NaturezaBusiness.ListarTodos();
+            ViewBag.Funcoes = FuncaoGridsBusiness.ListarTodos();
+            ViewBag.Especies = EspecieAcidenteImpessoalBusiness.ListarTodos();
+            ViewBag.TiposAcidentes = TipoAcidentePessoalBusiness.ListarTodos();
+            ViewBag.Agentes = AgenteAcidenteBusiness.ListarTodos();
+            ViewBag.Fontes = FonteLesaoBusiness.ListarTodos();
+            ViewBag.Fatores = FatorPessoalInsegurancaBusiness.ListarTodos();
+            ViewBag.Atos = AtoInseguroBusiness.ListarTodos();
+            ViewBag.Condicoes = CondicaoAmbientalInsegBusiness.ListarTodos();
+            ViewBag.Prejuizos = PrejuizoMaterialBusiness.ListarTodos();
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PesquisaCodificacao(VMNovaCodificacao entidade)
+        {
+            return PartialView();
+        }
+
+
+
+
+
+        public ActionResult PesquisaCAT()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PesquisaCAT(VMNovaCAT entidade)
+        {
+            return PartialView();
         }
 
     }
