@@ -1,0 +1,56 @@
+﻿@using GISModel.DTO.Incidente
+@model VMIncidente
+
+<tr data-codigo="@Model.Codigo" data-uniquekey="@Model.UniqueKey" style="font-size: 8pt; font-family: Tahoma; height: 30px; min-height: 10px;">
+    <td style="vertical-align: middle; padding: 5px 0px 5px 5px;">
+        <a id="@Model.UniqueKey" href="#" title="Visualizar informações" class="CustomTooltip lnkAbrirDocumento" onclick="VisualizarDetalhesIncidente(this); return false;" style="text-decoration: none;" data-target="#modalDetalhesIncidente" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+            <span style="color: #777; font-weight: bold;">
+                @Model.Codigo
+            </span>
+        </a>
+    </td>
+
+    <td style="vertical-align: middle; padding: 0px; text-align: center">
+        @Model.DataIncidente
+    </td>
+
+    <td style="vertical-align: middle; padding: 0px; padding-left: 10px;">
+        @Model.ETipoAcidente
+    </td>
+
+    <td style="vertical-align: middle; padding: 0px; text-align: center;" class="hidden-800 hidden-480">
+        @Model.Orgao
+    </td>
+
+    <td style="vertical-align: middle; padding: 0px; text-align: center;">
+        @Model.AcidenteFatal
+    </td>
+
+    <td style="vertical-align: middle; padding: 0px; text-align: center;">
+        @Model.AcidenteGraveIP102
+    </td>
+
+    <td style="vertical-align: middle; padding: 0px; text-align: center;">
+        @Model.Status
+    </td>
+
+    <td class="hidden-800 hidden-480" style="vertical-align: middle; padding: 0px; text-align: center;">
+        @Model.Municipio
+    </td>
+
+    <td style="vertical-align: middle; padding: 0px; text-align: center;">
+
+        <div class="inline pos-rel">
+            <button class="btn btn-minier bigger btn-default btnDropdownMenu" data-toggle="dropdown">
+                <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+            </button>
+
+            <ul id="menuOperacoes-@Model.UniqueKey" class="dropdown-menu dropdown-only-icon dropdown-yellow2 dropdown-menu-right dropdown-caret dropdown-close">
+                <li class="center">
+                    <img id="menuLoading-@Model.UniqueKey" src="~/Images/slack_loading.gif" />
+                </li>
+            </ul>
+        </div>
+
+    </td>
+</tr>

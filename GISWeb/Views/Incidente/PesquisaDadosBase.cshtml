@@ -17,7 +17,8 @@
     </div>
 
     @using (Ajax.BeginForm("PesquisaDadosBase", "Incidente", null,
-        new AjaxOptions {
+        new AjaxOptions
+        {
             HttpMethod = "POST",
             OnBegin = "OnBeginPesquisaDadosBase",
             OnSuccess = "OnSuccessPesquisaDadosBase",
@@ -307,9 +308,19 @@
 @section Scripts {
     <script src="~/Scripts/Ace/bootstrap-timepicker.js"></script>
 
+    @Scripts.Render("~/bundles/jQ_dataTable")
+
+    <script src="~/Scripts/Ace/ace.widget-box.js"></script>
     <script src="~/Scripts/Ace/chosen.jquery.js"></script>
 
     <script src="~/Scripts/jQuery/inputmask.js"></script>
     <script src="~/Scripts/jQuery/jquery.inputmask.js"></script>
+
     <script src="~/Scripts/Custom/Incidente/Pesquisa.js"></script>
+}
+
+@section Sliders {
+    @{
+        Html.RenderPartial("~/Views/Shared/_SlidersIncidente.cshtml");
+    }
 }

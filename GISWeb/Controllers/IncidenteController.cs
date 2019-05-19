@@ -9,6 +9,7 @@ using GISModel.Entidades;
 using GISModel.Entidades.OBJ;
 using GISModel.Entidades.OBJ.Tabelas;
 using GISModel.Entidades.REL;
+using GISModel.Enums;
 using GISWeb.Infraestrutura.Filters;
 using GISWeb.Infraestrutura.Provider.Abstract;
 using Ninject;
@@ -1426,33 +1427,54 @@ namespace GISWeb.Controllers
         {
             string sWhere = string.Empty;
 
-            if (string.IsNullOrEmpty(entidade.NumeroSmart))
-                sWhere += " and NumeroSmart like '%" + entidade.NumeroSmart + "%'";
+            if (!string.IsNullOrEmpty(entidade.NumeroSmart))
+                sWhere += " and o.NumeroSmart like '%" + entidade.NumeroSmart + "%'";
 
             if (!string.IsNullOrEmpty(entidade.DataIncidente))
-                sWhere += " and DataIncidente like '" + entidade.DataIncidente + "%'";
+                sWhere += " and o.DataIncidente like '" + entidade.DataIncidente + "%'";
 
-            if (!string.IsNullOrEmpty(entidade.AcidenteFatal))
+            if (!string.IsNullOrEmpty(entidade.AcidenteFatal) && !entidade.AcidenteFatal.Equals("Todos"))
             {
                 if (entidade.AcidenteFatal.Equals("Sim"))
                 {
-                    sWhere += " and AcidenteFatal = 1";
+                    sWhere += " and o.AcidenteFatal = 1";
                 }
                 else
                 {
-                    sWhere += " and AcidenteFatal = 0";
+                    sWhere += " and o.AcidenteFatal = 0";
                 }                
             }
                 
 
-            string sql = @"select UniqueKey, DataIncidente, AcidenteFatal, AcidenteGraveIP102, ETipoEntrada, ETipoAcidente 
-                           from OBJIncidente
-                           where 1 = 1 " + sWhere;
+            string sql = @"select top 100 UniqueKey, Codigo, DataIncidente, AcidenteFatal, AcidenteGraveIP102, 
+                                          ETipoEntrada, ETipoAcidente, Status,
+                                          (select Sigla from OBJDepartamento where UniqueKey = o.UKOrgao and UsuarioExclusao is null) as Orgao,
+                                          (select Descricao from OBJMunicipio where UniqueKey = o.UKMunicipio and UsuarioExclusao is null) as Municipio
+                           from OBJIncidente o
+                           where o.UsuarioExclusao is null " + sWhere + @"
+                           order by Codigo";
 
+            List<VMIncidente> lista = new List<VMIncidente>();
             DataTable result = IncidenteBusiness.GetDataTable(sql);
+            if (result.Rows.Count > 0) {
+                foreach (DataRow row in result.Rows) {
+                    lista.Add(new VMIncidente()
+                    {
+                        UniqueKey = row["UniqueKey"].ToString(),
+                        Codigo = row["Codigo"].ToString(),
+                        DataIncidente = ((DateTime)row["DataIncidente"]).ToString("dd/MM/yyyy"),
+                        TipoEntrada = row["ETipoEntrada"].ToString(),
+                        ETipoAcidente = ((ETipoAcidente)Enum.Parse(typeof(ETipoAcidente), row["ETipoAcidente"].ToString(), true)).GetDisplayName(),
+                        AcidenteFatal = ((int)row["ETipoAcidente"]).Equals(0) ? "Não" : "Sim",
+                        AcidenteGraveIP102 = ((bool)row["AcidenteGraveIP102"]) ? "Sim" : "Não",
+                        Status = row["Status"].ToString(),
+                        Orgao = row["Orgao"].ToString(),
+                        Municipio = row["Municipio"].ToString()
+                    });
+                }
+            }
 
-
-            return PartialView();
+            return PartialView("_ResultadoPesquisa", lista);
         }
 
 

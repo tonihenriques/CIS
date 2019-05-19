@@ -21,6 +21,8 @@
     });
 })(jQuery);
 
+
+
 function ExibirMensagemGritter(titulo, corpo, gritterClasse) {
     var t = titulo;
     if (t == "") t = 'Alerta!';
@@ -50,6 +52,8 @@ function ExibirMensagemDeAlerta(msg) {
 function ExibirMensagemDeSucesso(msg) {
     ExibirMensagemGritter('Sucesso!', msg, 'gritter-success');
 }
+
+
 
 function TratarResultadoJSON(resultado) {
     if (resultado.Erro != null && resultado.Erro != undefined && resultado.Erro != "") {
@@ -393,6 +397,8 @@ function ExibirMensagemGritterTodos(content, msgErroNaoIdentificado, exibirSuces
     else if (msgErroNaoIdentificado)
         ExibirMensagemGritter('Oops!', msgErroNaoIdentificado, 'gritter-error');
 }
+
+
 
 function BloquearDiv(id) {
     $("#" + id).append('<div class="bloquearDiv"></div>');

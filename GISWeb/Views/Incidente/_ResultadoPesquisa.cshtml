@@ -1,0 +1,109 @@
+﻿@using GISModel.DTO.Incidente
+@model List<VMIncidente>
+        
+<div class="space-6"></div>
+
+<div class="table-header">
+    Resultado por "Dados Base"
+
+    <a style="float: right; margin-top: 2px; margin-right: 2px; border-bottom: 0px;" class="dt-button buttons-collection buttons-colvis btn btn-white btn-primary btn-bold CustomTooltip btnVoltarPesquisaBase" tabindex="0" aria-controls="dynamic-table" data-original-title="" title="Voltar">
+        <span>
+            @*<i class="fa fa-search bigger-110 blue"></i>*@
+            <i class="ace-icon fa fa-mail-reply-all  bigger-110"></i>
+        </span>
+    </a>
+</div>
+
+@if (Model != null && Model.Count > 0)
+{
+
+    <div id="divTableResultadoPesquisa">
+        @if (ViewBag.AlertaRownumAtingido != null && ViewBag.AlertaRownumAtingido)
+        {
+            <div style="margin-bottom: 10px">
+                <div class="alert alert-warning padding-10">
+                    <strong>
+                        <i class="ace-icon fa fa-exclamation-triangle"></i>
+                        Oops!
+                    </strong>
+
+                    @{
+                        string msg = "Sua pesquisa atingiu o número máximo de ocorrências retornadas. ";
+                        msg += "Refine os parâmetros de localização para um resultado mais preciso ou utilize o ícone de exportar para Excel # para ver todos os @ documentos encontrados.";
+
+                        msg = msg.Replace("@", "<strong>" + ViewBag.TotalDocs.ToString() + "</strong>").Replace("#", "(<i class=\"ace-icon fa fa-file-excel-o bigger-110 blue\"></i>)");
+                    }
+
+                    @Html.Raw(msg)
+
+                    <br />
+                </div>
+            </div>
+        }
+
+        <table id="tableResultadoPesquisa" class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr style="background-image: linear-gradient(to bottom, #ffffff 0%, #e2e2e2 80%); font-size: 12px; height: 28px; min-height: 10px">
+
+                    <th class="center" width="100px" style="padding: 0px; border-bottom: 0px">
+                        Codigo
+                    </th>
+
+                    <th class="center" width="115px" style="padding: 0px; border-bottom: 0px">
+                        Data Incidente
+                    </th>
+
+                    <th class="center" style="padding: 0px; border-bottom: 0px">
+                        Tipo Acidente
+                    </th>
+
+                    <th class="hidden-800 hidden-480 center" width="80px" style="padding: 0px 0px 0px 5px; border-bottom: 0px">
+                        Órgão
+                    </th>
+
+                    <th class="center" width="50px" style="padding: 0px; border-bottom: 0px">
+                        Fatal?
+                    </th>
+
+                    <th class="center" width="55px" style="padding: 0px; border-bottom: 0px">
+                        Grave?
+                    </th>
+
+                    <th class="center" style="padding: 0px 0px 0px 8px; border-bottom: 0px">
+                        Status
+                    </th>
+
+                    <th class="hidden-800 hidden-480 center" style="padding: 0px 0px 0px 8px; border-bottom: 0px">
+                        Município
+                    </th>
+
+                    <th class="center" width="80px" style="padding: 0px 0px 0px 8px; border-bottom: 0px">
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @{
+                    foreach (var ficha in Model)
+                    {
+                        Html.RenderPartial("~/Views/Incidente/_ResultadoPesquisaRow.cshtml", ficha);
+                    }
+                }
+            </tbody>
+        </table>
+
+    </div>
+
+}
+else
+{
+    <div class="alert alert-warning">
+        <strong>
+            <i class="ace-icon fa fa-meh-o"></i>
+            Oops!
+        </strong>
+
+        No momento, nenhum incidente encontrado.
+        <br>
+    </div>
+}
