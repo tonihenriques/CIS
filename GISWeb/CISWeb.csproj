@@ -185,6 +185,7 @@
     <Content Include="Scripts\Ace\jQ\jquery-ui.js" />
     <Content Include="Scripts\Ace\jQ\jquery.colorbox.js" />
     <Content Include="Scripts\Ace\jQ\jquery.gritter.js" />
+    <Content Include="Scripts\Ace\jQ\jquery.maskedinput.js" />
     <Content Include="Scripts\Ace\jQ\jquery.mobile.custom.js" />
     <Content Include="Scripts\Ace\jQ\jquery.nestable.js" />
     <Content Include="Scripts\Ace\jQ\jquery.ui.touch-punch.js" />

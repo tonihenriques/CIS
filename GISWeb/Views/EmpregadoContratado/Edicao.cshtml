@@ -43,7 +43,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.CPF, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
                     <div class="col-xs-12 col-sm-12">
-                        @Html.EditorFor(model => model.CPF, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled", @readonly = "readonly" } })
+                        @Html.EditorFor(model => model.CPF, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled", @readonly = "readonly", @id = "txtCPF" } })
                         @Html.ValidationMessageFor(model => model.CPF, "", new { @class = "text-danger" })
                     </div>
                 </div>

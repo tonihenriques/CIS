@@ -94,6 +94,7 @@
     <Compile Include="DTO\Shared\RetornoJSON.cs" />
     <Compile Include="Entidades\Acesso.cs" />
     <Compile Include="Entidades\OBJ\Codificacao.cs" />
+    <Compile Include="Entidades\OBJ\Estado.cs" />
     <Compile Include="Entidades\OBJ\Tabelas\EspecieAcidenteImpessoal.cs" />
     <Compile Include="Entidades\OBJ\Tabelas\FonteLesao.cs" />
     <Compile Include="Entidades\OBJ\IncidenteVeiculo.cs" />

@@ -39,6 +39,8 @@ namespace GISCore.Repository.Configuration
 
         public DbSet<Estabelecimento> Estabelecimento { get; set; }
 
+        public DbSet<Estado> Estado { get; set; }
+
         public DbSet<FatorPessoalInseguranca> FatorPessoalInseguranca { get; set; }
 
         public DbSet<FonteLesao> FonteLesao { get; set; }

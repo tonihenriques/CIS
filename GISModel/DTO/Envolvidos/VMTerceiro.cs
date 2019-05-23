@@ -1,4 +1,5 @@
-﻿using GISModel.Enums;
+﻿using GISModel.CustomAttributes;
+using GISModel.Enums;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -29,6 +30,8 @@ namespace GISModel.DTO.Envolvidos
         public string Nome { get; set; }
 
         [Display(Name = "CPF")]
+        [Required(ErrorMessage = "CPF obrigatório")]
+        [CustomValidationCPF(ErrorMessage = "CPF inválido")]
         public string CPF { get; set; }
 
         [Display(Name = "Data de Nascimento")]

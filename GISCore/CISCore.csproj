@@ -70,6 +70,7 @@
     <Compile Include="Business\Abstract\IEmpregadoContratadoBusiness.cs" />
     <Compile Include="Business\Abstract\IEmpresaBusiness.cs" />
     <Compile Include="Business\Abstract\IEmpregadoProprioBusiness.cs" />
+    <Compile Include="Business\Abstract\IEstadoBusiness.cs" />
     <Compile Include="Business\Abstract\IFerramentasBusiness.cs" />
     <Compile Include="Business\Abstract\IFornecedorBusiness.cs" />
     <Compile Include="Business\Abstract\IIncidenteBusiness.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Business\Concrete\EmpregadoContratadoBusiness.cs" />
     <Compile Include="Business\Concrete\EmpregadoProprioBusiness.cs" />
     <Compile Include="Business\Concrete\EmpresaBusiness.cs" />
+    <Compile Include="Business\Concrete\EstadoBusiness.cs" />
     <Compile Include="Business\Concrete\FerramentasBusiness.cs" />
     <Compile Include="Business\Concrete\FornecedorBusiness.cs" />
     <Compile Include="Business\Concrete\LesaoDoencaBusiness.cs" />
@@ -133,6 +135,10 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="DI\GISNinjectModule.cs" />
+    <Compile Include="Migrations\201905222303414_a1.cs" />
+    <Compile Include="Migrations\201905222303414_a1.Designer.cs">
+      <DependentUpon>201905222303414_a1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -219,6 +225,11 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201905222303414_a1.resx">
+      <DependentUpon>201905222303414_a1.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

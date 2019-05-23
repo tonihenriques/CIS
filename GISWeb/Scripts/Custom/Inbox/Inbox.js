@@ -70,7 +70,17 @@ function OnSuccessAprovar(content) {
 
     ExibirMensagemGritterTodos(content, "Ocorreu algum problema não identificado ao aprovar o documento.");
 
-    AtualizarTelasDetalhes();
+    //AtualizarTelasDetalhes();
+    
+    $("#modalDetalhesIncidente").modal("hide");
+    $("#ObjRecemCriado").val("");
+    
+    if ($(".msgRetornoExterno .alert").length > 0) {
+        $(".msgRetornoExterno .alert").hide();
+    }
+
+    AtualizarIncidentes();
+
 }
 
 
@@ -146,6 +156,9 @@ function OnSuccessAssumir(content) {
     ExibirMensagemGritterTodos(content, "Ocorreu algum problema não identificado ao aprovar o documento.");
 
     AtualizarTelasDetalhes();
+
+    AtualizarIncidentes();
+
 }
 
 
@@ -220,5 +233,14 @@ function OnSuccessRejeitar(content) {
 
     ExibirMensagemGritterTodos(content, "Ocorreu algum problema não identificado ao rejeitar.");
 
-    AtualizarTelasDetalhes();
+    //AtualizarTelasDetalhes();
+    $("#modalDetalhesIncidente").modal("hide");
+
+    if ($(".msgRetornoExterno .alert").length > 0) {
+        $(".msgRetornoExterno .alert").hide();
+    }
+
+    $("#ObjRecemCriado").val("");
+
+    AtualizarIncidentes();
 }

@@ -8,16 +8,12 @@
     else if (fInbox == "IncidentesVeiculos") {
         AtualizarIncidentesVeiculos();
     }
-    else if (fInbox == "QuaseIncidentes") {
-        AtualizarQuaseIncidentes();
-    }
-    else if (fInbox == "QuaseIncidentesVeiculos") {
-        AtualizarQuaseIncidentesVeiculos();
-    }
 
 });
 
 function AtualizarIncidentes() {
+
+    
 
     $("#result_incidente").html("");
     $(".LoadingLayout").show();

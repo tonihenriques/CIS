@@ -209,14 +209,29 @@ function AdicionarFuncoesOnClikParaOperacoes() {
 }
 
 function AtualizarTelasDetalhes() {
+
+    alert("AtualizarTelasDetalhes");
+
     if (EstaNaCaixaDeEntrada()) {
-        if (EstaNoModalVisualizarDetalhesIncidente())
+
+        alert("EstaNaCaixaDeEntrada");
+
+        if (EstaNoModalVisualizarDetalhesIncidente()) {
+            alert("EstaNoModalVisualizarDetalhesIncidente()");
             VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
+        }
+            
 
         AtualizarIncidentes();
     } else if (EstaNaPesquisaIncidente()) {
-        if (EstaNoModalVisualizarDetalhesIncidente())
+
+        alert("EstaNaPesquisaIncidente");
+
+        if (EstaNoModalVisualizarDetalhesIncidente()) {
+            alert("EstaNoModalVisualizarDetalhesIncidente");
             VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
+        }
+            
 
         AtualizarRowPesquisa();
     }
@@ -546,6 +561,10 @@ function OnClickNovoEmpTerceiro(origemElemento) {
 
                 AplicaDatePicker();
 
+                AplicaValidacaoCPF();
+
+                $('#txtCPF').mask('999.999.999-99');
+
                 $("#modalNewEmpTercProsseguir").off("click").on('click', function (e) {
                     e.preventDefault();
                     $("#formCadastroContratado").submit();
@@ -786,6 +805,8 @@ function OnClickEditarEmpTerceiro(origemElemento) {
                 Chosen();
 
                 AplicaDatePicker();
+
+                $('#txtCPF').mask('999.999.999-99');
 
                 $("#modalEditEmpTercProsseguir").off("click").on('click', function (e) {
                     e.preventDefault();

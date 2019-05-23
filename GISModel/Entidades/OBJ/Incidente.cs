@@ -33,6 +33,7 @@ namespace GISModel.Entidades
         
         [Display(Name ="Data do Incidente")]
         [Required(ErrorMessage = "Informe a data do incidente")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime DataIncidente { get; set; }
         
         [Display(Name ="Tipo de Acidente")]

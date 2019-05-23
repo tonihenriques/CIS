@@ -103,6 +103,7 @@ function OnBeginCadastrarAcidente(jqXHR, settings) {
         $("#AcidenteGraveIP102").val(false);
     }
 
+    $("#DataIncidente").val($("#DataIncidente").val() + "-" + $("#timepicker1").val());
 
     var form = $("#formCadastroAcidente");
     settings.data = form.serialize();
