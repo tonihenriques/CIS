@@ -6,8 +6,6 @@
 <div class="row divInbox" id="divPesquisaGoogleishResultadoCorporativo" data-qs="@ViewBag.QueryString">
     <div class="col-xs-12">
 
-
-
         <div class="widget-box widget-color-blue" style="border: 0px">
 
             <div class="widget-body" id="widgetBodyInbox">
@@ -35,37 +33,18 @@
                                 @*<span class="badge badge-info">0</span>*@
                             </a>
                         </li>
-                        @*<li>
-                                <a data-toggle="tab" href="#result_q_incidente" onclick="AtualizarQuaseIncidentes();">
-                                    Q. Incidente
-                                </a>
-                            </li>
-                            <li>
-                                <a data-toggle="tab" href="#result_q_incidente_veiculo" onclick="AtualizarQuaseIncidentesVeiculos();">
-                                    Q. Incidente Veículo
-                                </a>
-                            </li>*@
                     </ul>
 
 
 
                     <div class="tabbable">
-
                         <div class="tab-content" style="float: left; width: 100%; margin-top: 0px; padding: 0; border-top: 1px solid #c5d0dc;">
-
                             <div id="result_incidente" class="tab-pane fade in active">
                             </div>
 
                             <div id="result_incidente_veiculo" class="tab-pane fade">
                             </div>
-
-                            @*<div id="result_q_incidente" class="tab-pane fade">
-                                </div>
-                                <div id="result_q_incidente_veiculo" class="tab-pane fade">
-                                </div>*@
-
                         </div>
-
                     </div>
 
                 </div>
@@ -74,7 +53,6 @@
 
     </div>
 </div>
-
 
 @section Sliders {
     @{
@@ -87,7 +65,7 @@
     <script src="~/Scripts/Ace/bootstrap-timepicker.js"></script>
 
     @Scripts.Render("~/bundles/jQ_dataTable")
-    
+
     <script src="~/Scripts/Ace/jQ/jquery.maskedinput.js"></script>
 
     <script src="~/Scripts/Ace/ace.widget-box.js"></script>

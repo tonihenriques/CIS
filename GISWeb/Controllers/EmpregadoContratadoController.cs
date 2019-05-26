@@ -134,48 +134,30 @@ namespace GISWeb.Controllers
                         EmpregadoContratadoBusiness.Inserir(empTerceiro);
                     }
 
+                    LesaoDoenca lesaodoencaTemp = null;
 
-                    LesaoDoenca lesaodoencaTemp = new LesaoDoenca()
+                    if (!string.IsNullOrEmpty(entidade.DescricaoLesao) ||
+                        !string.IsNullOrEmpty(entidade.UKNaturezaLesaoPrincipal) ||
+                        !string.IsNullOrEmpty(entidade.UKLocalizacaoLesaoPrincipal) ||
+                        !string.IsNullOrEmpty(entidade.UKNaturezaLesaoSecundaria) ||
+                        !string.IsNullOrEmpty(entidade.UKLocalizacaoLesaoSecundaria))
                     {
-                        UniqueKey = Guid.NewGuid().ToString(),
-                        DescricaoLesao = entidade.DescricaoLesao,
-                        UKNaturezaLesaoPrincipal = entidade.UKNaturezaLesaoPrincipal,
-                        UKLocalizacaoLesaoPrincipal = entidade.UKLocalizacaoLesaoPrincipal,
-                        UKNaturezaLesaoSecundaria = entidade.UKNaturezaLesaoSecundaria,
-                        UKLocalizacaoLesaoSecundaria = entidade.UKLocalizacaoLesaoSecundaria,
-                        DataInclusao = DateTime.Now,
-                        UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login
-                    };
+                        lesaodoencaTemp = new LesaoDoenca()
+                        {
+                            UniqueKey = Guid.NewGuid().ToString(),
+                            DescricaoLesao = entidade.DescricaoLesao,
+                            UKNaturezaLesaoPrincipal = entidade.UKNaturezaLesaoPrincipal,
+                            UKLocalizacaoLesaoPrincipal = entidade.UKLocalizacaoLesaoPrincipal,
+                            UKNaturezaLesaoSecundaria = entidade.UKNaturezaLesaoSecundaria,
+                            UKLocalizacaoLesaoSecundaria = entidade.UKLocalizacaoLesaoSecundaria,
+                            DataInclusao = DateTime.Now,
+                            UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login
+                        };
 
-                    LesaoDoencaBusiness.Inserir(lesaodoencaTemp);
+                        LesaoDoencaBusiness.Inserir(lesaodoencaTemp);
+                    }
 
-                    //LesaoEmpregado lesaoEmp = new LesaoEmpregado()
-                    //{
-                    //    UniqueKey = Guid.NewGuid().ToString(),
-                    //    TipoAcidente = entidade.TipoAcidente,
-                    //    Atividade = entidade.Atividade,
-                    //    UKTipoAtividade = entidade.UKTipoAtividade,
-                    //    UKNatureza = entidade.UKNatureza,
-                    //    ConsequenciaLesao = entidade.ConsequenciaLesao,
-                    //    UKFuncaoGRIDS = entidade.UKFuncaoGRIDS,
-                    //    UKEspecieAcidImpessoal = entidade.UKEspecieAcidImpessoal,
-                    //    UKTipoAcidPessoal = entidade.UKTipoAcidPessoal,
-                    //    UKAgenteAcidente = entidade.UKAgenteAcidente,
-                    //    UKFonteLesao = entidade.UKFonteLesao,
-                    //    UKFatorPessoalInseg = entidade.UKFatorPessoalInseg,
-                    //    UKAtoInseguro = entidade.UKAtoInseguro,
-                    //    UKCondAmbientalInseg = entidade.UKCondAmbientalInseg,
-                    //    UKPrejMaterial = entidade.UKPrejMaterial,
-                    //    Custo = entidade.Custo,
-                    //    DiasPerdidos = entidade.DiasPerdidos,
-                    //    DiasDebitados = entidade.DiasDebitados,
-                    //    DataObito = entidade.DataObito,
-                    //    DataInclusao = DateTime.Now,
-                    //    UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login
-                    //};
-
-                    //LesaoEmpregadoBusiness.Inserir(lesaoEmp);
-
+                        
 
                     RegistroEmpregadoContratadoBusiness.Inserir(new RegistroEmpregadoContratado()
                     {
@@ -183,8 +165,7 @@ namespace GISWeb.Controllers
                         DataInclusao = DateTime.Now,
                         UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login,
                         Funcao = entidade.Funcao,
-                        //UKLesaoEmpregado = lesaoEmp.UniqueKey,
-                        UKLesaoDoenca = lesaodoencaTemp.UniqueKey,
+                        UKLesaoDoenca = lesaodoencaTemp?.UniqueKey,
                         UKRegistro = entidade.UKIncidente,
                         UKEmpregadoContratado = empTerceiro.UniqueKey,
                         UKFornecedor = entidade.UKFornecedor

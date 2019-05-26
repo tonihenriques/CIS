@@ -1,20 +1,21 @@
 ﻿using GISCore.Business.Abstract;
+using GISHelpers.Extensions.System;
+using GISHelpers.Utils;
+using GISModel.DTO.Inbox;
+using GISModel.DTO.Incidente;
 using GISModel.DTO.Shared;
 using GISModel.Entidades;
+using GISModel.Enums;
 using GISWeb.Infraestrutura.Filters;
 using GISWeb.Infraestrutura.Provider.Abstract;
 using Ninject;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Runtime.Caching;
 using System.Web.Mvc;
 using System.Web.SessionState;
-using GISHelpers.Utils;
-using GISModel.DTO.Incidente;
-using GISHelpers.Extensions.System;
-using GISModel.DTO.Inbox;
-using System.Data;
-using GISModel.Enums;
 
 namespace GISWeb.Controllers
 {
@@ -47,6 +48,70 @@ namespace GISWeb.Controllers
 
         #endregion
 
+
+
+        public ActionResult BuscarTotalDocsInbox() {
+
+            int iTotal = 0;
+            int iPessoal = 0;
+            int iGrupos = 0;
+
+            
+            if (memoryCacheDefault.Contains(CustomAuthorizationProvider.UsuarioAutenticado.Login + "InboxTotal"))
+            {
+                List<int> lista = (List<int>)memoryCacheDefault[CustomAuthorizationProvider.UsuarioAutenticado.Login + "InboxTotal"];
+                iTotal = lista[0];
+                iPessoal = lista[1];
+                iGrupos = lista[2];
+            }
+            else
+            {
+                List<string> perfis = (from usuarioperfil in UsuarioPerfilBusiness.Consulta.Where(p => string.IsNullOrEmpty(p.UsuarioExclusao)).ToList()
+                                       join perfil in PerfilBusiness.Consulta.Where(p => string.IsNullOrEmpty(p.UsuarioExclusao)).ToList() on usuarioperfil.UKPerfil equals perfil.UniqueKey
+                                       where usuarioperfil.UKUsuario.Equals(CustomAuthorizationProvider.UsuarioAutenticado.UniqueKey)
+                                       select "'" + perfil.Nome + "'").ToList();
+
+                string sql = @"select 'Pessoal' as tipo, COUNT(*) as Total
+                           from OBJIncidente i
+                           where i.Responsavel in ('" + CustomAuthorizationProvider.UsuarioAutenticado.Login + @"') and i.UsuarioExclusao is null 
+
+                           union all
+                           
+                           select 'Grupos' as tipo, COUNT(*) as Total
+                           from OBJIncidente i
+                           where i.Responsavel in (" + string.Join(",", perfis) + @") and i.UsuarioExclusao is null ";
+
+                DataTable dtInbox = PerfilBusiness.GetDataTable(sql);
+                if (dtInbox.Rows.Count > 0)
+                {
+                    foreach (DataRow row in dtInbox.Rows)
+                    {
+                        if (row[0].ToString().Equals("Pessoal"))
+                        {
+                            iPessoal = int.Parse(row[1].ToString());
+                        }
+                        else
+                        {
+                            iGrupos = int.Parse(row[1].ToString());
+                        }
+                    }
+
+                    iTotal = iPessoal + iGrupos;
+                }
+
+                List<int> lista = new List<int>();
+                lista.Add(iTotal);
+                lista.Add(iPessoal);
+                lista.Add(iGrupos);
+
+                memoryCacheDefault.Add(CustomAuthorizationProvider.UsuarioAutenticado.Login + "InboxTotal", lista, DateTime.Today.AddHours(96));
+            }
+
+            return Json(new { resultado = new { Total = iTotal, Pessoal = iPessoal, Grupos = iGrupos } });
+        }
+
+
+
         public ActionResult Index()
         {
             ViewBag.FuncaoInbox = Severino.RecuperaCookie("FuncaoInboxAChamar", true);
@@ -74,6 +139,9 @@ namespace GISWeb.Controllers
 
             return View();
         }
+
+
+
 
         public ActionResult CarregarInboxPessoal(string tab)
         {
@@ -199,6 +267,9 @@ namespace GISWeb.Controllers
 
         }
 
+
+
+
         [RestritoAAjax]
         public ActionResult AprovarIncidente(string uk)
         {
@@ -257,6 +328,8 @@ namespace GISWeb.Controllers
                 }
                 else
                 {
+                    ReiniciarCache(CustomAuthorizationProvider.UsuarioAutenticado.Login);
+
                     obj.StatusWF = "SO";
                     obj.DataExclusao = DateTime.Now;
                     obj.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
@@ -302,6 +375,7 @@ namespace GISWeb.Controllers
                 return Json(new { erro = ex.Message });
             }
         }
+
 
 
 
@@ -360,6 +434,8 @@ namespace GISWeb.Controllers
                 }
                 else
                 {
+                    ReiniciarCache(CustomAuthorizationProvider.UsuarioAutenticado.Login);
+
                     bool first = true;
                     foreach (Incidente obj in lista)
                     {
@@ -404,6 +480,7 @@ namespace GISWeb.Controllers
                 return Json(new { erro = ex.Message });
             }
         }
+
 
 
 
@@ -465,6 +542,8 @@ namespace GISWeb.Controllers
                 }
                 else
                 {
+                    ReiniciarCache(CustomAuthorizationProvider.UsuarioAutenticado.Login);
+
                     obj.StatusWF = "RJ";
                     obj.DataExclusao = DateTime.Now;
                     obj.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
@@ -517,6 +596,8 @@ namespace GISWeb.Controllers
             }
         }
 
+
+        
 
     }
 }

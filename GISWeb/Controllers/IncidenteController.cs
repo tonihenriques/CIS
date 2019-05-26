@@ -303,6 +303,8 @@ namespace GISWeb.Controllers
                     Severino.GravaCookie("FuncaoInboxAChamar", "Incidentes", 10);
                     Severino.GravaCookie("ObjRecemCriado", entidade.UniqueKey, 10);
 
+                    ReiniciarCache(CustomAuthorizationProvider.UsuarioAutenticado.Login);
+
                     return Json(new { resultado = new RetornoJSON() { URL = Url.Action("Index", "Inbox") } });
                 }
                 catch (Exception ex)
@@ -911,13 +913,16 @@ namespace GISWeb.Controllers
 
 
 
-        public ActionResult EditarCodificacao(string UKRelEnvolvido, string Tipo, string UKCodificacao)
+        public ActionResult EditarCodificacao(string UKIncidente, string UKRelEnvolvido, string Tipo, string UKCodificacao)
         {
 
             try {
 
                 if (string.IsNullOrEmpty(UKCodificacao))
                     throw new Exception("Parâmetro que identifica a codifição não encontrado.");
+
+                if (string.IsNullOrEmpty(UKIncidente))
+                    throw new Exception("Não foi possível encontrar a identificação do incidente nos parâmetros.");
 
                 Codificacao cod = CodificacaoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(UKCodificacao));
                 if (cod == null)
@@ -1228,7 +1233,7 @@ namespace GISWeb.Controllers
 
 
 
-        public ActionResult EditarCAT(string UKRelEnvolvido, string Tipo, string UKCAT)
+        public ActionResult EditarCAT(string UKIncidente, string UKRelEnvolvido, string Tipo, string UKCAT)
         {
 
             try
@@ -1236,6 +1241,9 @@ namespace GISWeb.Controllers
 
                 if (string.IsNullOrEmpty(UKCAT))
                     throw new Exception("Parâmetro que identifica a CAT não encontrado.");
+
+                if (string.IsNullOrEmpty(UKIncidente))
+                    throw new Exception("Não foi possível encontrar a identificação do incidente nos parâmetros.");
 
                 CAT cat = CATBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(UKCAT));
                 if (cat == null)

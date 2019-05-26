@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "Página Inicial";
+
+    var path = string.Empty;
+    if (Request.ApplicationPath.Length > 1)
+    {
+        path = Request.ApplicationPath;
+    }
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <h3 class="header smaller lighter red">CIS Web - Comunicado de Incidentes</h3>
+
+        <div class="well">
+            <h4 class="green smaller lighter">Seja bem bindo @ViewBag.NomeUsuario!</h4>
+            Utilize os botões abaixo para acesso rápido a página de cadastro ou o menu superior para mais opções.
+        </div>
+
+    </div>
+</div>
+
+<div class="row" style="margin-top: 8px;">
+    <div class="col-xs-12 col-sm-offset-3 col-sm-6 col-sm-offset-3 text-center">
+
+        <a href="@path/Incidente/Novo" class="btn btn-danger CustomTooltip" title="Clique para cadastrar um novo incidente" style="width: 100%;">
+            <i class="ace-icon fa fa-plus align-top bigger-125"></i>
+            Novo incidente
+        </a>
+
+
+    </div>
+</div>
+
+<span class="space-16">&nbsp;</span>
+
+<div class="row">
+    <div class="col-xs-12 col-sm-offset-3 col-sm-6 col-sm-offset-3 text-center">
+
+        <a href="#" class="btn btn-primary CustomTooltip" title="Em construção..." onclick="ExibirMensagemDeAlerta('Em construção...'); return false;" style="width: 100%;">
+            <i class="ace-icon fa fa-plus align-top bigger-125"></i>
+            Novo incidente veículo
+        </a>
+
+    </div>
+</div>
+
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/jQ_dataTable")
+}

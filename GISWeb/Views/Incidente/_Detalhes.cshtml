@@ -480,11 +480,15 @@ else
                                 </a>
                             }
 
-                            <span>&nbsp;</span>
+                            @if (Model.Operacoes.Contains(Operacao.AnexarArquivos))
+                            {
+                                <span>&nbsp;</span>
 
-                            <a href="#" class="CustomTooltip lnkUploadArquivo" title="Anexar Novo Arquivo" data-target="#modalArquivo" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                <i class="ace-icon fa fa-cloud-upload bigger-170"></i>
-                            </a>
+                                <a href="#" class="CustomTooltip lnkUploadArquivo" title="Anexar Novo Arquivo" data-target="#modalArquivo" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                    <i class="ace-icon fa fa-cloud-upload bigger-170"></i>
+                                </a>
+                            }
+
                         </div>
                     </div>
 
@@ -531,14 +535,14 @@ else
                                                                                 <span>&nbsp;Arquivo anexado em @arq.DataInclusao por @arq.UsuarioInclusao</span>
                                                                             </div>
 
-
-                                                                            <div class="pull-right action-buttons">
-                                                                                <a href="#" class="red2 lnkExcluirArquivo CustomTooltip" title="Excluir">
-                                                                                    <i class="ace-icon fa fa-remove bigger-125"></i>
-                                                                                </a>
-                                                                            </div>
-
-
+                                                                            @if (Model.Operacoes.Contains(Operacao.ExcluirArquivos))
+                                                                            {
+                                                                                <div class="pull-right action-buttons">
+                                                                                    <a href="#" class="red2 lnkExcluirArquivo CustomTooltip" title="Excluir">
+                                                                                        <i class="ace-icon fa fa-remove bigger-125"></i>
+                                                                                    </a>
+                                                                                </div>
+                                                                            }
 
                                                                         </div>
                                                                     </div>
@@ -584,17 +588,20 @@ else
                             </a>
                         </h5>
 
-                        <div class="widget-toolbar action-buttons no-border" style="height: 38px; padding-top: 5px;">
-                            <span>&nbsp;</span>
-                            <a href="#" class="CustomTooltip green lnkNovoEmpregadoProprio" title="Novo Empregado Próprio" data-target="#modalNewEmpProp" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                <i class="ace-icon fa fa-user bigger-150"></i>
-                            </a>
+                        @if (Model.Operacoes.Contains(Operacao.IncluirEnvolvidos))
+                        {
+                            <div class="widget-toolbar action-buttons no-border" style="height: 38px; padding-top: 5px;">
+                                <span>&nbsp;</span>
+                                <a href="#" class="CustomTooltip green lnkNovoEmpregadoProprio" title="Novo Empregado Próprio" data-target="#modalNewEmpProp" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                    <i class="ace-icon fa fa-user bigger-150"></i>
+                                </a>
 
-                            <span>&nbsp;</span>
-                            <a href="#" class="CustomTooltip orange lnkNovoEmpregadoTerceiro" title="Novo Empregado Terceirizado" data-target="#modalNewEmpTerc" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                <i class="ace-icon fa fa-user bigger-150"></i>
-                            </a>
-                        </div>
+                                <span>&nbsp;</span>
+                                <a href="#" class="CustomTooltip orange lnkNovoEmpregadoTerceiro" title="Novo Empregado Terceirizado" data-target="#modalNewEmpTerc" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                    <i class="ace-icon fa fa-user bigger-150"></i>
+                                </a>
+                            </div>
+                        }
                     </div>
 
                     <div class="widget-body">
@@ -636,13 +643,23 @@ else
                                                                 {
                                                                     if (string.IsNullOrEmpty(iEmpregado.UKCAT))
                                                                     {
-                                                                        <a class="orange CustomTooltip lkNovaCAT" href="#" title="Gerenciar CAT" data-tipo="Proprio" data-uniquekeyrel="@iEmpregado.UKRel" title="Cadastrar CAT" data-target="#modalNovaCAT" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                                                            <i class="ace-icon fa fa-life-ring bigger-130"></i>
-                                                                        </a>
+                                                                        if (Model.Operacoes.Contains(Operacao.IncluirCAT))
+                                                                        {
+                                                                            <a class="grey CustomTooltip lkNovaCAT" href="#" data-tipo="Proprio" data-uniquekeyrel="@iEmpregado.UKRel" title="Cadastrar CAT" data-target="#modalNovaCAT" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                                <i class="ace-icon fa fa-life-ring bigger-130"></i>
+                                                                            </a>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <a class="grey CustomTooltip lkNovaCAT" href="#" title="Nenhuma CAT cadastrada">
+                                                                                <i class="ace-icon fa fa-life-ring bigger-130"></i>
+                                                                            </a>
+                                                                        }
+
                                                                     }
                                                                     else
                                                                     {
-                                                                        <a class="orange CustomTooltip lkEditarCAT" href="#" title="Gerenciar CAT" data-tipo="Proprio" data-ukcat="@iEmpregado.UKCAT" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar CAT" data-target="#modalEditarCAT" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                        <a class="orange CustomTooltip lkEditarCAT" href="#" title="Gerenciar CAT" data-tipo="Proprio" data-ukincidente="@Model.UniqueKey" data-ukcat="@iEmpregado.UKCAT" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar CAT" data-target="#modalEditarCAT" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                                                             <i class="ace-icon fa fa-life-ring bigger-130"></i>
                                                                         </a>
                                                                     }
@@ -652,14 +669,22 @@ else
                                                                 {
                                                                     if (string.IsNullOrEmpty(iEmpregado.UKCodificacao))
                                                                     {
-                                                                        <a class="red CustomTooltip lkNovaCodificacao" href="#" data-tipo="Proprio" data-uniquekeyrel="@iEmpregado.UKRel" title="Cadastrar Codificação" data-target="#modalNovaCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                                                            
-                                                                            <i class="ace-icon fa fa-bell bigger-130"></i>
-                                                                        </a>
+                                                                        if (Model.Operacoes.Contains(Operacao.IncluirCodificacao))
+                                                                        {
+                                                                            <a class="grey CustomTooltip lkNovaCodificacao" href="#" data-tipo="Proprio" data-uniquekeyrel="@iEmpregado.UKRel" title="Cadastrar Codificação" data-target="#modalNovaCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                                <i class="ace-icon fa fa-bell bigger-130"></i>
+                                                                            </a>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <a class="grey CustomTooltip lkNovaCodificacao" href="#" title="Nenhuma codificação cadastrada">
+                                                                                <i class="ace-icon fa fa-bell bigger-130"></i>
+                                                                            </a>
+                                                                        }
                                                                     }
                                                                     else
                                                                     {
-                                                                        <a class="red CustomTooltip lkEditarCodificacao" href="#" data-tipo="Proprio" data-ukcodificacao="@iEmpregado.UKCodificacao" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar Codificação" data-target="#modalEditarCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                        <a class="red CustomTooltip lkEditarCodificacao" href="#" data-tipo="Proprio" data-ukincidente="@Model.UniqueKey" data-ukcodificacao="@iEmpregado.UKCodificacao" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar Codificação" data-target="#modalEditarCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                                                             <i class="ace-icon fa fa-bell bigger-130"></i>
                                                                         </a>
                                                                     }
@@ -722,13 +747,22 @@ else
                                                                 {
                                                                     if (string.IsNullOrEmpty(iEmpregado.UKCAT))
                                                                     {
-                                                                        <a class="orange CustomTooltip lkNovaCAT" href="#" title="Gerenciar CAT" data-tipo="Contratado" data-uniquekeyrel="@iEmpregado.UKRel" title="Cadastrar CAT" data-target="#modalNovaCAT" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                                                            <i class="ace-icon fa fa-life-ring bigger-130"></i>
-                                                                        </a>
+                                                                        if (Model.Operacoes.Contains(Operacao.IncluirCodificacao))
+                                                                        {
+                                                                            <a class="grey CustomTooltip lkNovaCAT" href="#" title="Cadastrar CAT" data-tipo="Contratado" data-uniquekeyrel="@iEmpregado.UKRel" data-target="#modalNovaCAT" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                                <i class="ace-icon fa fa-life-ring bigger-130"></i>
+                                                                            </a>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <a class="grey CustomTooltip lkNovaCAT" href="#" title="Nenhuma CAT cadastrada">
+                                                                                <i class="ace-icon fa fa-life-ring bigger-130"></i>
+                                                                            </a>
+                                                                        }
                                                                     }
                                                                     else
                                                                     {
-                                                                        <a class="orange CustomTooltip lkEditarCAT" href="#" title="Gerenciar CAT" data-tipo="Contratado" data-ukcat="@iEmpregado.UKCAT" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar CAT" data-target="#modalEditarCAT" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                        <a class="orange CustomTooltip lkEditarCAT" href="#" title="Gerenciar CAT" data-ukincidente="@Model.UniqueKey" data-tipo="Contratado" data-ukincidente="@Model.UniqueKey" data-ukcat="@iEmpregado.UKCAT" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar CAT" data-target="#modalEditarCAT" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                                                             <i class="ace-icon fa fa-life-ring bigger-130"></i>
                                                                         </a>
                                                                     }
@@ -738,14 +772,23 @@ else
                                                                 {
                                                                     if (string.IsNullOrEmpty(iEmpregado.UKCodificacao))
                                                                     {
-                                                                        <a class="red CustomTooltip lkNovaCodificacao" href="#" data-tipo="Contratado" data-uniquekeyrel="@iEmpregado.UKRel" title="Cadastrar Codificação" data-target="#modalNovaCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                                                            <i class="ace-icon fa fa-bell bigger-130"></i>
-                                                                        </a>
+                                                                        if (Model.Operacoes.Contains(Operacao.IncluirCodificacao))
+                                                                        {
+                                                                            <a class="grey CustomTooltip lkNovaCodificacao" href="#" data-tipo="Contratado" data-uniquekeyrel="@iEmpregado.UKRel" title="Cadastrar Codificação" data-target="#modalNovaCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                                <i class="ace-icon fa fa-bell bigger-130"></i>
+                                                                            </a>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <a class="grey CustomTooltip lkNovaCodificacao" href="#" title="Nenhuma codificação cadastrada">
+                                                                                <i class="ace-icon fa fa-bell bigger-130"></i>
+                                                                            </a>
+                                                                        }
                                                                     }
                                                                     else
                                                                     {
-                                                                        <a class="red CustomTooltip lkEditarCodificacao" href="#" data-tipo="Contratado" data-ukcodificacao="@iEmpregado.UKCodificacao" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar Codificação" data-target="#modalEditarCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                                                            
+                                                                        <a class="red CustomTooltip lkEditarCodificacao" href="#" data-ukincidente="@Model.UniqueKey" data-tipo="Contratado" data-ukcodificacao="@iEmpregado.UKCodificacao" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar Codificação" data-target="#modalEditarCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+
                                                                             <i class="ace-icon fa fa-bell bigger-130"></i>
                                                                         </a>
                                                                     }

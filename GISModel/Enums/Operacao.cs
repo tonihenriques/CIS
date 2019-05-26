@@ -15,6 +15,11 @@ namespace GISModel.Enums
         Encaminhar,
         HistoricoWorkflow,
         AlterarDados,        
-        Excluir
+        Excluir,
+        AnexarArquivos,
+        ExcluirArquivos,
+        IncluirCAT,
+        IncluirCodificacao,
+        IncluirEnvolvidos
     }
 }

@@ -1,6 +1,29 @@
 ﻿jQuery(function ($) {
-    DatePTBR();  
+    DatePTBR();
+
+    BuscarTotalDocsInbox();
 });
+
+
+function BuscarTotalDocsInbox() {
+
+    $.ajax({
+        url: '/Inbox/BuscarTotalDocsInbox',
+        global: false,
+        type: 'POST',
+        async: true,
+        success: function (data) {
+
+            $(".liNavbarInboxBadgeTotalPessoal").html(data.resultado.Total);
+            $(".totalDocsPessoal").html(data.resultado.Pessoal);
+            $(".totalDocsGrupos").html(data.resultado.Grupos);
+
+            $("#liNavbarInbox").show();
+        }
+    });
+
+}
+
 
 function VisualizarDetalhesIncidente(elementoclicado) {
 
@@ -210,29 +233,19 @@ function AdicionarFuncoesOnClikParaOperacoes() {
 
 function AtualizarTelasDetalhes() {
 
-    alert("AtualizarTelasDetalhes");
-
     if (EstaNaCaixaDeEntrada()) {
 
-        alert("EstaNaCaixaDeEntrada");
-
         if (EstaNoModalVisualizarDetalhesIncidente()) {
-            alert("EstaNoModalVisualizarDetalhesIncidente()");
             VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
         }
-            
 
         AtualizarIncidentes();
     } else if (EstaNaPesquisaIncidente()) {
 
-        alert("EstaNaPesquisaIncidente");
-
         if (EstaNoModalVisualizarDetalhesIncidente()) {
-            alert("EstaNoModalVisualizarDetalhesIncidente");
             VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
         }
-            
-
+        
         AtualizarRowPesquisa();
     }
 }
@@ -1198,7 +1211,7 @@ function OnClickEditarCodificacao(origemElemento) {
     $.ajax({
         method: "POST",
         url: "/Incidente/EditarCodificacao",
-        data: { UKRelEnvolvido: origemElemento.data("uniquekeyrel"), Tipo: origemElemento.data("tipo"), UKCodificacao: origemElemento.data("ukcodificacao") },
+        data: { UKIncidente: origemElemento.data("ukincidente"), UKRelEnvolvido: origemElemento.data("uniquekeyrel"), Tipo: origemElemento.data("tipo"), UKCodificacao: origemElemento.data("ukcodificacao") },
         success: function (content) {
             $('#modalEditarCodificacaoCorpoLoading').hide();
 
@@ -1360,7 +1373,7 @@ function OnClickEditarCAT(origemElemento) {
     $.ajax({
         method: "POST",
         url: "/Incidente/EditarCAT",
-        data: { UKRelEnvolvido: origemElemento.data("uniquekeyrel"), Tipo: origemElemento.data("tipo"), UKCAT: origemElemento.data("ukcat") },
+        data: { UKIncidente: origemElemento.data("ukincidente"),  UKRelEnvolvido: origemElemento.data("uniquekeyrel"), Tipo: origemElemento.data("tipo"), UKCAT: origemElemento.data("ukcat") },
         success: function (content) {
             $('#modalEditarCATCorpoLoading').hide();
 

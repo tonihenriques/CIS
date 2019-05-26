@@ -23,6 +23,15 @@ namespace GISCore.Business.Concrete
                 //operacoes.Add(GISModel.Enums.Operacao.Encaminhar);
                 operacoes.Add(GISModel.Enums.Operacao.AlterarDados);
                 operacoes.Add(GISModel.Enums.Operacao.HistoricoWorkflow);
+
+                if (!entidade.Status.ToUpper().Equals("EM APROVAÇÃO"))
+                {
+                    operacoes.Add(GISModel.Enums.Operacao.AnexarArquivos);
+                    operacoes.Add(GISModel.Enums.Operacao.ExcluirArquivos);
+                    operacoes.Add(GISModel.Enums.Operacao.IncluirCAT);
+                    operacoes.Add(GISModel.Enums.Operacao.IncluirCodificacao);
+                    operacoes.Add(GISModel.Enums.Operacao.IncluirEnvolvidos);
+                }
                 
                 if (entidade.Status.ToUpper().Equals("EM EDIÇÃO"))
                 {

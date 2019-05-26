@@ -21,6 +21,8 @@ namespace GISModel.Entidades
         public bool AcidenteFatal { get; set; }
 
 
+        
+
 
         [Display(Name ="Tipo de Entrada")]
         public ETipoEntrada ETipoEntrada { get; set; }

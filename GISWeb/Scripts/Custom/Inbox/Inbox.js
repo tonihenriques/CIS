@@ -80,6 +80,7 @@ function OnSuccessAprovar(content) {
     }
 
     AtualizarIncidentes();
+    BuscarTotalDocsInbox();
 
 }
 
@@ -159,6 +160,7 @@ function OnSuccessAssumir(content) {
 
     AtualizarIncidentes();
 
+    BuscarTotalDocsInbox();
 }
 
 
@@ -243,4 +245,6 @@ function OnSuccessRejeitar(content) {
     $("#ObjRecemCriado").val("");
 
     AtualizarIncidentes();
+
+    BuscarTotalDocsInbox();
 }
