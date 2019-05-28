@@ -4,6 +4,8 @@
     ViewBag.Title = "Edição de Empregado Próprio";
 }
 
+<input type="hidden" style="display: none;" id="txtPodeEditar" value="@ViewBag.PodeEditar" />
+
 <div id="formEditEmpregadoProprio">
     @using (Ajax.BeginForm("Atualizar", "EmpregadoProprio", null,
         new AjaxOptions

@@ -79,21 +79,19 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.DataAtendimento, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
                     <div class="col-xs-12 col-sm-12">
-                        @Html.EditorFor(model => model.DataAtendimento, new { htmlAttributes = new { @class = "date-picker form-control" } })
+                        @Html.EditorFor(model => model.DataAtendimento, new { htmlAttributes = new { @class = "date-picker form-control", @value = @DateTime.Now.ToString("dd/MM/yyyy") } })
                     </div>
                 </div>
             </div>
 
             <div class="col-xs-12 col-sm-4">
                 <div class="form-group">
-
                     <label class="form-field-select-3 col-xs-12 col-sm-12 no-padding-right" for="DataIncidente">Hora Atendimento</label>
-
                     <div class="col-xs-12 col-sm-12">
-                        <div class="input-group">
-                            <input class="form-control date-picker" name="HoraAtendimento" id="HoraAtendimento" type="text" data-date-format="dd-mm-yyyy">
+                        <div class="input-group bootstrap-timepicker">
+                            <input id="HoraAtendimento" name="HoraAtendimento" type="text" class="form-control" value="">
                             <span class="input-group-addon">
-                                <i class="fa fa-calendar bigger-110"></i>
+                                <i class="fa fa-clock-o bigger-110"></i>
                             </span>
                         </div>
                     </div>

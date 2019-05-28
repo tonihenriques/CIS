@@ -5,6 +5,8 @@
     ViewBag.Title = "Cadastro de Empregado Contratado";
 }
 
+<input type="hidden" style="display: none;" id="txtPodeEditar" value="@ViewBag.PodeEditar" />
+
 <div id="formCadEmpregadoContratado">
     @using (Ajax.BeginForm("Atualizar", "EmpregadoContratado", null,
         new AjaxOptions

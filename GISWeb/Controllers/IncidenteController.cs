@@ -650,7 +650,8 @@ namespace GISWeb.Controllers
                     throw new Exception("Não foi possível localizar o parâmetro que identifica o incidente.");
                 else
                 {
-                    Incidente registro = IncidenteBusiness.Consulta.FirstOrDefault(a => a.UniqueKey.Equals(uniquekey) && string.IsNullOrEmpty(a.UsuarioExclusao));
+                    List<Incidente> lista = IncidenteBusiness.Consulta.Where(a => a.UniqueKey.Equals(uniquekey) && string.IsNullOrEmpty(a.UsuarioExclusao)).ToList();
+                    Incidente registro = lista[0];
 
                     VMIncidente vm = new VMIncidente();
                     vm.UniqueKey = registro.UniqueKey;
@@ -714,7 +715,8 @@ namespace GISWeb.Controllers
                                                 UKEmpregado = envol.UniqueKey,
                                                 UKRel = rel.UniqueKey,
                                                 UKCodificacao = rel.UKCodificacao,
-                                                UKCAT = rel.UKCAT
+                                                UKCAT = rel.UKCAT,
+                                                UKLesaoDoenca = rel.UKLesaoDoenca
                                             }).ToList();
 
                     vm.EnvolvidosTerceiro = (from rel in RegistroEmpregadoContratadoBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UKRegistro.Equals(registro.UniqueKey)).ToList()
@@ -727,10 +729,12 @@ namespace GISWeb.Controllers
                                                  UKEmpregado = envol.UniqueKey,
                                                  UKRel = rel.UniqueKey,
                                                  UKCodificacao = rel.UKCodificacao,
-                                                 UKCAT = rel.UKCAT
+                                                 UKCAT = rel.UKCAT,
+                                                 UKLesaoDoenca = rel.UKLesaoDoenca
                                              }).ToList();
 
-                    vm.Operacoes = OperacaoBusiness.RecuperarTodasPermitidas(CustomAuthorizationProvider.UsuarioAutenticado.Login, CustomAuthorizationProvider.UsuarioAutenticado.Permissoes, registro);
+
+                    vm.Operacoes = OperacaoBusiness.RecuperarTodasPermitidas(CustomAuthorizationProvider.UsuarioAutenticado.Login, CustomAuthorizationProvider.UsuarioAutenticado.Permissoes, lista);
 
                     registro.Operacoes = vm.Operacoes;
 
@@ -924,6 +928,17 @@ namespace GISWeb.Controllers
                 if (string.IsNullOrEmpty(UKIncidente))
                     throw new Exception("Não foi possível encontrar a identificação do incidente nos parâmetros.");
 
+                Incidente objIncidente = IncidenteBusiness.Consulta.FirstOrDefault(a => a.UniqueKey.Equals(UKIncidente) && string.IsNullOrEmpty(a.UsuarioExclusao));
+                if (objIncidente == null)
+                {
+                    throw new Exception("Não foi possível encontrar o incidente.");
+                }
+
+                if (objIncidente.Responsavel.Equals(CustomAuthorizationProvider.UsuarioAutenticado.Login) && !objIncidente.Status.Equals("Em Aprovação"))
+                {
+                    ViewBag.PodeEditar = true;
+                }
+
                 Codificacao cod = CodificacaoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(UKCodificacao));
                 if (cod == null)
                     throw new Exception("Não foi possível encontrar a codificação.");
@@ -1114,7 +1129,9 @@ namespace GISWeb.Controllers
             VMNovaCAT obj = new VMNovaCAT()
             {
                 UKRelEnvolvido = UKRelEnvolvido,
-                Tipo = Tipo
+                Tipo = Tipo,
+                DataAtendimento = DateTime.Now.ToString("dd/MM/yyyy"),
+                DataRegistro = DateTime.Now.ToString("dd/MM/yyyy")
             };
 
             return PartialView(obj);
@@ -1248,6 +1265,17 @@ namespace GISWeb.Controllers
                 CAT cat = CATBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(UKCAT));
                 if (cat == null)
                     throw new Exception("Não foi possível encontrar a codificação.");
+
+                Incidente objIncidente = IncidenteBusiness.Consulta.FirstOrDefault(a => a.UniqueKey.Equals(UKIncidente) && string.IsNullOrEmpty(a.UsuarioExclusao));
+                if (objIncidente == null)
+                {
+                    throw new Exception("Não foi possível encontrar o incidente.");
+                }
+
+                if (objIncidente.Responsavel.Equals(CustomAuthorizationProvider.UsuarioAutenticado.Login) && !objIncidente.Status.Equals("Em Aprovação"))
+                {
+                    ViewBag.PodeEditar = true;
+                }
 
                 VMNovaCAT obj = new VMNovaCAT()
                 {

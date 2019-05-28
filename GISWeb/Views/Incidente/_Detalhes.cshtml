@@ -76,19 +76,6 @@ else
             classeTitulos = "blue";
         }
 
-        //if (Model.RevState == SPFRevState.SUPERSEDED)
-        //{
-        //    classeTitulos = "orange2";
-        //}
-        //else if (Model.RevState == SPFRevState.CURRENT)
-        //{
-        //    classeTitulos = "green";
-        //}
-        //else
-        //{
-        //    classeTitulos = "blue";
-        //}
-
         <div id="detalhesIncidente" data-uniquekey="@Model.UniqueKey" data-codigo="@Model.Codigo">
             <div class="widget-container-col">
                 <div class="widget-box transparent">
@@ -620,7 +607,7 @@ else
                                                     <th>Número</th>
                                                     <th>Nome</th>
                                                     <th>Função</th>
-                                                    <th width="125px"></th>
+                                                    <th width="135px"></th>
                                                 </tr>
                                             </thead>
 
@@ -639,6 +626,13 @@ else
 
                                                         <td class="center">
                                                             <div class="hidden-sm hidden-xs action-buttons">
+                                                                @if (!string.IsNullOrEmpty(iEmpregado.UKLesaoDoenca))
+                                                                {
+                                                                    <span class="orange CustomTooltip" title="Houve lesão">
+                                                                        <i class="ace-icon fa fa-exclamation-triangle bigger-130"></i>
+                                                                    </span>
+                                                                }
+
                                                                 @if (!Model.Status.Contains("Em Edição"))
                                                                 {
                                                                     if (string.IsNullOrEmpty(iEmpregado.UKCAT))
@@ -694,9 +688,12 @@ else
                                                                     <i class="ace-icon fa fa-pencil bigger-130"></i>
                                                                 </a>
 
-                                                                <a class="red CustomTooltip" href="#" title="Excluir Empregado" onclick="ExcluirEnvolvidoProprio('@iEmpregado.UKRel', '@iEmpregado.Nome'); return false;">
-                                                                    <i class="ace-icon fa fa-trash-o bigger-130"></i>
-                                                                </a>
+                                                                @if (Model.Operacoes.Contains(Operacao.IncluirEnvolvidos))
+                                                                {
+                                                                    <a class="red CustomTooltip" href="#" title="Excluir Empregado" onclick="ExcluirEnvolvidoProprio('@iEmpregado.UKRel', '@iEmpregado.Nome'); return false;">
+                                                                        <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                                                    </a>
+                                                                }
                                                             </div>
 
                                                             <div class="hidden-md hidden-lg">
@@ -743,6 +740,14 @@ else
 
                                                         <td class="center">
                                                             <div class="hidden-sm hidden-xs action-buttons">
+
+                                                                @if (!string.IsNullOrEmpty(iEmpregado.UKLesaoDoenca))
+                                                                {
+                                                                    <span class="orange CustomTooltip" title="Houve lesão">
+                                                                        <i class="ace-icon fa fa-exclamation-triangle bigger-130"></i>
+                                                                    </span>
+                                                                }
+
                                                                 @if (!Model.Status.Contains("Em Edição"))
                                                                 {
                                                                     if (string.IsNullOrEmpty(iEmpregado.UKCAT))
@@ -798,9 +803,12 @@ else
                                                                     <i class="ace-icon fa fa-pencil bigger-130"></i>
                                                                 </a>
 
-                                                                <a class="red CustomTooltip" href="#" title="Excluir Empregado" onclick="ExcluirEnvolvidoTerceiro('@iEmpregado.UKRel', '@iEmpregado.Nome'); return false;">
-                                                                    <i class="ace-icon fa fa-trash-o bigger-130"></i>
-                                                                </a>
+                                                                @if (Model.Operacoes.Contains(Operacao.IncluirEnvolvidos))
+                                                                {
+                                                                    <a class="red CustomTooltip" href="#" title="Excluir Empregado" onclick="ExcluirEnvolvidoTerceiro('@iEmpregado.UKRel', '@iEmpregado.Nome'); return false;">
+                                                                        <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                                                    </a>
+                                                                }
                                                             </div>
 
                                                             <div class="hidden-md hidden-lg">

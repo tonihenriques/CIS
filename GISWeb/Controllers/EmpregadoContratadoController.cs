@@ -28,6 +28,9 @@ namespace GISWeb.Controllers
         #region
 
             [Inject]
+            public IIncidenteBusiness IncidenteBusiness { get; set; }
+
+            [Inject]
             public INaturezaLesaoBusiness NaturezaLesaoBusiness { get; set; }
 
             [Inject]
@@ -228,6 +231,23 @@ namespace GISWeb.Controllers
 
                         obj.UKRel = relEmpTerceiro.UniqueKey;
                         obj.UKIncidente = relEmpTerceiro.UKRegistro;
+
+
+
+
+                        Incidente objIncidente = IncidenteBusiness.Consulta.FirstOrDefault(a => a.UniqueKey.Equals(obj.UKIncidente) && string.IsNullOrEmpty(a.UsuarioExclusao));
+                        if (objIncidente == null)
+                        {
+                            throw new Exception("Não foi possível encontrar o incidente.");
+                        }
+                        if (objIncidente.Responsavel.Equals(CustomAuthorizationProvider.UsuarioAutenticado.Login) && !objIncidente.Status.Equals("Em Aprovação"))
+                        {
+                            ViewBag.PodeEditar = true;
+                        }
+
+
+
+
                         obj.UKEmpregado = relEmpTerceiro.UKEmpregadoContratado;
                         obj.UKFornecedor = relEmpTerceiro.UKFornecedor;
 

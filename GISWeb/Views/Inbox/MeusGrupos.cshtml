@@ -32,15 +32,15 @@
                             </a>
                         </li>
                         @*<li>
-                            <a data-toggle="tab" href="#result_q_incidente" onclick="AtualizarQuaseIncidentes();">
-                                Q. Incidente
-                            </a>
-                        </li>
-                        <li>
-                            <a data-toggle="tab" href="#result_q_incidente_veiculo" onclick="AtualizarQuaseIncidentesVeiculos();">
-                                Q. Incidente Veículo
-                            </a>
-                        </li>*@
+                                <a data-toggle="tab" href="#result_q_incidente" onclick="AtualizarQuaseIncidentes();">
+                                    Q. Incidente
+                                </a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#result_q_incidente_veiculo" onclick="AtualizarQuaseIncidentesVeiculos();">
+                                    Q. Incidente Veículo
+                                </a>
+                            </li>*@
                     </ul>
 
 
@@ -56,9 +56,9 @@
                             </div>
 
                             @*<div id="result_q_incidente" class="tab-pane fade">
-                            </div>
-                            <div id="result_q_incidente_veiculo" class="tab-pane fade">
-                            </div>*@
+                                </div>
+                                <div id="result_q_incidente_veiculo" class="tab-pane fade">
+                                </div>*@
                         </div>
                     </div>
 
@@ -70,7 +70,11 @@
 </div>
 
 @section Scripts {
+
+    <script src="~/Scripts/Ace/bootstrap-timepicker.js"></script>
     @Scripts.Render("~/bundles/jQ_dataTable")
+    <script src="~/Scripts/Ace/jQ/jquery.maskedinput.js"></script>
+
     <script src="~/Scripts/Ace/ace.widget-box.js"></script>
     <script src="~/Scripts/Ace/chosen.jquery.js"></script>
 

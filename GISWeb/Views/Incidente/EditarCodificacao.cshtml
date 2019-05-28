@@ -5,6 +5,8 @@
     ViewBag.Title = "Edição da Codificação";
 }
 
+<input type="hidden" style="display: none;" id="txtPodeEditar" value="@ViewBag.PodeEditar" />
+
 <div id="formCadEmpregadoProprio">
     @using (Ajax.BeginForm("AtualizarCodificacao", "Incidente", null,
         new AjaxOptions

@@ -27,6 +27,8 @@ function BuscarTotalDocsInbox() {
 
 function VisualizarDetalhesIncidente(elementoclicado) {
 
+    $(".modal-body").css("max-height", (window.innerHeight - 120) + "px");
+
     var codigoIncidente = $(elementoclicado).closest("[data-codigo]").attr("data-codigo");
     var ukIncidente = $(elementoclicado).closest("[data-uniquekey]").attr("data-uniquekey");
 
@@ -729,6 +731,7 @@ function ExcluirEnvolvidoTerceiro(ukRel, nomeEnvolvido) {
 }
 
 
+
 function OnClickEditarEmpProprio(origemElemento) {
 
     $('#modalEditEmpPropCorpo').html('');
@@ -764,6 +767,14 @@ function OnClickEditarEmpProprio(origemElemento) {
                 $('#modalEditEmpPropCorpo').html(content);
 
                 AplicaTooltip();
+
+                if ($("#txtPodeEditar").val() == "") {
+                    $("#formEdicaoEmpregadoProprio input").attr("disabled", true);
+                    $("#formEdicaoEmpregadoProprio select").attr("disabled", true);
+                }
+                else {
+                    $("#modalEditEmpPropProsseguir").show();
+                }
 
                 Chosen();
 
@@ -815,6 +826,14 @@ function OnClickEditarEmpTerceiro(origemElemento) {
 
                 AplicaTooltip();
 
+                if ($("#txtPodeEditar").val() == "") {
+                    $("#formEdicaoEmpregadoTerc input").attr("disabled", true);
+                    $("#formEdicaoEmpregadoTerc select").attr("disabled", true);
+                }
+                else {
+                    $("#modalEditEmpTercProsseguir").show();
+                }
+
                 Chosen();
 
                 AplicaDatePicker();
@@ -830,6 +849,8 @@ function OnClickEditarEmpTerceiro(origemElemento) {
         }
     });
 }
+
+
 
 
 function OnBeginEditarEmpProprio() {
@@ -857,6 +878,9 @@ function OnSuccessEditarEmpProprio(data) {
     }
 }
 
+
+
+
 function OnBeginEditarEmpTerceiro() {
     $(".LoadingLayout").show();
     $('#btnSalvar').hide();
@@ -881,6 +905,9 @@ function OnSuccessEditarEmpTerceiro(data) {
         VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
     }
 }
+
+
+
 
 function OnClickExcluirIncidente(origemElemento) {
     var msgInformativa = "Você está excluindo este incidente.";
@@ -1238,6 +1265,14 @@ function OnClickEditarCodificacao(origemElemento) {
 
                 AplicaTooltip();
 
+                if ($("#txtPodeEditar").val() == "") {
+                    $("#formEditarCodificacao input").attr("disabled", true);
+                    $("#formEditarCodificacao select").attr("disabled", true);
+                }
+                else {
+                    $("#modalEditarCodificacaoProsseguir").show();
+                }
+
                 Chosen();
 
                 AplicaDatePicker();
@@ -1325,6 +1360,21 @@ function OnClickNovaCAT(origemElemento) {
 
                 AplicaDatePicker();
 
+                $('#HoraAtendimento').timepicker({
+                    minuteStep: 1,
+                    showSeconds: false,
+                    showMeridian: false,
+                    disableFocus: true,
+                    icons: {
+                        up: 'fa fa-chevron-up',
+                        down: 'fa fa-chevron-down'
+                    }
+                }).on('focus', function () {
+                    $('#HoraAtendimento').timepicker('showWidget');
+                }).next().on(ace.click_event, function () {
+                    $(this).prev().focus();
+                });
+
                 $("#modalNovaCATProsseguir").off("click").on('click', function (e) {
                     e.preventDefault();
                     $("#formCadastroCAT").submit();
@@ -1336,6 +1386,7 @@ function OnClickNovaCAT(origemElemento) {
 }
 
 function OnBeginCadastrarCAT(jqXHR, settings) {
+
     $("#formCadastroCAT").css({ opacity: "0.5" });
     $("#modalNovaCATLoading").show();
     BloquearDiv("modalNovaCAT");
@@ -1399,6 +1450,14 @@ function OnClickEditarCAT(origemElemento) {
                 $('#modalEditarCATCorpo').html(content);
 
                 AplicaTooltip();
+
+                if ($("#txtPodeEditar").val() == "") {
+                    $("#formEditarCAT input").attr("disabled", true);
+                    $("#formEditarCAT select").attr("disabled", true);
+                }
+                else {
+                    $("#modalEditarCATProsseguir").show();
+                }
 
                 Chosen();
 

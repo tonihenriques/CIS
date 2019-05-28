@@ -5,9 +5,6 @@ namespace GISModel.Enums
     public enum ETipoAcidente
     {
 
-        [Display(Name = "")]
-        Tipo_nao_informado = 0,
-
         [Display(Name = "001 - Acidente com Contratado")]
         Acidente_com_Contratado = 1,
 

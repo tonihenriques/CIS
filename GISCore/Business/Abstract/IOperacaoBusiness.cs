@@ -8,6 +8,8 @@ namespace GISCore.Business.Abstract
     public interface IOperacaoBusiness : IBaseBusiness<EntidadeBase>
     {
 
+        OperacaoCollection RecuperarTodasPermitidas(string usuarioLogado, List<VMPermissao> permissoes, List<Incidente> entidades);
+
         OperacaoCollection RecuperarTodasPermitidas(string usuarioLogado, List<VMPermissao> permissoes, Incidente entidade);
 
         string RecuperarProximoStatus(string statusAtual);
