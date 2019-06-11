@@ -135,17 +135,13 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="DI\GISNinjectModule.cs" />
-    <Compile Include="Migrations\201905222303414_a1.cs" />
-    <Compile Include="Migrations\201905222303414_a1.Designer.cs">
-      <DependentUpon>201905222303414_a1.cs</DependentUpon>
+    <Compile Include="Migrations\201906102333123_t1.cs" />
+    <Compile Include="Migrations\201906102333123_t1.Designer.cs">
+      <DependentUpon>201906102333123_t1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201905261603270_r1.cs" />
-    <Compile Include="Migrations\201905261603270_r1.Designer.cs">
-      <DependentUpon>201905261603270_r1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201905261610371_r2.cs" />
-    <Compile Include="Migrations\201905261610371_r2.Designer.cs">
-      <DependentUpon>201905261610371_r2.cs</DependentUpon>
+    <Compile Include="Migrations\201906110014001_t2.cs" />
+    <Compile Include="Migrations\201906110014001_t2.Designer.cs">
+      <DependentUpon>201906110014001_t2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -235,14 +231,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201905222303414_a1.resx">
-      <DependentUpon>201905222303414_a1.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201906102333123_t1.resx">
+      <DependentUpon>201906102333123_t1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201905261603270_r1.resx">
-      <DependentUpon>201905261603270_r1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201905261610371_r2.resx">
-      <DependentUpon>201905261610371_r2.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201906110014001_t2.resx">
+      <DependentUpon>201906110014001_t2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

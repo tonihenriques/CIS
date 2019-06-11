@@ -18,7 +18,7 @@
 
     
 
-    $('#timepicker1').timepicker({
+    $('#HoraIncidente').timepicker({
         minuteStep: 1,
         showSeconds: false,
         showMeridian: false,
@@ -28,7 +28,7 @@
             down: 'fa fa-chevron-down'
         }
     }).on('focus', function () {
-        $('#timepicker1').timepicker('showWidget');
+        $('#HoraIncidente').timepicker('showWidget');
     }).next().on(ace.click_event, function () {
         $(this).prev().focus();
     });
@@ -102,8 +102,6 @@ function OnBeginCadastrarAcidente(jqXHR, settings) {
     else {
         $("#AcidenteGraveIP102").val(false);
     }
-
-    $("#DataIncidente").val($("#DataIncidente").val() + "-" + $("#timepicker1").val());
 
     var form = $("#formCadastroAcidente");
     settings.data = form.serialize();

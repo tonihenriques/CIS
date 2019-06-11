@@ -3,12 +3,11 @@
         
 <div class="space-6"></div>
 
-<div class="table-header">
+<div class="table-header" style="background-color: #5090c1;">
     Resultado por "Dados Base"
 
     <a style="float: right; margin-top: 2px; margin-right: 2px; border-bottom: 0px;" class="dt-button buttons-collection buttons-colvis btn btn-white btn-primary btn-bold CustomTooltip btnVoltarPesquisaBase" tabindex="0" aria-controls="dynamic-table" data-original-title="" title="Voltar">
         <span>
-            @*<i class="fa fa-search bigger-110 blue"></i>*@
             <i class="ace-icon fa fa-mail-reply-all  bigger-110"></i>
         </span>
     </a>
@@ -17,7 +16,7 @@
 @if (Model != null && Model.Count > 0)
 {
 
-    <div id="divTableResultadoPesquisa">
+    <div id="divTableResultadoPesquisa" style="margin-top: 10px;">
         @if (ViewBag.AlertaRownumAtingido != null && ViewBag.AlertaRownumAtingido)
         {
             <div style="margin-bottom: 10px">
@@ -97,7 +96,7 @@
 }
 else
 {
-    <div class="alert alert-warning">
+    <div class="alert alert-warning" style="margin-top: 10px;">
         <strong>
             <i class="ace-icon fa fa-meh-o"></i>
             Oops!

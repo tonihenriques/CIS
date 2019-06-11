@@ -22,6 +22,9 @@ namespace GISModel.DTO.Incidente
         [Display(Name = "Data do Incidente")]
         public string DataIncidente { get; set; }
 
+        [Display(Name = "Horário do Incidente")]
+        public string HoraIncidente { get; set; }
+
 
         [Display(Name = "Acidente Fatal?")]
         public string AcidenteFatal { get; set; }
@@ -68,7 +71,7 @@ namespace GISModel.DTO.Incidente
         public string NumeroBoletimOcorrencia { get; set; }
 
         [Display(Name = "Data Boletim de Ocorrência")]
-        public DateTime? DataBoletimOcorrencia { get; set; }
+        public string DataBoletimOcorrencia { get; set; }
 
         [Display(Name = "Acid. grave (IP 10.2)?")]
         public string AcidenteGraveIP102 { get; set; }

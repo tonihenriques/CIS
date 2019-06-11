@@ -9,9 +9,6 @@ namespace GISModel.Enums
 {
     public enum ETipoEntrada
     {
-        [Display(Name = "")]
-        Tipo_nao_informado = 0,
-
         [Display(Name = "Acidente de Trabalho")]
         Acidente_de_Trabalho = 1,
 

@@ -18,7 +18,7 @@
 
 
 
-    $('#timepicker1').timepicker({
+    $('#HoraIncidente').timepicker({
         minuteStep: 1,
         showSeconds: false,
         showMeridian: false,
@@ -28,12 +28,12 @@
             down: 'fa fa-chevron-down'
         }
     }).on('focus', function () {
-        $('#timepicker1').timepicker('showWidget');
+        $('#HoraIncidente').timepicker('showWidget');
     }).next().on(ace.click_event, function () {
         $(this).prev().focus();
-        });
+    });
 
-
+    $("#HoraIncidente").val("");
 
     Chosen();
 
@@ -41,7 +41,7 @@
 
 
 
-function OnBeginPesquisaDadosBase() {
+function OnBeginPesquisaDadosBase(jqXHR, settings) {
     $(".LoadingLayout").show();
     $('.page-content-area').ace_ajax('startLoading');
     $("#ResultadoPesquisa").html("");
@@ -49,27 +49,41 @@ function OnBeginPesquisaDadosBase() {
 }
 
 function OnSuccessPesquisaDadosBase(data) {
-    $(".LoadingLayout").hide();
-    $("#formPesquisa").hide();
-    $('.page-content-area').ace_ajax('stopLoading', true);
-    $("#ResultadoPesquisa").html(data);
+    
+    if (data.resultado != null &&
+        data.resultado != undefined &&
+        data.resultado.Erro != null &&
+        data.resultado.Erro != undefined &&
+        data.resultado.Erro != "") {
 
-    AplicaTooltip();
+        $('.page-content-area').ace_ajax('stopLoading', true);
+        $(".LoadingLayout").hide();
+        ExibirMensagemDeAlerta(data.resultado.Erro);
+    }
+    else {
+        
+        $(".LoadingLayout").hide();
+        $("#formPesquisa").hide();
+        $('.page-content-area').ace_ajax('stopLoading', true);
+        $("#ResultadoPesquisa").html(data);
 
-    if ($("#divTableResultadoPesquisa").length > 0) {
-        AplicajQdataTable("tableResultadoPesquisa", [null, null, null, null, null, null, null, null, { "bSortable": false }], false, 20);
+        AplicaTooltip();
 
-        $('.btnDropdownMenu').off("click").on('click', function () {
-            $(this).closest('tr').css({ 'background-color': '#dff0d8' });
+        if ($("#divTableResultadoPesquisa").length > 0) {
+            AplicajQdataTable("tableResultadoPesquisa", [null, null, null, null, null, null, null, null, { "bSortable": false }], false, 20);
 
-            OnClickBtnDropdownMenu($(this));
+            $('.btnDropdownMenu').off("click").on('click', function () {
+                $(this).closest('tr').css({ 'background-color': '#dff0d8' });
+
+                OnClickBtnDropdownMenu($(this));
+            });
+        }
+
+        $(".btnVoltarPesquisaBase").off("click").on("click", function () {
+            $("#ResultadoPesquisa").html("");
+            $("#formPesquisa").show();
         });
     }
-
-    $(".btnVoltarPesquisaBase").off("click").on("click", function () {
-        $("#ResultadoPesquisa").html("");
-        $("#formPesquisa").show();
-    });
 }
 
 function OnFailurePesquisaDadosBase() {

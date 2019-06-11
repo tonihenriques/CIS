@@ -36,8 +36,12 @@ namespace GISModel.Entidades
         [Display(Name ="Data do Incidente")]
         [Required(ErrorMessage = "Informe a data do incidente")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [Column(TypeName = "date")]
         public DateTime DataIncidente { get; set; }
-        
+
+        [Display(Name = "Horário do Incidente")]
+        public string HoraIncidente { get; set; }
+
         [Display(Name ="Tipo de Acidente")]
         public ETipoAcidente ETipoAcidente { get; set; }
 
@@ -68,6 +72,7 @@ namespace GISModel.Entidades
         public string NumeroBoletimOcorrencia { get; set; }
 
         [Display(Name = "Data Boletim de Ocorrência")]
+        [Column(TypeName = "date")]
         public DateTime? DataBoletimOcorrencia { get; set; }
 
         [Display(Name = "Acid. grave (IP 10.2)?")]

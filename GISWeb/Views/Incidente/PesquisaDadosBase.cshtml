@@ -61,7 +61,7 @@
                     <label class="form-field-select-3 col-xs-12 col-sm-12 no-padding-right" for="HoraIncidente">Horário do Incidente</label>
                     <div class="col-xs-12 col-sm-12">
                         <div class="input-group bootstrap-timepicker">
-                            <input id="timepicker1" type="text" class="form-control" value="">
+                            <input id="HoraIncidente" name="HoraIncidente" type="text" class="form-control" value="">
                             <span class="input-group-addon">
                                 <i class="fa fa-clock-o bigger-110"></i>
                             </span>
@@ -100,7 +100,7 @@
         </div>
 
         <div class="row">
-            <div class="col-xs-12 col-sm-4">
+            <div class="col-xs-12 col-sm-3">
                 <div class="form-group">
                     @Html.LabelFor(model => model.ETipoEntrada, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
                     <div class="col-xs-12 col-sm-12">
@@ -109,7 +109,17 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-4">
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ETipoAcidente, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EnumDropDownListFor(model => model.ETipoAcidente, "Selecione um tipo ...", htmlAttributes: new { @class = "chosen-select form-control" })
+
+                        @Html.ValidationMessageFor(model => model.ETipoAcidente, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
                 <div class="form-group">
                     @Html.LabelFor(model => model.Centro, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
                     <div class="col-xs-12 col-sm-12">
@@ -119,42 +129,12 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-sm-4">
+            <div class="col-xs-12 col-sm-3">
                 <div class="form-group">
                     @Html.LabelFor(model => model.Regional, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
                     <div class="col-xs-12 col-sm-12">
                         @Html.EnumDropDownListFor(model => model.Regional, "Selecione uma regional ...", htmlAttributes: new { @class = "chosen-select form-control" })
                         @Html.ValidationMessageFor(model => model.Regional, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-xs-12 col-sm-4">
-                <div class="form-group">
-                    @Html.LabelFor(model => model.UKDiretoria, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
-                    <div class="col-xs-12 col-sm-12">
-                        @Html.EditorFor(model => model.UKDiretoria, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-4">
-                <div class="form-group">
-                    @Html.LabelFor(model => model.UKOrgao, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
-                    <div class="col-xs-12 col-sm-12">
-                        @Html.DropDownListFor(d => d.UKOrgao, new SelectList(ViewBag.Departamentos, "UniqueKey", "Sigla"), "Selecione um órgão ...", new { @class = "chosen-select form-control tag-input-style", @autocomplete = "off" })
-                        @Html.ValidationMessageFor(model => model.UKOrgao, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-4">
-                <div class="form-group">
-                    @Html.LabelFor(model => model.ETipoAcidente, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
-                    <div class="col-xs-12 col-sm-12">
-                        @Html.EnumDropDownListFor(model => model.ETipoAcidente, "Selecione um tipo ...", htmlAttributes: new { @class = "chosen-select form-control" })
-
-                        @Html.ValidationMessageFor(model => model.ETipoAcidente, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>
@@ -260,12 +240,21 @@
         </div>
 
         <div class="row">
-            <div class="col-xs-12 col-sm-12">
+            <div class="col-xs-12 col-sm-8">
                 <div class="form-group">
                     @Html.LabelFor(model => model.Descricao, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
                     <div class="col-xs-12 col-sm-12">
                         @Html.TextAreaFor(model => model.Descricao, new { @class = "col-xs-12 col-sm-12", @rows = 1 })
                         @Html.ValidationMessageFor(model => model.Descricao, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UKOrgao, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.DropDownListFor(d => d.UKOrgao, new SelectList(ViewBag.Departamentos, "UniqueKey", "Sigla"), "Selecione um órgão ...", new { @class = "chosen-select form-control tag-input-style", @autocomplete = "off" })
+                        @Html.ValidationMessageFor(model => model.UKOrgao, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>
