@@ -104,7 +104,7 @@ namespace GISWeb.Controllers
                 lista.Add(iPessoal);
                 lista.Add(iGrupos);
 
-                memoryCacheDefault.Add(CustomAuthorizationProvider.UsuarioAutenticado.Login + "InboxTotal", lista, DateTime.Today.AddHours(96));
+                memoryCacheDefault.Add(CustomAuthorizationProvider.UsuarioAutenticado.Login + "InboxTotal", lista, DateTime.Today.AddHours(2));
             }
 
             return Json(new { resultado = new { Total = iTotal, Pessoal = iPessoal, Grupos = iGrupos } });
@@ -361,6 +361,7 @@ namespace GISWeb.Controllers
                         obj2.UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
                         obj2.UsuarioExclusao = null;
                         obj2.DataExclusao = DateTime.MaxValue;
+                        obj2.DataAtualizacao = DateTime.Now;
 
                         IncidenteBusiness.Inserir(obj2);
 
@@ -550,9 +551,49 @@ namespace GISWeb.Controllers
                     IncidenteBusiness.Alterar(obj);
 
                     string novoStatus = OperacaoBusiness.RecuperarStatusAnterior(obj.Status);
-                    List<string> Responsaveis = OperacaoBusiness.RecuperarResponsavelPorStatus(novoStatus);
-                    
-                    foreach (string resp in Responsaveis)
+
+                    string sql = "select top 1 Responsavel from objincidente where uniquekey = '" + item.UniqueKey + "' and UsuarioExclusao is not null and Status = '" + novoStatus + "' order by DataExclusao desc";
+                    string Responsavel = IncidenteBusiness.ExecuteQuery(sql);
+                    if (string.IsNullOrEmpty(Responsavel))
+                    {
+                        List<string> Responsaveis = OperacaoBusiness.RecuperarResponsavelPorStatus(novoStatus);
+                        foreach (string resp in Responsaveis)
+                        {
+                            Incidente obj2 = new Incidente();
+                            PropertyCopy.Copy(obj, obj2);
+
+                            obj2.ID = Guid.NewGuid().ToString();
+                            obj2.StatusWF = "RS";
+                            obj2.MensagemPasso = item.Comentarios;
+                            obj2.Status = novoStatus;
+
+                            if (resp.Equals("Submitter"))
+                            {
+                                string sql2 = "select top 1 UsuarioInclusao from OBJIncidente where Codigo = '" + obj2.Codigo + "' order by DataInclusao";
+                                string submitter = IncidenteBusiness.ExecuteQuery(sql2);
+                                if (string.IsNullOrEmpty(submitter))
+                                {
+                                    throw new Exception("Não foi possível recuperar o usuário que criou o incidente.");
+                                }
+
+                                obj2.Responsavel = submitter;
+                            }
+                            else
+                            {
+                                obj2.Responsavel = resp;
+                            }
+
+                            obj2.UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                            obj2.UsuarioExclusao = null;
+                            obj2.DataExclusao = DateTime.MaxValue;
+                            obj2.DataAtualizacao = DateTime.Now;
+
+                            IncidenteBusiness.Inserir(obj2);
+
+                            Severino.GravaCookie("MensagemSucesso", "O incidente " + obj2.Codigo + " foi rejeitado com sucesso.", 10);
+                        }
+                    }
+                    else
                     {
                         Incidente obj2 = new Incidente();
                         PropertyCopy.Copy(obj, obj2);
@@ -561,31 +602,17 @@ namespace GISWeb.Controllers
                         obj2.StatusWF = "RS";
                         obj2.MensagemPasso = item.Comentarios;
                         obj2.Status = novoStatus;
-
-                        if (resp.Equals("Submitter"))
-                        {
-                            string sql = "select top 1 UsuarioInclusao from OBJIncidente where Codigo = '" + obj2.Codigo + "' order by DataInclusao";
-                            string submitter = IncidenteBusiness.ExecuteQuery(sql);
-                            if (string.IsNullOrEmpty(submitter))
-                            {
-                                throw new Exception("Não foi possível recuperar o usuário que criou o incidente.");
-                            }
-
-                            obj2.Responsavel = submitter;
-                        }
-                        else
-                        {
-                            obj2.Responsavel = resp;
-                        }
-                        
+                        obj2.Responsavel = Responsavel;
                         obj2.UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
                         obj2.UsuarioExclusao = null;
                         obj2.DataExclusao = DateTime.MaxValue;
+                        obj2.DataAtualizacao = DateTime.Now;
 
                         IncidenteBusiness.Inserir(obj2);
 
                         Severino.GravaCookie("MensagemSucesso", "O incidente " + obj2.Codigo + " foi rejeitado com sucesso.", 10);
                     }
+
                 }
 
                 return Json(new { sucesso = "O passo do workflow associado ao documento foi aprovado com sucesso." });

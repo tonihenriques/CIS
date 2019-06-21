@@ -232,6 +232,7 @@
     <Content Include="Scripts\Custom\Inbox\MeusGrupos.js" />
     <Content Include="Scripts\Custom\Inbox\Pessoal.js" />
     <Content Include="Scripts\Custom\Incidente\Pesquisa.js" />
+    <Content Include="Scripts\Custom\Incidente\PesquisaEnvolvidos.js" />
     <Content Include="Scripts\Custom\Lesdoen\Edicao.js" />
     <Content Include="Scripts\Custom\Lesdoen\Listagem.js" />
     <Content Include="Scripts\Custom\Lesdoen\Novo.js" />
@@ -404,6 +405,8 @@
     <Content Include="Views\Incidente\_ResultadoPesquisa.cshtml" />
     <Content Include="Views\Incidente\_ResultadoPesquisaRow.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Incidente\PesquisaEnvolvidosProprio.cshtml" />
+    <Content Include="Views\Incidente\PesquisaEnvolvidosTerceiro.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

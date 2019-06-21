@@ -528,6 +528,22 @@ function OnClickNovoEmpProprio(origemElemento) {
 
                 AplicaDatePicker();
 
+                $("#NumeroPessoal").blur(function () {
+                    if ($(this).val() != "") {
+                        $.ajax({
+                            method: "POST",
+                            url: "/EmpregadoProprio/BuscarNomePorMatricula",
+                            data: { Matricula: $(this).val() },
+                            success: function (content) {
+                                TratarResultadoJSON(content.resultado);
+                                if (content.resultado != null && content.resultado != undefined && content.resultado.Conteudo != "") {
+                                    $("#Nome").val(content.resultado.Conteudo);
+                                }
+                            }
+                        });
+                    }
+                });
+
                 $("#modalNewEmpPropProsseguir").off("click").on('click', function (e) {
                     e.preventDefault();
                     $("#formCadastroEmpregado").submit();
@@ -579,6 +595,23 @@ function OnClickNovoEmpTerceiro(origemElemento) {
                 AplicaValidacaoCPF();
 
                 $('#txtCPF').mask('999.999.999-99');
+
+                $("#txtCPF").blur(function () {
+                    if ($(this).val() != "") {
+                        $.ajax({
+                            method: "POST",
+                            url: "/EmpregadoContratado/BuscarNomePorCPF",
+                            data: { CPF: $(this).val() },
+                            success: function (content) {
+                                TratarResultadoJSON(content.resultado);
+                                if (content.resultado != null && content.resultado != undefined && content.resultado.Conteudo != "") {
+                                    $("#Nome").val(content.resultado.Conteudo.substring(0, content.resultado.Conteudo.indexOf("$")));
+                                    $("#Nascimento").val(content.resultado.Conteudo.substring(content.resultado.Conteudo.indexOf("$") + 1));
+                                }
+                            }
+                        });
+                    }
+                });
 
                 $("#modalNewEmpTercProsseguir").off("click").on('click', function (e) {
                     e.preventDefault();

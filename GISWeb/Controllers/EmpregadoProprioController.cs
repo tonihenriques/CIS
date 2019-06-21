@@ -443,6 +443,34 @@ namespace GISWeb.Controllers
             ViewBag.EmpregadoID = new SelectList(EmpregadoProprioBusiness.Consulta.ToList());
             return View();
         }
-       
+
+        [HttpPost]
+        public ActionResult BuscarNomePorMatricula(string Matricula)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(Matricula))
+                {
+                    EmpregadoProprio emp = EmpregadoProprioBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.NumeroPessoal.Trim().ToUpper().Equals(Matricula.Trim().ToUpper()));
+                    if (emp != null)
+                        return Json(new { resultado = new RetornoJSON() { Conteudo = emp.Nome } });
+                }
+
+
+                return Json(new { resultado = new RetornoJSON() { } });
+            }
+            catch (Exception ex)
+            {
+                if (ex.GetBaseException() == null)
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.Message } });
+                }
+                else
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.GetBaseException().Message } });
+                }
+            }
+        }
+
     }
 }

@@ -466,5 +466,34 @@ namespace GISWeb.Controllers
             return View();
         }
 
+
+        [HttpPost]
+        public ActionResult BuscarNomePorCPF(string CPF)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(CPF))
+                {
+                    EmpregadoContratado emp = EmpregadoContratadoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.CPF.Trim().ToUpper().Equals(CPF.Trim().ToUpper()));
+                    if (emp != null)
+                        return Json(new { resultado = new RetornoJSON() { Conteudo = emp.Nome + "$" + emp.Nascimento } });
+                }
+
+
+                return Json(new { resultado = new RetornoJSON() { } });
+            }
+            catch (Exception ex)
+            {
+                if (ex.GetBaseException() == null)
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.Message } });
+                }
+                else
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.GetBaseException().Message } });
+                }
+            }
+        }
+
     }
 }

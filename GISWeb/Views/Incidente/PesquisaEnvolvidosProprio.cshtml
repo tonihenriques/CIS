@@ -1,0 +1,160 @@
+﻿@using GISModel.DTO.Incidente
+@model VMPesqIncidenteEnvProprio
+
+@{
+    ViewBag.Title = "Pesquisar Incidentes";
+}
+
+<div id="formPesquisa">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 widget-container-col ui-sortable">
+            <div class="page-header">
+                <h1>
+                    Pesquisar Incidentes por Envolvido Próprio
+                </h1>
+            </div>
+        </div>
+    </div>
+
+    @using (Ajax.BeginForm("PesquisaEnvolvidosProprio", "Incidente", null,
+        new AjaxOptions
+        {
+            HttpMethod = "POST",
+            OnBegin = "OnBeginPesquisaEnvolvidosProprio",
+            OnSuccess = "OnSuccessPesquisaEnvolvidosProprio",
+            OnFailure = "OnFailurePesquisaEnvolvidosProprio",
+        }, new { @id = "formPesquisaEnvolvidosProprio", @class = "form-horizontal", @autocomplete = "off" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Matricula, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-6 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.TextBoxFor(model => model.Matricula, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Nome, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-6 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.TextBoxFor(model => model.Nome, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Funcao, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-6 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.TextBoxFor(model => model.Funcao, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DescricaoLesao, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.TextBoxFor(model => model.DescricaoLesao, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UKNaturezaLesaoPrincipal, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.DropDownListFor(d => d.UKNaturezaLesaoPrincipal, new SelectList(ViewBag.NaturezaLesao, "UniqueKey", "NomeCompleto"), "Selecione um tipo de atividade ...", new { @class = "chosen-select form-control tag-input-style", @autocomplete = "off" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UKLocalizacaoLesaoPrincipal, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.DropDownListFor(d => d.UKLocalizacaoLesaoPrincipal, new SelectList(ViewBag.LocalizacaoLesao, "UniqueKey", "NomeCompleto"), "Selecione um tipo de atividade ...", new { @class = "chosen-select form-control tag-input-style", @autocomplete = "off" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UKNaturezaLesaoSecundaria, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.DropDownListFor(d => d.UKNaturezaLesaoSecundaria, new SelectList(ViewBag.NaturezaLesao, "UniqueKey", "NomeCompleto"), "Selecione um tipo de atividade ...", new { @class = "chosen-select form-control tag-input-style", @autocomplete = "off" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UKLocalizacaoLesaoSecundaria, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.DropDownListFor(d => d.UKLocalizacaoLesaoSecundaria, new SelectList(ViewBag.LocalizacaoLesao, "UniqueKey", "NomeCompleto"), "Selecione um tipo de atividade ...", new { @class = "chosen-select form-control tag-input-style", @autocomplete = "off" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-sm-offset-3 align-center">
+                <button class="btn btn-info" id="btnPesquisar" type="submit">
+                    <i class="ace-icon fa fa-check bigger-110"></i>
+                    Pesquisar
+                </button>
+                &nbsp;
+                <button class="btn btn-warning" type="reset">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    Limpar
+                </button>
+            </div>
+        </div>
+    }
+
+</div> <!-- Fim FormQuery -->
+
+
+<div id="ResultadoPesquisa">
+</div>
+
+
+@section Stylesheets {
+    <link href="~/Content/Ace/css/bootstrap-timepicker.css" rel="stylesheet" />
+    <link href="~/Content/Ace/css/chosen.css" rel="stylesheet" />
+
+    <style type="text/css">
+        textarea {
+            resize: none;
+        }
+    </style>
+}
+
+
+@section Scripts {
+    <script src="~/Scripts/Ace/bootstrap-timepicker.js"></script>
+
+    @Scripts.Render("~/bundles/jQ_dataTable")
+
+    <script src="~/Scripts/Ace/ace.widget-box.js"></script>
+    <script src="~/Scripts/Ace/chosen.jquery.js"></script>
+
+    <script src="~/Scripts/jQuery/inputmask.js"></script>
+    <script src="~/Scripts/jQuery/jquery.inputmask.js"></script>
+
+    <script src="~/Scripts/Custom/Incidente/PesquisaEnvolvidos.js"></script>
+}
+
+@section Sliders {
+    @{
+        Html.RenderPartial("~/Views/Shared/_SlidersIncidente.cshtml");
+    }
+}

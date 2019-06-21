@@ -121,6 +121,16 @@ namespace GISWeb.Controllers
             [Inject]
             public INivelHierarquicoBusiness NivelHierarquicoBusiness { get; set; }
 
+
+            [Inject]
+            public INaturezaLesaoBusiness NaturezaLesaoBusiness { get; set; }
+
+            [Inject]
+            public ILocalizacaoLesaoBusiness LocalizacaoLesaoBusiness { get; set; }
+
+            [Inject]
+            public IFornecedorBusiness FornecedorBusiness { get; set; }
+
         #endregion
 
         public ActionResult Index()
@@ -1619,8 +1629,169 @@ namespace GISWeb.Controllers
 
 
 
+        public ActionResult PesquisaEnvolvidosProprio() {
 
-        
+            ViewBag.NaturezaLesao = NaturezaLesaoBusiness.ListarTodos();
+            ViewBag.LocalizacaoLesao = LocalizacaoLesaoBusiness.ListarTodos();
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PesquisaEnvolvidosProprio(VMPesqIncidenteEnvProprio entidade)
+        {
+            try
+            {
+                string sWhere = string.Empty;
+
+                if (string.IsNullOrEmpty(entidade.Nome) &&
+                    string.IsNullOrEmpty(entidade.Matricula) &&
+                    string.IsNullOrEmpty(entidade.Funcao) &&
+                    entidade.UKLocalizacaoLesaoPrincipal.Equals("Todos") &&
+                    entidade.UKLocalizacaoLesaoSecundaria.Equals("Todos") &&
+                    entidade.UKNaturezaLesaoPrincipal.Equals("Todos") &&
+                    entidade.UKNaturezaLesaoSecundaria.Equals("Todos") &&
+                    string.IsNullOrEmpty(entidade.DescricaoLesao))
+                    throw new Exception("Informe pelo menos um filtro para prossegui na pesquisa.");
+
+                if (!string.IsNullOrEmpty(entidade.Nome))
+                    sWhere += " and upper(ep.Nome) like '" + entidade.Nome.ToUpper().Replace("*", "%") + "'";
+
+                if (!string.IsNullOrEmpty(entidade.Matricula))
+                    sWhere += " and upper(ep.NumeroPessoal) like '" + entidade.Matricula.ToUpper().Replace("*", "%") + "'";
+
+                string sql = @"select top 100 o.UniqueKey, o.Codigo, o.DataIncidente, o.AcidenteFatal, o.AcidenteGraveIP102, 
+                                          o.ETipoEntrada, o.ETipoAcidente, o.Status,
+                                          (select Sigla from OBJDepartamento where UniqueKey = o.UKOrgao and UsuarioExclusao is null) as Orgao,
+                                          (select Descricao from OBJMunicipio where UniqueKey = o.UKMunicipio and UsuarioExclusao is null) as Municipio
+                           from OBJIncidente o, RELRegistroEmpregadoProprio re, OBJEmpregadoProprio ep
+                           where o.UsuarioExclusao is null and 
+	                             o.UniqueKey = re.UKRegistro and re.UKEmpregadoProprio = ep.UniqueKey " + sWhere + @"
+                           order by Codigo";
+
+                List<VMIncidente> lista = new List<VMIncidente>();
+                DataTable result = IncidenteBusiness.GetDataTable(sql);
+                if (result.Rows.Count > 0)
+                {
+                    foreach (DataRow row in result.Rows)
+                    {
+                        lista.Add(new VMIncidente()
+                        {
+                            UniqueKey = row["UniqueKey"].ToString(),
+                            Codigo = row["Codigo"].ToString(),
+                            DataIncidente = ((DateTime)row["DataIncidente"]).ToString("dd/MM/yyyy"),
+                            TipoEntrada = row["ETipoEntrada"].ToString(),
+                            ETipoAcidente = ((ETipoAcidente)Enum.Parse(typeof(ETipoAcidente), row["ETipoAcidente"].ToString(), true)).GetDisplayName(),
+                            AcidenteFatal = ((int)row["ETipoAcidente"]).Equals(0) ? "Não" : "Sim",
+                            AcidenteGraveIP102 = ((bool)row["AcidenteGraveIP102"]) ? "Sim" : "Não",
+                            Status = row["Status"].ToString(),
+                            Orgao = row["Orgao"].ToString(),
+                            Municipio = row["Municipio"].ToString()
+                        });
+                    }
+                }
+
+                return PartialView("_ResultadoPesquisa", lista);
+            }
+            catch (Exception ex)
+            {
+                if (ex.GetBaseException() == null)
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.Message } });
+                }
+                else
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.GetBaseException().Message } });
+                }
+            }
+        }
+
+
+
+        public ActionResult PesquisaEnvolvidosTerceiro()
+        {
+
+            ViewBag.Fornecedores = FornecedorBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao)).ToList();
+            ViewBag.NaturezaLesao = NaturezaLesaoBusiness.ListarTodos();
+            ViewBag.LocalizacaoLesao = LocalizacaoLesaoBusiness.ListarTodos();
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PesquisaEnvolvidosTerceiro(VMPesqIncidenteEnvTerceiro entidade)
+        {
+            try
+            {
+                string sWhere = string.Empty;
+
+                if (string.IsNullOrEmpty(entidade.CPF) &&
+                    string.IsNullOrEmpty(entidade.Nome) &&
+                    string.IsNullOrEmpty(entidade.Nascimento) &&
+                    string.IsNullOrEmpty(entidade.Funcao) &&
+                    entidade.UKLocalizacaoLesaoPrincipal.Equals("Todos") &&
+                    entidade.UKLocalizacaoLesaoSecundaria.Equals("Todos") &&
+                    entidade.UKNaturezaLesaoPrincipal.Equals("Todos") &&
+                    entidade.UKNaturezaLesaoSecundaria.Equals("Todos") &&
+                    string.IsNullOrEmpty(entidade.DescricaoLesao))
+                    throw new Exception("Informe pelo menos um filtro para prossegui na pesquisa.");
+
+                if (!string.IsNullOrEmpty(entidade.CPF))
+                    sWhere += " and ec.CPF like '" + entidade.CPF.Replace("*", "%") + "'";
+
+                if (!string.IsNullOrEmpty(entidade.Nome))
+                    sWhere += " and upper(ec.Nome) like '" + entidade.Nome.ToUpper().Replace("*", "%") + "'";
+
+                string sql = @"select top 100 o.UniqueKey, o.Codigo, o.DataIncidente, o.AcidenteFatal, o.AcidenteGraveIP102, 
+                                          o.ETipoEntrada, o.ETipoAcidente, o.Status,
+                                          (select Sigla from OBJDepartamento where UniqueKey = o.UKOrgao and UsuarioExclusao is null) as Orgao,
+                                          (select Descricao from OBJMunicipio where UniqueKey = o.UKMunicipio and UsuarioExclusao is null) as Municipio
+                           from OBJIncidente o, RELRegistroEmpregadoContratado rc, OBJEmpregadoContratado ec
+                           where o.UsuarioExclusao is null and 
+	                             o.UniqueKey = rc.UKRegistro and rc.UKEmpregadoContratado = ec.UniqueKey  " + sWhere + @"
+                           order by o.Codigo";
+
+                List<VMIncidente> lista = new List<VMIncidente>();
+                DataTable result = IncidenteBusiness.GetDataTable(sql);
+                if (result.Rows.Count > 0)
+                {
+                    foreach (DataRow row in result.Rows)
+                    {
+                        lista.Add(new VMIncidente()
+                        {
+                            UniqueKey = row["UniqueKey"].ToString(),
+                            Codigo = row["Codigo"].ToString(),
+                            DataIncidente = ((DateTime)row["DataIncidente"]).ToString("dd/MM/yyyy"),
+                            TipoEntrada = row["ETipoEntrada"].ToString(),
+                            ETipoAcidente = ((ETipoAcidente)Enum.Parse(typeof(ETipoAcidente), row["ETipoAcidente"].ToString(), true)).GetDisplayName(),
+                            AcidenteFatal = ((int)row["ETipoAcidente"]).Equals(0) ? "Não" : "Sim",
+                            AcidenteGraveIP102 = ((bool)row["AcidenteGraveIP102"]) ? "Sim" : "Não",
+                            Status = row["Status"].ToString(),
+                            Orgao = row["Orgao"].ToString(),
+                            Municipio = row["Municipio"].ToString()
+                        });
+                    }
+                }
+
+                return PartialView("_ResultadoPesquisa", lista);
+            }
+            catch (Exception ex)
+            {
+                if (ex.GetBaseException() == null)
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.Message } });
+                }
+                else
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.GetBaseException().Message } });
+                }
+            }
+        }
+
+
+
         public ActionResult PesquisaCodificacao()
         {
             ViewBag.TiposAtividades = TipoAtividadeBusiness.ListarTodos();
