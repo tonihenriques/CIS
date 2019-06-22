@@ -1,7 +1,6 @@
 ﻿@using GISModel.DTO.Incidente
 @model VMPesqIncidenteEnvTerceiro
 
-
 @{
     ViewBag.Title = "Pesquisar Incidentes";
 }
@@ -176,6 +175,7 @@
         jQuery(function ($) {
 
             $('#CPF').mask('999.999.999-99');
+            $('#Nascimento').mask('99/99/9999');
 
         });
 

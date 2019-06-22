@@ -1643,15 +1643,16 @@ namespace GISWeb.Controllers
         {
             try
             {
+                string sFrom = string.Empty;
                 string sWhere = string.Empty;
 
                 if (string.IsNullOrEmpty(entidade.Nome) &&
                     string.IsNullOrEmpty(entidade.Matricula) &&
                     string.IsNullOrEmpty(entidade.Funcao) &&
-                    entidade.UKLocalizacaoLesaoPrincipal.Equals("Todos") &&
-                    entidade.UKLocalizacaoLesaoSecundaria.Equals("Todos") &&
-                    entidade.UKNaturezaLesaoPrincipal.Equals("Todos") &&
-                    entidade.UKNaturezaLesaoSecundaria.Equals("Todos") &&
+                    string.IsNullOrEmpty(entidade.UKLocalizacaoLesaoPrincipal) &&
+                    string.IsNullOrEmpty(entidade.UKLocalizacaoLesaoSecundaria) &&
+                    string.IsNullOrEmpty(entidade.UKNaturezaLesaoPrincipal) &&
+                    string.IsNullOrEmpty(entidade.UKNaturezaLesaoSecundaria) &&
                     string.IsNullOrEmpty(entidade.DescricaoLesao))
                     throw new Exception("Informe pelo menos um filtro para prossegui na pesquisa.");
 
@@ -1661,11 +1662,40 @@ namespace GISWeb.Controllers
                 if (!string.IsNullOrEmpty(entidade.Matricula))
                     sWhere += " and upper(ep.NumeroPessoal) like '" + entidade.Matricula.ToUpper().Replace("*", "%") + "'";
 
+                if (!string.IsNullOrEmpty(entidade.Funcao))
+                    sWhere += " and upper(re.Funcao) like '" + entidade.Funcao.Trim().ToUpper().Replace("*", "%") + "'";
+
+                if (!string.IsNullOrEmpty(entidade.DescricaoLesao) ||
+                    !string.IsNullOrEmpty(entidade.UKLocalizacaoLesaoPrincipal) ||
+                    !string.IsNullOrEmpty(entidade.UKLocalizacaoLesaoSecundaria) ||
+                    !string.IsNullOrEmpty(entidade.UKNaturezaLesaoPrincipal) ||
+                    !string.IsNullOrEmpty(entidade.UKNaturezaLesaoSecundaria))
+                {
+                    sFrom += " , OBJLesaoDoenca ld ";
+                    sWhere += " and re.UKLesaoDoenca = ld.UniqueKey ";
+
+                    if (!string.IsNullOrEmpty(entidade.DescricaoLesao))
+                        sWhere += " and upper(ld.DescricaoLesao) like '" + entidade.DescricaoLesao.Trim().ToUpper().Replace("*", "%") + "'";
+
+                    if (!string.IsNullOrEmpty(entidade.UKLocalizacaoLesaoPrincipal))
+                        sWhere += " and ld.UKLocalizacaoLesaoPrincipal = '" + entidade.UKLocalizacaoLesaoPrincipal + "'";
+
+                    if (!string.IsNullOrEmpty(entidade.UKLocalizacaoLesaoSecundaria))
+                        sWhere += " and ld.UKLocalizacaoLesaoSecundaria = '" + entidade.UKLocalizacaoLesaoSecundaria + "'";
+
+                    if (!string.IsNullOrEmpty(entidade.UKNaturezaLesaoPrincipal))
+                        sWhere += " and ld.UKNaturezaLesaoPrincipal = '" + entidade.UKNaturezaLesaoPrincipal + "'";
+
+                    if (!string.IsNullOrEmpty(entidade.UKNaturezaLesaoSecundaria))
+                        sWhere += " and ld.UKNaturezaLesaoSecundaria = '" + entidade.UKNaturezaLesaoSecundaria + "'";
+
+                }
+
                 string sql = @"select top 100 o.UniqueKey, o.Codigo, o.DataIncidente, o.AcidenteFatal, o.AcidenteGraveIP102, 
                                           o.ETipoEntrada, o.ETipoAcidente, o.Status,
                                           (select Sigla from OBJDepartamento where UniqueKey = o.UKOrgao and UsuarioExclusao is null) as Orgao,
                                           (select Descricao from OBJMunicipio where UniqueKey = o.UKMunicipio and UsuarioExclusao is null) as Municipio
-                           from OBJIncidente o, RELRegistroEmpregadoProprio re, OBJEmpregadoProprio ep
+                           from OBJIncidente o, RELRegistroEmpregadoProprio re, OBJEmpregadoProprio ep " + sFrom + @"
                            where o.UsuarioExclusao is null and 
 	                             o.UniqueKey = re.UKRegistro and re.UKEmpregadoProprio = ep.UniqueKey " + sWhere + @"
                            order by Codigo";
@@ -1725,16 +1755,18 @@ namespace GISWeb.Controllers
         {
             try
             {
+                string sFrom = string.Empty;
                 string sWhere = string.Empty;
 
                 if (string.IsNullOrEmpty(entidade.CPF) &&
                     string.IsNullOrEmpty(entidade.Nome) &&
                     string.IsNullOrEmpty(entidade.Nascimento) &&
                     string.IsNullOrEmpty(entidade.Funcao) &&
-                    entidade.UKLocalizacaoLesaoPrincipal.Equals("Todos") &&
-                    entidade.UKLocalizacaoLesaoSecundaria.Equals("Todos") &&
-                    entidade.UKNaturezaLesaoPrincipal.Equals("Todos") &&
-                    entidade.UKNaturezaLesaoSecundaria.Equals("Todos") &&
+                    string.IsNullOrEmpty(entidade.UKFornecedor) &&
+                    string.IsNullOrEmpty(entidade.UKLocalizacaoLesaoPrincipal) &&
+                    string.IsNullOrEmpty(entidade.UKLocalizacaoLesaoSecundaria) &&
+                    string.IsNullOrEmpty(entidade.UKNaturezaLesaoPrincipal) &&
+                    string.IsNullOrEmpty(entidade.UKNaturezaLesaoSecundaria) &&
                     string.IsNullOrEmpty(entidade.DescricaoLesao))
                     throw new Exception("Informe pelo menos um filtro para prossegui na pesquisa.");
 
@@ -1744,11 +1776,46 @@ namespace GISWeb.Controllers
                 if (!string.IsNullOrEmpty(entidade.Nome))
                     sWhere += " and upper(ec.Nome) like '" + entidade.Nome.ToUpper().Replace("*", "%") + "'";
 
+                if (!string.IsNullOrEmpty(entidade.Nascimento))
+                    sWhere += " and ec.Nascimento = '" + entidade.Nascimento + "'";
+
+                if (!string.IsNullOrEmpty(entidade.Funcao))
+                    sWhere += " and upper(rc.Funcao) like '" + entidade.Funcao.Trim().ToUpper().Replace("*", "%") + "'";
+
+                if (!string.IsNullOrEmpty(entidade.UKFornecedor))
+                    sWhere += " and rc.UKFornecedor = '" + entidade.UKFornecedor + "'";
+
+                if (!string.IsNullOrEmpty(entidade.DescricaoLesao) || 
+                    !string.IsNullOrEmpty(entidade.UKLocalizacaoLesaoPrincipal) ||
+                    !string.IsNullOrEmpty(entidade.UKLocalizacaoLesaoSecundaria) ||
+                    !string.IsNullOrEmpty(entidade.UKNaturezaLesaoPrincipal) ||
+                    !string.IsNullOrEmpty(entidade.UKNaturezaLesaoSecundaria))
+                {
+                    sFrom += " , OBJLesaoDoenca ld ";
+                    sWhere += " and rc.UKLesaoDoenca = ld.UniqueKey ";
+
+                    if (!string.IsNullOrEmpty(entidade.DescricaoLesao))
+                        sWhere += " and upper(ld.DescricaoLesao) like '" + entidade.DescricaoLesao.Trim().ToUpper().Replace("*", "%") + "'";
+
+                    if (!string.IsNullOrEmpty(entidade.UKLocalizacaoLesaoPrincipal))
+                        sWhere += " and ld.UKLocalizacaoLesaoPrincipal = '" + entidade.UKLocalizacaoLesaoPrincipal + "'";
+
+                    if (!string.IsNullOrEmpty(entidade.UKLocalizacaoLesaoSecundaria))
+                        sWhere += " and ld.UKLocalizacaoLesaoSecundaria = '" + entidade.UKLocalizacaoLesaoSecundaria + "'";
+
+                    if (!string.IsNullOrEmpty(entidade.UKNaturezaLesaoPrincipal))
+                        sWhere += " and ld.UKNaturezaLesaoPrincipal = '" + entidade.UKNaturezaLesaoPrincipal + "'";
+
+                    if (!string.IsNullOrEmpty(entidade.UKNaturezaLesaoSecundaria))
+                        sWhere += " and ld.UKNaturezaLesaoSecundaria = '" + entidade.UKNaturezaLesaoSecundaria + "'";
+
+                }
+
                 string sql = @"select top 100 o.UniqueKey, o.Codigo, o.DataIncidente, o.AcidenteFatal, o.AcidenteGraveIP102, 
                                           o.ETipoEntrada, o.ETipoAcidente, o.Status,
                                           (select Sigla from OBJDepartamento where UniqueKey = o.UKOrgao and UsuarioExclusao is null) as Orgao,
                                           (select Descricao from OBJMunicipio where UniqueKey = o.UKMunicipio and UsuarioExclusao is null) as Municipio
-                           from OBJIncidente o, RELRegistroEmpregadoContratado rc, OBJEmpregadoContratado ec
+                           from OBJIncidente o, RELRegistroEmpregadoContratado rc, OBJEmpregadoContratado ec " + sFrom + @"
                            where o.UsuarioExclusao is null and 
 	                             o.UniqueKey = rc.UKRegistro and rc.UKEmpregadoContratado = ec.UniqueKey  " + sWhere + @"
                            order by o.Codigo";
@@ -1813,7 +1880,140 @@ namespace GISWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PesquisaCodificacao(VMNovaCodificacao entidade)
         {
-            return PartialView();
+            try
+            {
+                string sWhere = string.Empty;
+
+                if (entidade.TipoAcidente == 0 &&
+                    entidade.Atividade == 0 &&
+                    string.IsNullOrEmpty(entidade.UKTipoAtividade) &&
+                    string.IsNullOrEmpty(entidade.UKNatureza) &&
+                    entidade.ConsequenciaLesao == 0 &&
+                    string.IsNullOrEmpty(entidade.UKFuncaoGRIDS) &&
+                    string.IsNullOrEmpty(entidade.UKEspecieAcidImpessoal) &&
+                    string.IsNullOrEmpty(entidade.UKTipoAcidPessoal) &&
+                    string.IsNullOrEmpty(entidade.UKAgenteAcidente) &&
+                    string.IsNullOrEmpty(entidade.UKFonteLesao) &&
+                    string.IsNullOrEmpty(entidade.UKFatorPessoalInseg) &&
+                    string.IsNullOrEmpty(entidade.UKAtoInseguro) &&
+                    string.IsNullOrEmpty(entidade.UKCondAmbientalInseg) &&
+                    string.IsNullOrEmpty(entidade.UKPrejMaterial) &&
+                    string.IsNullOrEmpty(entidade.Custo) &&
+                    string.IsNullOrEmpty(entidade.DiasPerdidos) &&
+                    string.IsNullOrEmpty(entidade.DiasDebitados) &&
+                    string.IsNullOrEmpty(entidade.DataObito))
+                    throw new Exception("Informe pelo menos um filtro para prossegui na pesquisa.");
+
+                if (entidade.TipoAcidente != 0)
+                    sWhere += " and oc.TipoAcidente = " + ((int)entidade.TipoAcidente).ToString();
+
+                if (entidade.Atividade != 0)
+                    sWhere += " and oc.Atividade = " + ((int)entidade.Atividade).ToString();
+
+                if (!string.IsNullOrEmpty(entidade.UKTipoAtividade))
+                    sWhere += " and oc.UKTipoAtividade = '" + entidade.UKTipoAtividade + "'";
+
+                if (!string.IsNullOrEmpty(entidade.UKNatureza))
+                    sWhere += " and oc.UKNatureza = '" + entidade.UKNatureza + "'";
+
+                if (entidade.ConsequenciaLesao != 0)
+                    sWhere += " and oc.ConsequenciaLesao = " + entidade.ConsequenciaLesao;
+
+                if (!string.IsNullOrEmpty(entidade.UKFuncaoGRIDS))
+                    sWhere += " and oc.UKFuncaoGRIDS = '" + entidade.UKFuncaoGRIDS + "'";
+
+                if (!string.IsNullOrEmpty(entidade.UKEspecieAcidImpessoal))
+                    sWhere += " and oc.UKEspecieAcidImpessoal = '" + entidade.UKEspecieAcidImpessoal + "'";
+
+                if (!string.IsNullOrEmpty(entidade.UKTipoAcidPessoal))
+                    sWhere += " and oc.UKTipoAcidPessoal = '" + entidade.UKTipoAcidPessoal + "'";
+
+                if (!string.IsNullOrEmpty(entidade.UKAgenteAcidente))
+                    sWhere += " and oc.UKAgenteAcidente = '" + entidade.UKAgenteAcidente + "'";
+
+                if (!string.IsNullOrEmpty(entidade.UKFonteLesao))
+                    sWhere += " and oc.UKFonteLesao = '" +  entidade.UKFonteLesao + "'";
+
+                if (!string.IsNullOrEmpty(entidade.UKFatorPessoalInseg))
+                    sWhere += " and oc.UKFatorPessoalInseg = '" + entidade.UKFatorPessoalInseg + "'";
+
+                if (!string.IsNullOrEmpty(entidade.UKAtoInseguro))
+                    sWhere += " and oc.UKAtoInseguro = '" + entidade.UKAtoInseguro + "'";
+
+                if (!string.IsNullOrEmpty(entidade.UKCondAmbientalInseg))
+                    sWhere += " and oc.UKCondAmbientalInseg = '" + entidade.UKCondAmbientalInseg + "'";
+
+                if (!string.IsNullOrEmpty(entidade.UKPrejMaterial))
+                    sWhere += " and oc.UKPrejMaterial = '" + entidade.UKPrejMaterial + "'";
+
+                if (!string.IsNullOrEmpty(entidade.Custo))
+                    sWhere += " and oc.Custo like '" + entidade.Custo.Replace("*", "%") + "'";
+
+                if (!string.IsNullOrEmpty(entidade.DiasPerdidos))
+                    sWhere += " and oc.DiasPerdidos like '" + entidade.DiasPerdidos.Replace("*", "%") + "'";
+
+                if (!string.IsNullOrEmpty(entidade.DiasDebitados))
+                    sWhere += " and oc.DiasDebitados like '" + entidade.DiasDebitados.Replace("*", "%") + "'";
+
+                if (!string.IsNullOrEmpty(entidade.DataObito))
+                    sWhere += " and oc.DataObito = '" + entidade.DataObito + "'";
+
+                string sql = @"select top 100 o.UniqueKey, o.Codigo, o.DataIncidente, o.AcidenteFatal, o.AcidenteGraveIP102, 
+                                          o.ETipoEntrada, o.ETipoAcidente, o.Status,
+                                          (select Sigla from OBJDepartamento where UniqueKey = o.UKOrgao and UsuarioExclusao is null) as Orgao,
+                                          (select Descricao from OBJMunicipio where UniqueKey = o.UKMunicipio and UsuarioExclusao is null) as Municipio
+                               from objincidente o, RELRegistroEmpregadoContratado rc, OBJCodificacao oc
+                               where o.UsuarioExclusao is null and
+	                                 o.UniqueKey = rc.UKRegistro and rc.UsuarioExclusao is null and
+	                                 rc.UKCodificacao = oc.UniqueKey " + sWhere + @"
+
+                               union 
+
+                               select top 100 o.UniqueKey, o.Codigo, o.DataIncidente, o.AcidenteFatal, o.AcidenteGraveIP102, 
+                                          o.ETipoEntrada, o.ETipoAcidente, o.Status,
+                                          (select Sigla from OBJDepartamento where UniqueKey = o.UKOrgao and UsuarioExclusao is null) as Orgao,
+                                          (select Descricao from OBJMunicipio where UniqueKey = o.UKMunicipio and UsuarioExclusao is null) as Municipio
+                               from OBJIncidente o, RELRegistroEmpregadoProprio rp, OBJCodificacao oc
+                               where o.UsuarioExclusao is null and
+	                                o.UniqueKey = rp.UKRegistro and rp.UsuarioExclusao is null and
+	                                rp.UKCodificacao = oc.UniqueKey " + sWhere + @"
+                              order by o.Codigo";
+
+                List<VMIncidente> lista = new List<VMIncidente>();
+                DataTable result = IncidenteBusiness.GetDataTable(sql);
+                if (result.Rows.Count > 0)
+                {
+                    foreach (DataRow row in result.Rows)
+                    {
+                        lista.Add(new VMIncidente()
+                        {
+                            UniqueKey = row["UniqueKey"].ToString(),
+                            Codigo = row["Codigo"].ToString(),
+                            DataIncidente = ((DateTime)row["DataIncidente"]).ToString("dd/MM/yyyy"),
+                            TipoEntrada = row["ETipoEntrada"].ToString(),
+                            ETipoAcidente = ((ETipoAcidente)Enum.Parse(typeof(ETipoAcidente), row["ETipoAcidente"].ToString(), true)).GetDisplayName(),
+                            AcidenteFatal = ((int)row["ETipoAcidente"]).Equals(0) ? "Não" : "Sim",
+                            AcidenteGraveIP102 = ((bool)row["AcidenteGraveIP102"]) ? "Sim" : "Não",
+                            Status = row["Status"].ToString(),
+                            Orgao = row["Orgao"].ToString(),
+                            Municipio = row["Municipio"].ToString()
+                        });
+                    }
+                }
+
+                return PartialView("_ResultadoPesquisa", lista);
+            }
+            catch (Exception ex)
+            {
+                if (ex.GetBaseException() == null)
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.Message } });
+                }
+                else
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.GetBaseException().Message } });
+                }
+            }
         }
 
 
@@ -1827,9 +2027,142 @@ namespace GISWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PesquisaCAT(VMNovaCAT entidade)
+        public ActionResult PesquisaCAT(VMPesqIncidenteCAT entidade)
         {
-            return PartialView();
+            try
+            {
+                string sWhere = string.Empty;
+
+                if (string.IsNullOrEmpty(entidade.NumeroCat) &&
+                    string.IsNullOrEmpty(entidade.DataRegistro) &&
+                    entidade.ETipoRegistrador == null &&
+                    entidade.ETipoCAT == null &&
+                    entidade.ETipoIniciativa == null &&
+                    string.IsNullOrEmpty(entidade.CodigoCNS) &&
+                    string.IsNullOrEmpty(entidade.DataAtendimento) &&
+                    string.IsNullOrEmpty(entidade.HoraAtendimento) &&
+                    entidade.Internacao == null &&
+                    string.IsNullOrEmpty(entidade.DuracaoTratamento) &&
+                    entidade.Afatamento == null &&
+                    string.IsNullOrEmpty(entidade.Diagnostico) &&
+                    string.IsNullOrEmpty(entidade.Observacao) &&
+                    string.IsNullOrEmpty(entidade.CID) &&
+                    string.IsNullOrEmpty(entidade.NomeMedico) &&
+                    entidade.EOrgaoClasse == null &&
+                    string.IsNullOrEmpty(entidade.NumOrgClasse) &&
+                    entidade.EUnidadeFederacao == null)
+                    throw new Exception("Informe pelo menos um filtro para prossegui na pesquisa.");
+
+                if (!string.IsNullOrEmpty(entidade.NumeroCat))
+                    sWhere += " and oc.NumeroCat like '" + entidade.NumeroCat.Replace("*", "%") + "'";
+
+                if (!string.IsNullOrEmpty(entidade.DataRegistro))
+                    sWhere += " and oc.DataRegistro = '" + entidade.DataRegistro + "'";
+
+                if (entidade.ETipoRegistrador != null)
+                    sWhere += " and oc.ETipoRegistrador = " + ((int)entidade.ETipoRegistrador).ToString();
+
+                if (entidade.ETipoCAT != null)
+                    sWhere += " and oc.ETipoCAT = " + ((int)entidade.ETipoCAT).ToString();
+
+                if (entidade.ETipoIniciativa != null)
+                    sWhere += " and oc.ETipoIniciativa = " + ((int)entidade.ETipoIniciativa).ToString();
+
+                if (!string.IsNullOrEmpty(entidade.CodigoCNS))
+                    sWhere += " and oc.CodigoCNS like '" + entidade.CodigoCNS.Replace("*", "%") + "'";
+
+                if (!string.IsNullOrEmpty(entidade.DataAtendimento))
+                    sWhere += " and oc.DataAtendimento = '" + entidade.DataAtendimento + "'";
+
+                if (!string.IsNullOrEmpty(entidade.HoraAtendimento))
+                    sWhere += " and oc.HoraAtendimento = '" + entidade.HoraAtendimento + "'";
+
+                if (entidade.Internacao != null)
+                    sWhere += " and oc.Internacao = " + ((int)entidade.Internacao).ToString();
+
+                if (!string.IsNullOrEmpty(entidade.DuracaoTratamento))
+                    sWhere += " and oc.DuracaoTratamento = '" + entidade.DuracaoTratamento + "'";
+
+                if (entidade.Afatamento != null)
+                    sWhere += " and oc.Afatamento = " + ((int)entidade.Afatamento).ToString();
+
+                if (!string.IsNullOrEmpty(entidade.Diagnostico))
+                    sWhere += " and upper(oc.Diagnostico) like '" + entidade.Diagnostico.Trim().ToUpper().Replace("*", "%") + "'";
+
+                if (!string.IsNullOrEmpty(entidade.Observacao))
+                    sWhere += " and upper(oc.Observacao) like '" + entidade.Observacao.Trim().ToUpper().Replace("*", "%") + "'";
+
+                if (!string.IsNullOrEmpty(entidade.CID))
+                    sWhere += " and upper(oc.CID) like '" + entidade.CID.ToUpper().Replace("*", "%") + "'";
+
+                if (!string.IsNullOrEmpty(entidade.NomeMedico))
+                    sWhere += " and upper(oc.NomeMedico) like '" + entidade.NomeMedico.ToUpper().Trim().Replace("*", "%") + "'";
+
+                if (entidade.EOrgaoClasse != null)
+                    sWhere += " and oc.EOrgaoClasse = " + ((int)entidade.EOrgaoClasse).ToString();
+
+                if (!string.IsNullOrEmpty(entidade.NumOrgClasse))
+                    sWhere += " and upper(oc.NumOrgClasse) like '" + entidade.NumOrgClasse.Trim().ToUpper().Replace("*", "%") + "'";
+
+                if (entidade.EUnidadeFederacao != null)
+                    sWhere += " and oc.EUnidadeFederacao = " + ((int)entidade.EUnidadeFederacao).ToString();
+
+                string sql = @"select top 100 o.UniqueKey, o.Codigo, o.DataIncidente, o.AcidenteFatal, o.AcidenteGraveIP102, 
+                                          o.ETipoEntrada, o.ETipoAcidente, o.Status,
+                                          (select Sigla from OBJDepartamento where UniqueKey = o.UKOrgao and UsuarioExclusao is null) as Orgao,
+                                          (select Descricao from OBJMunicipio where UniqueKey = o.UKMunicipio and UsuarioExclusao is null) as Municipio
+                               from objincidente o, RELRegistroEmpregadoContratado rc, objcat oc
+                               where o.UsuarioExclusao is null and
+	                                 o.UniqueKey = rc.UKRegistro and rc.UsuarioExclusao is null and
+	                                 rc.UKCAT = oc.UniqueKey " + sWhere + @"
+
+                               union	  
+
+                               select top 100 o.UniqueKey, o.Codigo, o.DataIncidente, o.AcidenteFatal, o.AcidenteGraveIP102, 
+                                          o.ETipoEntrada, o.ETipoAcidente, o.Status,
+                                          (select Sigla from OBJDepartamento where UniqueKey = o.UKOrgao and UsuarioExclusao is null) as Orgao,
+                                          (select Descricao from OBJMunicipio where UniqueKey = o.UKMunicipio and UsuarioExclusao is null) as Municipio
+                               from OBJIncidente o, RELRegistroEmpregadoProprio rp, objcat oc
+                               where o.UsuarioExclusao is null and
+	                                o.UniqueKey = rp.UKRegistro and rp.UsuarioExclusao is null and
+	                                rp.UKCAT = oc.UniqueKey " + sWhere + @"
+                              order by o.Codigo";
+
+                List<VMIncidente> lista = new List<VMIncidente>();
+                DataTable result = IncidenteBusiness.GetDataTable(sql);
+                if (result.Rows.Count > 0)
+                {
+                    foreach (DataRow row in result.Rows)
+                    {
+                        lista.Add(new VMIncidente()
+                        {
+                            UniqueKey = row["UniqueKey"].ToString(),
+                            Codigo = row["Codigo"].ToString(),
+                            DataIncidente = ((DateTime)row["DataIncidente"]).ToString("dd/MM/yyyy"),
+                            TipoEntrada = row["ETipoEntrada"].ToString(),
+                            ETipoAcidente = ((ETipoAcidente)Enum.Parse(typeof(ETipoAcidente), row["ETipoAcidente"].ToString(), true)).GetDisplayName(),
+                            AcidenteFatal = ((int)row["ETipoAcidente"]).Equals(0) ? "Não" : "Sim",
+                            AcidenteGraveIP102 = ((bool)row["AcidenteGraveIP102"]) ? "Sim" : "Não",
+                            Status = row["Status"].ToString(),
+                            Orgao = row["Orgao"].ToString(),
+                            Municipio = row["Municipio"].ToString()
+                        });
+                    }
+                }
+
+                return PartialView("_ResultadoPesquisa", lista);
+            }
+            catch (Exception ex)
+            {
+                if (ex.GetBaseException() == null)
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.Message } });
+                }
+                else
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.GetBaseException().Message } });
+                }
+            }
         }
 
     }

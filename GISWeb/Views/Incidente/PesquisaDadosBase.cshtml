@@ -105,7 +105,6 @@
                     @Html.LabelFor(model => model.ETipoEntrada, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
                     <div class="col-xs-12 col-sm-12">
                         @Html.EnumDropDownListFor(model => model.ETipoEntrada, "Tipo de Entrada ...", htmlAttributes: new { @class = "chosen-select form-control" })
-                        @Html.ValidationMessageFor(model => model.ETipoEntrada, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>
@@ -114,8 +113,6 @@
                     @Html.LabelFor(model => model.ETipoAcidente, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
                     <div class="col-xs-12 col-sm-12">
                         @Html.EnumDropDownListFor(model => model.ETipoAcidente, "Selecione um tipo ...", htmlAttributes: new { @class = "chosen-select form-control" })
-
-                        @Html.ValidationMessageFor(model => model.ETipoAcidente, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>
@@ -124,7 +121,6 @@
                     @Html.LabelFor(model => model.Centro, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
                     <div class="col-xs-12 col-sm-12">
                         @Html.EnumDropDownListFor(model => model.Centro, "Selecione um centro ...", htmlAttributes: new { @class = "chosen-select form-control" })
-                        @Html.ValidationMessageFor(model => model.Centro, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>
@@ -134,7 +130,6 @@
                     @Html.LabelFor(model => model.Regional, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
                     <div class="col-xs-12 col-sm-12">
                         @Html.EnumDropDownListFor(model => model.Regional, "Selecione uma regional ...", htmlAttributes: new { @class = "chosen-select form-control" })
-                        @Html.ValidationMessageFor(model => model.Regional, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>

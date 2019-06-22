@@ -86,6 +86,7 @@
     <Compile Include="DTO\Incidente\VMIncidente.cs" />
     <Compile Include="DTO\Incidente\VMNovaCAT.cs" />
     <Compile Include="DTO\Incidente\VMNovaCodificacao.cs" />
+    <Compile Include="DTO\Incidente\VMPesqIncidenteCAT.cs" />
     <Compile Include="DTO\Incidente\VMPesqIncidenteEnvTerceiro.cs" />
     <Compile Include="DTO\Incidente\VMPesquisaIncidenteBase.cs" />
     <Compile Include="DTO\Incidente\VMPesqIncidenteEnvProprio.cs" />

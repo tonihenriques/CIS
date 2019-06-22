@@ -232,6 +232,8 @@
     <Content Include="Scripts\Custom\Inbox\MeusGrupos.js" />
     <Content Include="Scripts\Custom\Inbox\Pessoal.js" />
     <Content Include="Scripts\Custom\Incidente\Pesquisa.js" />
+    <Content Include="Scripts\Custom\Incidente\PesquisaCAT.js" />
+    <Content Include="Scripts\Custom\Incidente\PesquisaCodificacao.js" />
     <Content Include="Scripts\Custom\Incidente\PesquisaEnvolvidos.js" />
     <Content Include="Scripts\Custom\Lesdoen\Edicao.js" />
     <Content Include="Scripts\Custom\Lesdoen\Listagem.js" />

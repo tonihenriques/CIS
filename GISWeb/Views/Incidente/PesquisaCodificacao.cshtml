@@ -5,12 +5,24 @@
 }
 
 <div id="formPesquisa">
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 widget-container-col ui-sortable">
+            <div class="page-header">
+                <h1>
+                    Pesquisar Incidentes por Codificação
+                </h1>
+            </div>
+        </div>
+    </div>
+
     @using (Ajax.BeginForm("PesquisaCodificacao", "Incidente", null,
         new AjaxOptions
         {
             HttpMethod = "POST",
             OnBegin = "OnBeginPesquisaCodificacao",
             OnSuccess = "OnSuccessPesquisaCodificacao",
+            OnFailure = "OnFailurePesquisaCodificacao"
         }, new { @id = "formPesquisaCodificacao", @class = "form-horizontal" }))
     {
         @Html.AntiForgeryToken()
@@ -183,7 +195,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.DataObito, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
                     <div class="col-xs-12 col-sm-12">
-                        @Html.EditorFor(model => model.DataObito, new { htmlAttributes = new { @class = "date-picker form-control" } })
+                        @Html.EditorFor(model => model.DataObito, new { htmlAttributes = new { @class = "form-control" } })
                     </div>
                 </div>
             </div>
@@ -208,3 +220,46 @@
 
 <div id="ResultadoPesquisa">
 </div>
+
+
+@section Stylesheets {
+    <link href="~/Content/Ace/css/bootstrap-timepicker.css" rel="stylesheet" />
+    <link href="~/Content/Ace/css/chosen.css" rel="stylesheet" />
+
+    <style type="text/css">
+        textarea {
+            resize: none;
+        }
+    </style>
+}
+
+
+@section Scripts {
+    <script src="~/Scripts/Ace/bootstrap-timepicker.js"></script>
+
+    @Scripts.Render("~/bundles/jQ_dataTable")
+
+    <script src="~/Scripts/Ace/ace.widget-box.js"></script>
+    <script src="~/Scripts/Ace/chosen.jquery.js"></script>
+
+    <script src="~/Scripts/Ace/jQ/jquery.maskedinput.js"></script>
+
+    <script src="~/Scripts/jQuery/inputmask.js"></script>
+    <script src="~/Scripts/jQuery/jquery.inputmask.js"></script>
+
+    <script src="~/Scripts/Custom/Incidente/PesquisaCodificacao.js"></script>
+
+    <script type="text/javascript">
+        jQuery(function ($) {
+
+            $('#DataObito').mask('99/99/9999');
+
+        });
+    </script>
+}
+
+@section Sliders {
+    @{
+        Html.RenderPartial("~/Views/Shared/_SlidersIncidente.cshtml");
+    }
+}
