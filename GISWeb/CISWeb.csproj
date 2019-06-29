@@ -231,6 +231,7 @@
     <Content Include="Scripts\Custom\Inbox\Inbox.js" />
     <Content Include="Scripts\Custom\Inbox\MeusGrupos.js" />
     <Content Include="Scripts\Custom\Inbox\Pessoal.js" />
+    <Content Include="Scripts\Custom\IncidenteVeiculo\Novo.js" />
     <Content Include="Scripts\Custom\Incidente\Pesquisa.js" />
     <Content Include="Scripts\Custom\Incidente\PesquisaCAT.js" />
     <Content Include="Scripts\Custom\Incidente\PesquisaCodificacao.js" />
@@ -288,6 +289,7 @@
     <Compile Include="Controllers\FornecedorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InboxController.cs" />
+    <Compile Include="Controllers\IncidenteVeiculoController.cs" />
     <Compile Include="Controllers\NivelHierarquicoController.cs" />
     <Compile Include="Controllers\PerfilController.cs" />
     <Compile Include="Controllers\PermissoesController.cs" />
@@ -409,6 +411,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Incidente\PesquisaEnvolvidosProprio.cshtml" />
     <Content Include="Views\Incidente\PesquisaEnvolvidosTerceiro.cshtml" />
+    <Content Include="Views\IncidenteVeiculo\Novo.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

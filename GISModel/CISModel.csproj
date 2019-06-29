@@ -139,8 +139,10 @@
     <Compile Include="Enums\EConsequencia.cs" />
     <Compile Include="Enums\EOrgaoClasse.cs" />
     <Compile Include="Enums\ETipoAcidente.cs" />
+    <Compile Include="Enums\ETipoAcidenteVeiculo.cs" />
     <Compile Include="Enums\ETipoCAT.cs" />
     <Compile Include="Enums\ETipoEntrada.cs" />
+    <Compile Include="Enums\ETipoEntradaVeiculo.cs" />
     <Compile Include="Enums\ETipoIniciativa.cs" />
     <Compile Include="Enums\ETipoLocalAcid.cs" />
     <Compile Include="Enums\ETipoRegistrador.cs" />
