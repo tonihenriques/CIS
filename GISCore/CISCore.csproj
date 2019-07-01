@@ -74,6 +74,7 @@
     <Compile Include="Business\Abstract\IFerramentasBusiness.cs" />
     <Compile Include="Business\Abstract\IFornecedorBusiness.cs" />
     <Compile Include="Business\Abstract\IIncidenteBusiness.cs" />
+    <Compile Include="Business\Abstract\IIncidenteVeiculoBusiness.cs" />
     <Compile Include="Business\Abstract\ILesaoDoencaBusiness.cs" />
     <Compile Include="Business\Abstract\ICodificacaoBusiness.cs" />
     <Compile Include="Business\Abstract\INivelHierarquicoBusiness.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Business\Concrete\EstadoBusiness.cs" />
     <Compile Include="Business\Concrete\FerramentasBusiness.cs" />
     <Compile Include="Business\Concrete\FornecedorBusiness.cs" />
+    <Compile Include="Business\Concrete\IncidenteVeiculoBusiness.cs" />
     <Compile Include="Business\Concrete\LesaoDoencaBusiness.cs" />
     <Compile Include="Business\Concrete\CodificacaoBusiness.cs" />
     <Compile Include="Business\Concrete\NivelHierarquicoBusiness.cs" />
@@ -135,22 +137,6 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="DI\GISNinjectModule.cs" />
-    <Compile Include="Migrations\201906102333123_t1.cs" />
-    <Compile Include="Migrations\201906102333123_t1.Designer.cs">
-      <DependentUpon>201906102333123_t1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201906110014001_t2.cs" />
-    <Compile Include="Migrations\201906110014001_t2.Designer.cs">
-      <DependentUpon>201906110014001_t2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201906291759459_t11.cs" />
-    <Compile Include="Migrations\201906291759459_t11.Designer.cs">
-      <DependentUpon>201906291759459_t11.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201906292232157_t21.cs" />
-    <Compile Include="Migrations\201906292232157_t21.Designer.cs">
-      <DependentUpon>201906292232157_t21.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -237,20 +223,6 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201906102333123_t1.resx">
-      <DependentUpon>201906102333123_t1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201906110014001_t2.resx">
-      <DependentUpon>201906110014001_t2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201906291759459_t11.resx">
-      <DependentUpon>201906291759459_t11.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201906292232157_t21.resx">
-      <DependentUpon>201906292232157_t21.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

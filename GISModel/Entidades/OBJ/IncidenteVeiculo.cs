@@ -118,6 +118,10 @@ namespace GISModel.Entidades.OBJ
 
 
 
+        [Display(Name = "Data Atualização")]
+        public DateTime? DataAtualizacao { get; set; }
+
+
 
         public string Status { get; set; }
 

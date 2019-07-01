@@ -2,7 +2,7 @@
 
 namespace GISCore.Business.Abstract
 {
-    public interface IIncidenteBusiness: IBaseBusiness<Incidente>
+    public interface IIncidenteBusiness : IBaseBusiness<Incidente>
     {
     }
 }
