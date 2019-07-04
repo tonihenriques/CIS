@@ -413,6 +413,7 @@
     <Content Include="Views\Incidente\PesquisaEnvolvidosTerceiro.cshtml" />
     <Content Include="Views\IncidenteVeiculo\Novo.cshtml" />
     <Content Include="Views\IncidenteVeiculo\_Detalhes.cshtml" />
+    <Content Include="Views\Home\Dashboard.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
