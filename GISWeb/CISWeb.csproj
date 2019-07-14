@@ -383,12 +383,8 @@
     <Content Include="Views\Inbox\Index.cshtml" />
     <Content Include="Views\Inbox\_ListarIncidente.cshtml" />
     <Content Include="Views\Inbox\_ListarIncidenteVeiculo.cshtml" />
-    <Content Include="Views\Inbox\_ListarQuaseIncidente.cshtml" />
-    <Content Include="Views\Inbox\_ListarQuaseIncidenteVeiculo.cshtml" />
     <Content Include="Views\Inbox\_ListarIncidenteRow.cshtml" />
     <Content Include="Views\Inbox\_ListarIncidenteVeiculoRow.cshtml" />
-    <Content Include="Views\Inbox\_ListarQuaseIncidenteRow.cshtml" />
-    <Content Include="Views\Inbox\_ListarQuaseIncidenteVeiculoRow.cshtml" />
     <Content Include="Views\Shared\_SlidersIncidente.cshtml" />
     <Content Include="Views\Incidente\_Detalhes.cshtml" />
     <Content Include="Views\Incidente\_MenuOperacoes.cshtml" />
@@ -414,6 +410,8 @@
     <Content Include="Views\IncidenteVeiculo\Novo.cshtml" />
     <Content Include="Views\IncidenteVeiculo\_Detalhes.cshtml" />
     <Content Include="Views\Home\Dashboard.cshtml" />
+    <Content Include="Views\IncidenteVeiculo\_DetalhesVeiculo.cshtml" />
+    <Content Include="Views\IncidenteVeiculo\_MenuOperacoes.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

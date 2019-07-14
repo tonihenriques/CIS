@@ -88,7 +88,9 @@
 });
 
 function OnBeginCadastrarAcidente(jqXHR, settings) {
-    
+
+
+
     if ($("#AcidenteFatal").prop("checked") == true) {
         $("#AcidenteFatal").val(true);
     }

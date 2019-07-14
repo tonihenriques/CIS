@@ -2,6 +2,7 @@
 using GISModel.DTO;
 using GISModel.DTO.Permissoes;
 using GISModel.Entidades;
+using GISModel.Entidades.OBJ;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,6 +76,72 @@ namespace GISCore.Business.Concrete
             return operacoes;
 
         }
+
+
+        public OperacaoCollection RecuperarTodasPermitidas(string usuarioLogado, List<VMPermissao> permissoes, List<IncidenteVeiculo> entidades)
+        {
+            var operacoes = new OperacaoCollection();
+
+            foreach (IncidenteVeiculo entidade in entidades)
+            {
+                if (entidade.Responsavel.ToUpper().Equals(usuarioLogado.ToUpper()))
+                {
+                    if (!operacoes.Contains(GISModel.Enums.Operacao.Aprovar))
+                        operacoes.Add(GISModel.Enums.Operacao.Aprovar);
+
+                    if (!operacoes.Contains(GISModel.Enums.Operacao.AlterarDados))
+                        operacoes.Add(GISModel.Enums.Operacao.AlterarDados);
+
+                    if (!operacoes.Contains(GISModel.Enums.Operacao.HistoricoWorkflow))
+                        operacoes.Add(GISModel.Enums.Operacao.HistoricoWorkflow);
+
+                    if (!entidade.Status.ToUpper().Equals("EM APROVAÇÃO"))
+                    {
+                        if (!operacoes.Contains(GISModel.Enums.Operacao.AnexarArquivos))
+                            operacoes.Add(GISModel.Enums.Operacao.AnexarArquivos);
+
+                        if (!operacoes.Contains(GISModel.Enums.Operacao.ExcluirArquivos))
+                            operacoes.Add(GISModel.Enums.Operacao.ExcluirArquivos);
+
+                        if (!operacoes.Contains(GISModel.Enums.Operacao.IncluirCAT))
+                            operacoes.Add(GISModel.Enums.Operacao.IncluirCAT);
+
+                        if (!operacoes.Contains(GISModel.Enums.Operacao.IncluirCodificacao))
+                            operacoes.Add(GISModel.Enums.Operacao.IncluirCodificacao);
+
+                        if (!operacoes.Contains(GISModel.Enums.Operacao.IncluirEnvolvidos))
+                            operacoes.Add(GISModel.Enums.Operacao.IncluirEnvolvidos);
+                    }
+
+                    if (entidade.Status.ToUpper().Equals("EM EDIÇÃO"))
+                    {
+                        if (!operacoes.Contains(GISModel.Enums.Operacao.Excluir))
+                            operacoes.Add(GISModel.Enums.Operacao.Excluir);
+                    }
+                    else
+                    {
+                        if (!operacoes.Contains(GISModel.Enums.Operacao.Reprovar))
+                            operacoes.Add(GISModel.Enums.Operacao.Reprovar);
+                    }
+                }
+                else
+                {
+                    if (permissoes.Where(a => a.Perfil.Equals(entidade.Responsavel)).Count() > 0)
+                    {
+                        if (!operacoes.Contains(GISModel.Enums.Operacao.Assumir))
+                            operacoes.Add(GISModel.Enums.Operacao.Assumir);
+                    }
+
+                    if (!operacoes.Contains(GISModel.Enums.Operacao.HistoricoWorkflow))
+                        operacoes.Add(GISModel.Enums.Operacao.HistoricoWorkflow);
+                }
+            }
+
+            return operacoes;
+
+        }
+
+
 
         public OperacaoCollection RecuperarTodasPermitidas(string usuarioLogado, List<VMPermissao> permissoes, Incidente entidade)
         {

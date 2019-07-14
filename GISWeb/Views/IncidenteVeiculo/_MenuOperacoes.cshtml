@@ -1,0 +1,136 @@
+﻿@using GISModel.Enums
+@model GISModel.Entidades.OBJ.IncidenteVeiculo
+
+
+@{
+
+    var possuiAlgumMetodoWF = Model.Operacoes.Any(o =>
+            o.Equals(Operacao.Aprovar) ||
+            o.Equals(Operacao.Reprovar) ||
+            o.Equals(Operacao.Assumir) ||
+            o.Equals(Operacao.Encaminhar) ||
+            o.Equals(Operacao.HistoricoWorkflow)
+        );
+
+    var possuiAlgumMetodoCorp = Model.Operacoes.Any(o =>
+            o.Equals(Operacao.Excluir) ||
+            o.Equals(Operacao.AlterarDados)
+        );
+
+    var qtdDividers = Convert.ToInt32(possuiAlgumMetodoWF) + Convert.ToInt32(possuiAlgumMetodoCorp) + -1;
+}
+
+@*####################   WORKFLOW   ####################*@
+
+@if (possuiAlgumMetodoWF)
+{
+    @*<li class="operacoes-header">Workflow</li>*@
+
+    if (Model.Operacoes.Contains(Operacao.Encaminhar))
+    {
+        <li class="action-buttons">
+            <a href="#" class="CustomTooltip lnkEncaminhar" title="Encaminhar" data-target="#modalEncaminhar" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                <span class="blue">
+                    <i class="ace-icon fa fa-mail-forward bigger-150"></i>
+                </span>
+            </a>
+        </li>
+    }
+
+    if (Model.Operacoes.Contains(Operacao.Aprovar))
+    {
+        <li class="action-buttons">
+            <a href="#" class="CustomTooltip lnkAprovar" title=Aprovar data-target="#modalAprovar" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                <span class="green">
+                    <i class="ace-icon fa fa-check bigger-150"></i>
+                </span>
+            </a>
+        </li>
+    }
+
+    if (Model.Operacoes.Contains(Operacao.Reprovar))
+    {
+        <li class="action-buttons">
+            <a href="#" class="CustomTooltip lnkReprovar" title="Reprovar" data-target="#modalRejeitar" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                <span class="red">
+                    <i class="ace-icon fa fa-remove bigger-150"></i>
+                </span>
+            </a>
+        </li>
+    }
+
+    if (Model.Operacoes.Contains(Operacao.Assumir))
+    {
+        <li class="action-buttons">
+            <a href="#" class="CustomTooltip lnkAssumir" title="Assumir" data-target="#modalAssumir" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                <span class="blue">
+                    <i class="ace-icon fa fa-arrow-circle-down bigger-150"></i>
+                </span>
+            </a>
+        </li>
+    }
+
+    if (Model.Operacoes.Contains(Operacao.HistoricoWorkflow))
+    {
+        <li class="action-buttons">
+            <a href="#" class="CustomTooltip lnkHistoricoWF" title="WORKFLOW" data-target="#modalHistoricoWF" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                <span style="color: #4b7b43 !important">
+                    <i class="ace-icon fa fa-retweet bigger-150"></i>
+                </span>
+            </a>
+        </li>
+    }
+
+    if (qtdDividers > 0)
+    {
+        qtdDividers--;
+
+        <li role="separator" class="operacoes-divider divider"></li>
+    }
+}
+
+@*####################   CORPORATIVO   ####################*@
+
+@if (possuiAlgumMetodoCorp)
+{
+    if (Model.Operacoes.Contains(Operacao.AlterarDados))
+    {
+        <li class="action-buttons">
+            <a href="#" class="lnkAlterarDados CustomTooltip" title="Alterar" data-target="#modalEditIncidente" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                <span class="blue">
+                    <i class="ace-icon fa fa-pencil bigger-150"></i>
+                </span>
+            </a>
+        </li>
+    }
+
+    if (Model.Operacoes.Contains(Operacao.Excluir))
+    {
+        <li class="action-buttons">
+            <a href="#" class="lnkExcluirIncidente CustomTooltip" title="Excluir">
+                <span class="red">
+                    <i class="ace-icon fa fa-trash bigger-150"></i>
+                </span>
+            </a>
+        </li>
+    }
+
+    if (qtdDividers > 0)
+    {
+        qtdDividers--;
+
+        <li role="separator" class="operacoes-divider divider"></li>
+    }
+}
+
+@if (!possuiAlgumMetodoWF && !possuiAlgumMetodoCorp)
+{
+    <li class="action-buttons">
+        <a>
+            <span class="lnkSemOperacao orange2 CustomTooltip" title="Nenhuma operação disponível">
+                <i class="ace-icon fa fa-exclamation-triangle bigger-150"></i>
+            </span>
+        </a>
+    </li>
+}
+
