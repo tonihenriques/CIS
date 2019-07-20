@@ -23,13 +23,15 @@ namespace GISCore.WSAutenticacao {
     
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.3056.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Web.Services.WebServiceBindingAttribute(Name="CartaoCorporativoSoap", Namespace="http://tempuri.org/")]
     public partial class CartaoCorporativo : System.Web.Services.Protocols.SoapHttpClientProtocol {
         
         private System.Threading.SendOrPostCallback LoginOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback LoginADOperationCompleted;
         
         private System.Threading.SendOrPostCallback BuscarFaturasOperationCompleted;
         
@@ -83,6 +85,9 @@ namespace GISCore.WSAutenticacao {
         public event LoginCompletedEventHandler LoginCompleted;
         
         /// <remarks/>
+        public event LoginADCompletedEventHandler LoginADCompleted;
+        
+        /// <remarks/>
         public event BuscarFaturasCompletedEventHandler BuscarFaturasCompleted;
         
         /// <remarks/>
@@ -125,6 +130,37 @@ namespace GISCore.WSAutenticacao {
             if ((this.LoginCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.LoginCompleted(this, new LoginCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/LoginAD", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public string LoginAD(string pMatricula, string pSenha) {
+            object[] results = this.Invoke("LoginAD", new object[] {
+                        pMatricula,
+                        pSenha});
+            return ((string)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void LoginADAsync(string pMatricula, string pSenha) {
+            this.LoginADAsync(pMatricula, pSenha, null);
+        }
+        
+        /// <remarks/>
+        public void LoginADAsync(string pMatricula, string pSenha, object userState) {
+            if ((this.LoginADOperationCompleted == null)) {
+                this.LoginADOperationCompleted = new System.Threading.SendOrPostCallback(this.OnLoginADOperationCompleted);
+            }
+            this.InvokeAsync("LoginAD", new object[] {
+                        pMatricula,
+                        pSenha}, this.LoginADOperationCompleted, userState);
+        }
+        
+        private void OnLoginADOperationCompleted(object arg) {
+            if ((this.LoginADCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.LoginADCompleted(this, new LoginADCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -303,11 +339,11 @@ namespace GISCore.WSAutenticacao {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.3056.0")]
     public delegate void LoginCompletedEventHandler(object sender, LoginCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.3056.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class LoginCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -329,11 +365,37 @@ namespace GISCore.WSAutenticacao {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.3056.0")]
+    public delegate void LoginADCompletedEventHandler(object sender, LoginADCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.3056.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class LoginADCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal LoginADCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public string Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.3056.0")]
     public delegate void BuscarFaturasCompletedEventHandler(object sender, BuscarFaturasCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.3056.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class BuscarFaturasCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -355,11 +417,11 @@ namespace GISCore.WSAutenticacao {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.3056.0")]
     public delegate void BuscarDespesasCompletedEventHandler(object sender, BuscarDespesasCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.3056.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class BuscarDespesasCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -381,11 +443,11 @@ namespace GISCore.WSAutenticacao {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.3056.0")]
     public delegate void SalvarDadosCompletedEventHandler(object sender, SalvarDadosCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.3056.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class SalvarDadosCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -407,11 +469,11 @@ namespace GISCore.WSAutenticacao {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.3056.0")]
     public delegate void BuscarFaturasAbastecimentoCompletedEventHandler(object sender, BuscarFaturasAbastecimentoCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.3056.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class BuscarFaturasAbastecimentoCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -433,11 +495,11 @@ namespace GISCore.WSAutenticacao {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.3056.0")]
     public delegate void BuscarDespesasAbastecimentoCompletedEventHandler(object sender, BuscarDespesasAbastecimentoCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.3056.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class BuscarDespesasAbastecimentoCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {

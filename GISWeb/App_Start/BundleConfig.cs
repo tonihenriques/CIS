@@ -50,6 +50,33 @@ namespace GISWeb.App_Start
                         "~/Content/Ace/css/ace-fonts.css",
                         "~/Content/Ace/css/ace.css"));
 
+
+
+
+
+            bundles.Add(new ScriptBundle("~/bundles/js_common_end").Include(
+                        "~/Scripts/Ace/ace.widget-box.js",
+                        "~/Scripts/Ace/chosen.jquery.js",
+                        "~/Scripts/Ace/bootstrap-multiselect.js",
+                        "~/Scripts/Ace/moment.js",
+                        "~/Scripts/Ace/daterangepicker.js",
+                        "~/Scripts/Ace/bootstrap-datepicker.js",
+                        "~/Scripts/Ace/bootstrap-tag.js",
+                        "~/Scripts/Ace/elements.typeahead.js",
+                        "~/Scripts/Ace/jQ/jquery.maskedinput.js",
+                        "~/Scripts/Ace/jQ/jquery.nestable.js",
+                        "~/Scripts/Ace/jQ/jquery.colorbox.js"));
+
+            bundles.Add(new StyleBundle("~/bundles/css_common_end").Include(
+                        "~/Content/Ace/css/chosen.css",
+                        "~/Content/Ace/css/bootstrap-multiselect.css",
+                        "~/Content/Ace/css/daterangepicker.css",
+                        "~/Content/Ace/css/datepicker.css",
+                        "~/Content/Ace/css/colorbox.css"));
+
+
+
+
             bundles.Add(new ScriptBundle("~/bundles/jQ_dataTable").Include(
                         "~/Scripts/Ace/dataTables/jquery.dataTables.js",
                         "~/Scripts/Ace/dataTables/jquery.dataTables.bootstrap.js"));
@@ -81,6 +108,9 @@ namespace GISWeb.App_Start
             bundles.Add(new ScriptBundle("~/bundles/inbox/grupos_js").Include(
                         "~/Scripts/Custom/Inbox/Inbox.js",
                         "~/Scripts/Custom/Inbox/MeusGrupos.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/custom/profile").Include(
+                        "~/Scripts/Custom/Account/custom-profile.js"));
 
         }
 

@@ -192,6 +192,8 @@
     <Content Include="Scripts\Ace\jQ\typeahead.jquery.js" />
     <Content Include="Scripts\Ace\moment.js" />
     <Content Include="Scripts\Ace\respond.js" />
+    <Content Include="Scripts\Croppie\croppie.js" />
+    <Content Include="Scripts\Custom\Account\custom-profile.js" />
     <Content Include="Scripts\Custom\AcidenteNBR\Edicao.js" />
     <Content Include="Scripts\Custom\AcidenteNBR\Listagem.js" />
     <Content Include="Scripts\Custom\AcidenteNBR\Novo.js" />
@@ -412,6 +414,7 @@
     <Content Include="Views\Home\Dashboard.cshtml" />
     <Content Include="Views\IncidenteVeiculo\_DetalhesVeiculo.cshtml" />
     <Content Include="Views\IncidenteVeiculo\_MenuOperacoes.cshtml" />
+    <Content Include="Views\Home\Sobre.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

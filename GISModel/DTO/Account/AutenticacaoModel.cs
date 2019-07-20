@@ -1,5 +1,6 @@
 ﻿using GISModel.DTO.Permissoes;
 using GISModel.Entidades;
+using GISModel.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -17,7 +18,9 @@ namespace GISModel.DTO.Account
         [Required(ErrorMessage = "Senha é obrigatório")]
         [DataType(DataType.Password)]
         public string Senha { get; set; }
-        
+
+        public TipoDeAcesso TipoDeAcesso { get; set; }
+
         public string Nome { get; set; }
 
         public string Email { get; set; }

@@ -109,16 +109,70 @@ namespace GISCore.Business.Concrete
 
             EnviarEmailParaUsuarioSolicacaoAcesso(listaUsuarios[0]);
         }
-        
+
         public AutenticacaoModel ValidarCredenciais(AutenticacaoModel autenticacaoModel)
         {
             autenticacaoModel.Login = autenticacaoModel.Login.Trim();
 
-            //Buscar usuário sem validar senha, para poder determinar se a validação da senha será com AD ou com a senha interna do GIS
-            List<Usuario> lUsuarios = Consulta.Where(u => string.IsNullOrEmpty(u.UsuarioExclusao) && 
-                                                          (u.Login.Equals(autenticacaoModel.Login) || u.Email.Equals(autenticacaoModel.Login))).ToList();
+            //WSAutenticacao.CartaoCorporativo wf = new WSAutenticacao.CartaoCorporativo();
 
-            if (lUsuarios.Count > 1 || lUsuarios.Count < 1)
+            //string result = wf.LoginAD(autenticacaoModel.Login, autenticacaoModel.Senha);
+
+            //if (result.Equals("-1"))
+            //{
+            //    throw new Exception("Login ou senha incorreto.");
+            //}
+            //else
+            //{
+            //    List<Usuario> lUsuarios = Consulta.Where(u => string.IsNullOrEmpty(u.UsuarioExclusao) &&
+            //                                             (u.Login.Equals(autenticacaoModel.Login) || u.Email.Equals(autenticacaoModel.Login))).ToList();
+
+            //    if (lUsuarios.Count > 1)
+            //    {
+            //        throw new Exception("Não foi possível identificar o seu cadastro.");
+            //    }
+            //    else if (lUsuarios.Count == 0)
+            //    {
+            //        throw new Exception("Usuário .");
+            //    }
+            //    else
+            //    {
+            //        string IDUsuario = lUsuarios[0].UniqueKey;
+
+            //        List<VMPermissao> listapermissoes = new List<VMPermissao>();
+
+            //        listapermissoes.AddRange(from usuarioperfil in UsuarioPerfilBusiness.Consulta.Where(p => string.IsNullOrEmpty(p.UsuarioExclusao)).ToList()
+            //                                 join perfil in PerfilBusiness.Consulta.Where(p => string.IsNullOrEmpty(p.UsuarioExclusao)).ToList() on usuarioperfil.UKPerfil equals perfil.UniqueKey
+            //                                 join empresa in EmpresaBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao)).ToList() on usuarioperfil.UKConfig equals empresa.UniqueKey
+            //                                 where usuarioperfil.UKUsuario.Equals(IDUsuario)
+            //                                 select new VMPermissao { UKPerfil = perfil.UniqueKey, Perfil = perfil.Nome, UKConfig = empresa.UniqueKey, Config = empresa.NomeFantasia });
+
+            //        listapermissoes.AddRange(from usuarioperfil in UsuarioPerfilBusiness.Consulta.Where(p => string.IsNullOrEmpty(p.UsuarioExclusao)).ToList()
+            //                                 join perfil in PerfilBusiness.Consulta.Where(p => string.IsNullOrEmpty(p.UsuarioExclusao)).ToList() on usuarioperfil.UKPerfil equals perfil.UniqueKey
+            //                                 join dep in DepartamentoBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao)).ToList() on usuarioperfil.UKConfig equals dep.UniqueKey
+            //                                 where usuarioperfil.UKUsuario.Equals(IDUsuario)
+            //                                 select new VMPermissao { UKPerfil = perfil.UniqueKey, Perfil = perfil.Nome, UKConfig = dep.UniqueKey, Config = dep.Sigla });
+
+            //        if (listapermissoes.Count == 0)
+            //        {
+            //            throw new Exception("O usuário não possui permissão para acessar o sistema. Entre em contato com o Administrador.");
+            //        }
+
+            //        return new AutenticacaoModel() { UniqueKey = lUsuarios[0].UniqueKey, Login = lUsuarios[0].Login, Nome = lUsuarios[0].Nome, Email = lUsuarios[0].Email, Permissoes = listapermissoes };
+            //    }
+
+            //}
+
+
+            //Buscar usuário sem validar senha, para poder determinar se a validação da senha será com AD ou com a senha interna do GIS
+            List<Usuario> lUsuarios = Consulta.Where(u => string.IsNullOrEmpty(u.UsuarioExclusao) &&
+                                                     (u.Login.Equals(autenticacaoModel.Login) || u.Email.Equals(autenticacaoModel.Login))).ToList();
+
+            if (lUsuarios.Count == 0)
+            {
+                throw new Exception("Não foi possível identificar o seu cadastro.");
+            }
+            else if (lUsuarios.Count > 1)
             {
                 throw new Exception("Não foi possível identificar o seu cadastro.");
             }
@@ -139,38 +193,12 @@ namespace GISCore.Business.Concrete
                         {
                             //Chamar web service para validar a senha no AD
                             WSAutenticacao.CartaoCorporativo ws = new WSAutenticacao.CartaoCorporativo();
-                            ws.Url = emp.URL_WS;
+                            //ws.Url = emp.URL_WS;
 
-                            string rs = ws.Login(autenticacaoModel.Login, autenticacaoModel.Senha);
-                            if (rs.Equals("0"))
+                            string rs = ws.LoginAD(autenticacaoModel.Login, autenticacaoModel.Senha);
+                            if (rs.Equals("\"-1\""))
                             {
-                                throw new Exception("Login ou senha incorretos.");
-                                //txtEmail.setError("Erro inesperado na tentativa do login!");
-                            }
-                            else if (rs.Equals("-1"))
-                            {
-                                throw new Exception("Login ou senha incorretos.");
-                                //txtSenha.setError(myContext.getResources().getString(R.string.msgRetorno2));
-                            }
-                            else if (rs.Equals("-2"))
-                            {
-                                throw new Exception("Login ou senha incorretos.");
-                                //txtEmail.setError(myContext.getResources().getString(R.string.msgLoginErro1));
-                            }
-                            else if (rs.Equals("-3"))
-                            {
-                                throw new Exception("Login ou senha incorretos.");
-                                //txtEmail.setError(myContext.getResources().getString(R.string.msgRetorno1));
-                            }
-                            else if (rs.Equals("-4"))
-                            {
-                                throw new Exception("Login ou senha incorretos.");
-                                //txtEmail.setError(myContext.getResources().getString(R.string.msgRetorno3));
-                            }
-                            else if (rs.Equals("-9"))
-                            {
-                                throw new Exception("Login ou senha incorretos.");
-                                //txtEmail.setError(myContext.getResources().getString(R.string.msgRetorno5));
+                                throw new Exception("Login ou senha incorreto.");
                             }
                             else
                             {
@@ -180,7 +208,7 @@ namespace GISCore.Business.Concrete
 
                                 listapermissoes.AddRange(from usuarioperfil in UsuarioPerfilBusiness.Consulta.Where(p => string.IsNullOrEmpty(p.UsuarioExclusao)).ToList()
                                                          join perfil in PerfilBusiness.Consulta.Where(p => string.IsNullOrEmpty(p.UsuarioExclusao)).ToList() on usuarioperfil.UKPerfil equals perfil.UniqueKey
-                                                         join empresa in EmpresaBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao)).ToList() on usuarioperfil.UKConfig equals empresa.UniqueKey 
+                                                         join empresa in EmpresaBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao)).ToList() on usuarioperfil.UKConfig equals empresa.UniqueKey
                                                          where usuarioperfil.UKUsuario.Equals(IDUsuario)
                                                          select new VMPermissao { UKPerfil = perfil.UniqueKey, Perfil = perfil.Nome, UKConfig = empresa.UniqueKey, Config = empresa.NomeFantasia });
 
@@ -189,13 +217,13 @@ namespace GISCore.Business.Concrete
                                                          join dep in DepartamentoBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao)).ToList() on usuarioperfil.UKConfig equals dep.UniqueKey
                                                          where usuarioperfil.UKUsuario.Equals(IDUsuario)
                                                          select new VMPermissao { UKPerfil = perfil.UniqueKey, Perfil = perfil.Nome, UKConfig = dep.UniqueKey, Config = dep.Sigla });
-                                
+
                                 if (listapermissoes.Count == 0)
                                 {
                                     throw new Exception("O usuário não possui permissão para acessar o sistema. Entre em contato com o Administrador.");
                                 }
-                                
-                                return new AutenticacaoModel() { UniqueKey = lUsuarios[0].UniqueKey, Login = lUsuarios[0].Login, Nome = lUsuarios[0].Nome, Email = lUsuarios[0].Email, Permissoes = listapermissoes };
+
+                                return new AutenticacaoModel() { UniqueKey = lUsuarios[0].UniqueKey, Login = lUsuarios[0].Login, Nome = lUsuarios[0].Nome, Email = lUsuarios[0].Email, TipoDeAcesso = lUsuarios[0].TipoDeAcesso, Permissoes = listapermissoes };
                             }
 
                         }
@@ -250,7 +278,7 @@ namespace GISCore.Business.Concrete
                             throw new Exception("O usuário não possui permissão para acessar o sistema. Entre em contato com o Administrador.");
                         }
 
-                        return new AutenticacaoModel() { UniqueKey = IDUsuario, Login = oUsuario.Login, Nome = oUsuario.Nome, Email = oUsuario.Email, Permissoes = listapermissoes };
+                        return new AutenticacaoModel() { UniqueKey = IDUsuario, Login = oUsuario.Login, Nome = oUsuario.Nome, Email = oUsuario.Email, TipoDeAcesso = lUsuarios[0].TipoDeAcesso, Permissoes = listapermissoes };
                     }
                     else
                     {

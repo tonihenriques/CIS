@@ -5,10 +5,6 @@
         $('.widget-box.visible').removeClass('visible');//hide others
         $(target).addClass('visible');//show target
     });
-
-    if ($("#formLoginAutomatico").length !== 0) {
-        $('#formLoginAutomatico').submit();
-    }
 });
 
 (function () {

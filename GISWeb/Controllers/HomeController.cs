@@ -20,5 +20,10 @@ namespace GISWeb.Controllers
             return View();
         }
 
+        public ActionResult Sobre()
+        {
+            return View();
+        }
+
     }
 }
