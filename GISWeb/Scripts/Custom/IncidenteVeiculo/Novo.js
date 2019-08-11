@@ -117,6 +117,7 @@ function OnBeginCadastrarAcidente(jqXHR, settings) {
         $("#AcidenteGraveIP102").val(false);
     }
 
+
     var form = $("#formCadastroAcidente");
     settings.data = form.serialize();
 

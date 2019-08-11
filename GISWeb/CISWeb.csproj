@@ -200,6 +200,7 @@
     <Content Include="Scripts\Custom\Cat\Edicao.js" />
     <Content Include="Scripts\Custom\Cat\Listagem.js" />
     <Content Include="Scripts\Custom\Cat\Novo.js" />
+    <Content Include="Scripts\Custom\custom-chart.js" />
     <Content Include="Scripts\Custom\custom-functions.js" />
     <Content Include="Scripts\Custom\Account\custom-login.js" />
     <Content Include="Scripts\Custom\custom-master.js" />

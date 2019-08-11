@@ -9,49 +9,40 @@
     }
 }
 
-<div class="row">
-    <div class="col-sm-12">
-        @*<h3 class="header smaller lighter red">CIS Web - Comunicado de Incidentes</h3>*@
-
-        <div class="well">
+<div class="well">
+    <div class="row">
+        <div class="col-sm-6">
             <h4 class="green smaller lighter">Bem bindo(a) @ViewBag.NomeUsuario!</h4>
-            Utilize os botões abaixo para acesso rápido a página de cadastro ou o menu superior para mais opções.
+
+            <span class="customhidden-xs">Utilize os botões ao lado para acesso rápido a página de cadastro ou o menu superior para mais opções.</span>
+            <span class="show-xs hidden-sm hidden-md hidden-lg">Utilize os botões abaixo para acesso rápido a página de cadastro ou o menu superior para mais opções.</span>
         </div>
 
+        <div class="col-sm-6">
+            <button class="btn btn-white btn-info btn-bold marginTopBotoesInicial" onclick="window.location.href = '@path/Incidente/Novo';" style="width: 100%;">
+                <i class="ace-icon fa fa-plus bigger-120 blue"></i>
+                Novo incidente
+            </button>
+
+            <button class="btn btn-white btn-warning btn-bold" onclick="window.location.href = '@path/IncidenteVeiculo/Novo';" style="width: 100%; margin-top: 10px;">
+                <i class="ace-icon fa fa-plus bigger-120 orange"></i>
+                Novo incidente veículo
+            </button>
+        </div>
     </div>
 </div>
 
-<div class="row" style="margin-top: 8px;">
-    <div class="col-xs-12 col-sm-offset-4 col-sm-4 col-sm-offset-4 text-center">
-
-        <button class="btn btn-white btn-info btn-bold" onclick="window.location.href = '@path/Incidente/Novo';" style="width: 100%;">
-            <i class="ace-icon fa fa-plus bigger-120 blue"></i>
-            Novo incidente
-        </button>
-
-        @*<a href="@path/Incidente/Novo" class="btn btn-danger CustomTooltip" title="Clique para cadastrar um novo incidente" style="width: 100%;">
-            <i class="ace-icon fa fa-plus align-top bigger-125"></i>
-            Novo incidente
-        </a>*@
-
-    </div>
-</div>
-
-<span class="space-16">&nbsp;</span>
+<div class="space-10"></div>
 
 <div class="row">
-    <div class="col-xs-12 col-sm-offset-4 col-sm-4 col-sm-offset-4 text-center">
-
-        <button class="btn btn-white btn-warning btn-bold" onclick="window.location.href = '@path/IncidenteVeiculo/Novo';" style="width: 100%;">
-            <i class="ace-icon fa fa-floppy-o bigger-120 orange"></i>
-            Novo incidente veículo
-        </button>
-
-        @*<a href="@path/IncidenteVeiculo/Novo" class="btn btn-primary CustomTooltip" title="Clique para cadastrar um novo incidente com veículo" style="width: 100%;">
-            <i class="ace-icon fa fa-plus align-top bigger-125"></i>
-            Novo incidente veículo
-        </a>*@
-
+    <div class="col-sm-6 col-xs-12">
+        <p id="chart_div1_title" style="display: none; font-weight: bold; margin-bottom: 5px; font-size: 14px; padding-bottom: 10px;">Meus Incidentes por Mês</p>
+        <div id="chart_div1" style="height: 400px;"></div>
+        <input type="hidden" id="chart_div1Data" value="" />
+    </div>
+    <div class="col-sm-6 col-xs-12">
+        <p id="piechart_title" style="display: none; font-weight: bold; margin-bottom: 5px; font-size: 14px; padding-bottom: 10px;">Meus Incidentes por Tipo de Acidente</p>
+        <div id="piechart" style="width: 500px; height: 400px;"></div>
     </div>
 </div>
 
@@ -59,4 +50,16 @@
 @section Scripts
 {
     @Scripts.Render("~/bundles/jQ_dataTable")
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript">
+
+        jQuery(function ($) {
+            MeusIncidentesChartBar("chart_div1");
+            MeusIncidentesPorTipoAcidente("piechart");
+        });
+
+    </script>
+
 }

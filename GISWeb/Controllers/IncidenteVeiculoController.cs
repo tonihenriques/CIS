@@ -75,13 +75,13 @@ namespace GISWeb.Controllers
                     entidade.UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
                     entidade.Status = "Em Edição";
                     entidade.Responsavel = entidade.UsuarioInclusao;
-                    entidade.Codigo = "IV-" + DateTime.Now.Year.ToString() + "-" + IncidenteVeiculoBusiness.GetNextNumber("IncidenteVeiculo", "select max(SUBSTRING(codigo, 8, 6)) from objincidenteveiculo").ToString().PadLeft(6, '0');
+                    entidade.Codigo = "IV-" + DateTime.Now.Year.ToString() + "-" + IncidenteVeiculoBusiness.GetNextNumber("IncidenteVeiculo", "select max(SUBSTRING(codigo, 9, 6)) from objincidenteveiculo").ToString().PadLeft(6, '0');
                     entidade.StatusWF = "RS";
                     entidade.DataAtualizacao = DateTime.Now;
                     IncidenteVeiculoBusiness.Inserir(entidade);
 
                     Severino.GravaCookie("MensagemSucesso", "O incidente com veículo foi cadastrado com sucesso.", 10);
-                    Severino.GravaCookie("FuncaoInboxAChamar", "IncidentesVeiculo", 10);
+                    Severino.GravaCookie("FuncaoInboxAChamar", "IncidentesVeiculos", 10);
                     Severino.GravaCookie("ObjRecemCriado", entidade.UniqueKey, 10);
 
                     ReiniciarCache(CustomAuthorizationProvider.UsuarioAutenticado.Login);

@@ -8,3 +8,20 @@
     width: 100%;
     height: 100%;
 }
+
+
+
+@media (max-width: 767px) {
+    .marginTopBotoesInicial {
+        margin-top: 10px;
+
+    }
+
+    .customhidden-xs {
+        display: none;
+    }
+
+    .show-xs {
+        display: block;
+    }
+}

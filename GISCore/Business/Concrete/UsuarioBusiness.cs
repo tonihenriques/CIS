@@ -3,6 +3,7 @@ using GISHelpers.Utils;
 using GISModel.DTO.Account;
 using GISModel.DTO.Permissoes;
 using GISModel.Entidades;
+using GISModel.Entidades.OBJ;
 using GISModel.Enums;
 using Ninject;
 using System;
@@ -31,7 +32,7 @@ namespace GISCore.Business.Concrete
 
         [Inject]
         public IPerfilBusiness PerfilBusiness { get; set; }
-
+        
         [Inject]
         public IDepartamentoBusiness DepartamentoBusiness { get; set; }
 
@@ -46,14 +47,14 @@ namespace GISCore.Business.Concrete
             base.Inserir(usuario);
 
             //Enviar e-mail
-            if (usuario.TipoDeAcesso.Equals(TipoDeAcesso.AD))
-            {
-                EnviarEmailParaUsuarioRecemCriadoAD(usuario);
-            }
-            else
-            {
-                EnviarEmailParaUsuarioRecemCriadoSistema(usuario);
-            }
+            //if (usuario.TipoDeAcesso.Equals(TipoDeAcesso.AD))
+            //{
+            //    EnviarEmailParaUsuarioRecemCriadoAD(usuario);
+            //}
+            //else
+            //{
+            //    EnviarEmailParaUsuarioRecemCriadoSistema(usuario);
+            //}
         }
 
         public override void Alterar(Usuario entidade)
@@ -112,7 +113,7 @@ namespace GISCore.Business.Concrete
 
         public AutenticacaoModel ValidarCredenciais(AutenticacaoModel autenticacaoModel)
         {
-            autenticacaoModel.Login = autenticacaoModel.Login.Trim();
+            autenticacaoModel.Login = autenticacaoModel.Login.Trim().ToUpper();
 
             //WSAutenticacao.CartaoCorporativo wf = new WSAutenticacao.CartaoCorporativo();
 
@@ -170,7 +171,154 @@ namespace GISCore.Business.Concrete
 
             if (lUsuarios.Count == 0)
             {
-                throw new Exception("Não foi possível identificar o seu cadastro.");
+                //throw new Exception("Não foi possível identificar o seu cadastro.");
+
+
+                //Este código é específico para a CEMIG, logo, se eu encontrar o login na rede da cemig, eu assumo que é integração com AD e não pelo sistema
+                
+                CEMIGInfoService.InfoServiceClient wfInfo = new CEMIGInfoService.InfoServiceClient();
+                CEMIGInfoService.Empregado emp = wfInfo.RecuperarDadosEmpregado(new CEMIGInfoService.DadosEmpregado()
+                {
+                    ChaveAcesso = autenticacaoModel.Login,
+                    IgnorarDesligamento = true
+                });
+
+                if (emp == null)
+                {
+                    throw new Exception("Não foi possível identificar o cadastro '" + autenticacaoModel.Login + "'.");
+                }
+                else
+                {
+                    Empresa empresa = EmpresaBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.NomeFantasia.Equals(emp.Empresa.Nome));
+                    if (empresa == null)
+                    {
+                        throw new Exception("A empresa vinculada a chave '" + autenticacaoModel.Login + "' não está cadastrada. Acione o Administrador do sistema para a regularização.");
+                    }
+
+                    Empresa empBase = EmpresaBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.NomeFantasia.Equals("CEMIG"));
+                    if (empBase == null)
+                    {
+                        empBase = empresa;
+                    }
+
+                    Departamento dep = DepartamentoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.Sigla.Equals(emp.Orgao.Sigla));
+                    if (dep == null)
+                    {
+                        //Criar órgão
+
+                        //Buscar Hierarquia dos órgãos
+                        List<CEMIGInfoService.Orgao> estrutura = DefinirHierarquiaOrganizacional(emp.Orgao.UA, wfInfo);
+                        if (estrutura?.Count == 0)
+                        {
+                            throw new Exception("Não foi localizado o órgão da chave '" + autenticacaoModel.Login + "'. Acione o Administrador do sistema para a regularização.");
+                        }
+                        else
+                        {
+                            Departamento depAnterior = null;
+                            int i = 0;
+                            List<NivelHierarquico> niveis = DepartamentoBusiness.BuscarNiveis();
+                            for (i = estrutura.Count - 1; i >= 0; i--)
+                            {
+
+                                string siglaFind = estrutura[i].Sigla;
+
+                                string UKNivel = string.Empty;
+
+                                if (estrutura[i].NivelHierarquico.ToUpper().Equals("DIR"))
+                                {
+                                    NivelHierarquico nivel = niveis.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.Nome.Equals("Diretoria"));
+                                    UKNivel = nivel.UniqueKey;
+                                }
+                                else if (estrutura[i].NivelHierarquico.ToUpper().Equals("SUP"))
+                                {
+                                    NivelHierarquico nivel = niveis.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.Nome.Equals("Superintendência"));
+                                    UKNivel = nivel.UniqueKey;
+                                }
+                                else if (estrutura[i].NivelHierarquico.ToUpper().Equals("GER"))
+                                {
+                                    NivelHierarquico nivel = niveis.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.Nome.Equals("Gerência"));
+                                    UKNivel = nivel.UniqueKey;
+                                }
+
+                                Departamento depFind = DepartamentoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.Sigla.Equals(siglaFind));
+                                if (depFind == null)
+                                {
+                                    depFind = new Departamento()
+                                    {
+                                        Sigla = estrutura[i].Sigla,
+                                        Codigo = estrutura[i].UA,
+                                        Descricao = estrutura[i].NomeCompleto,
+                                        UniqueKey = Guid.NewGuid().ToString(),
+                                        UKDepartamentoVinculado = depAnterior == null ? string.Empty : depAnterior.UniqueKey,
+                                        UKEmpresa = empBase.UniqueKey,
+                                        UKNivelHierarquico = UKNivel,
+                                        UsuarioInclusao = autenticacaoModel.Login
+                                    };
+
+                                    DepartamentoBusiness.Inserir(depFind);
+                                    depAnterior = depFind;
+
+                                }
+                                else
+                                {
+                                    depAnterior = depFind;
+                                }
+
+                                if (estrutura[i].Sigla.Equals(emp.Orgao.Sigla))
+                                {
+                                    dep = depFind;
+                                }
+                            }
+
+                        }
+                    }
+
+                    Usuario objU = new Usuario()
+                    {
+                        Login = emp.Matricula,
+                        Nome = emp.Nome,
+                        Email = emp.Email,
+                        TipoDeAcesso = TipoDeAcesso.AD,
+                        UKDepartamento = dep.UniqueKey,
+                        UKEmpresa = empresa.UniqueKey,
+                        UsuarioInclusao = autenticacaoModel.Login
+                    };
+
+                    Inserir(objU);
+
+                    List<VMPermissao> vmPer = new List<VMPermissao>();
+
+                    Perfil perfil = PerfilBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.Nome.Equals("Básico"));
+                    if (perfil != null)
+                    {
+                        UsuarioPerfilBusiness.Inserir(new UsuarioPerfil()
+                        {
+                            UKConfig = dep.UniqueKey,
+                            UKPerfil = perfil.UniqueKey,
+                            UKUsuario = objU.UniqueKey,
+                            UsuarioInclusao = autenticacaoModel.Login
+                        });
+
+                        vmPer.Add(new VMPermissao()
+                        {
+                            UKPerfil = perfil.UniqueKey,
+                            Perfil = perfil.Nome,
+                            UKConfig = dep.UniqueKey,
+                            Config = dep.Sigla
+                        });
+                    }
+
+                    return new AutenticacaoModel() {
+                        UniqueKey = objU.UniqueKey,
+                        Login = objU.Login,
+                        Nome = objU.Nome,
+                        Email = objU.Email,
+                        TipoDeAcesso = objU.TipoDeAcesso,
+                        Permissoes = vmPer
+                    };
+
+                }
+
             }
             else if (lUsuarios.Count > 1)
             {
@@ -289,9 +437,34 @@ namespace GISCore.Business.Concrete
 
         }
 
+        
+
+        private List<CEMIGInfoService.Orgao> DefinirHierarquiaOrganizacional(string Orgao, CEMIGInfoService.InfoServiceClient wfInfo)
+        {
+
+            List<CEMIGInfoService.Orgao> estrutura = new List<CEMIGInfoService.Orgao>();
+
+            CEMIGInfoService.Orgao orgaoAnalisado = null;
+
+            string uaParaAnalisar = Orgao;
+
+            while (uaParaAnalisar != "0000")
+            {
+                orgaoAnalisado = wfInfo.RecuperarDadosOrgao(new CEMIGInfoService.DadosOrgao() { UA = uaParaAnalisar });
+
+                estrutura.Add(orgaoAnalisado);
+
+                uaParaAnalisar = orgaoAnalisado.UASuperior;
+            }
+
+            return estrutura;
+
+        }
+
+
         #region E-mails
 
-            private void EnviarEmailParaUsuarioSolicacaoAcesso(Usuario usuario)
+        private void EnviarEmailParaUsuarioSolicacaoAcesso(Usuario usuario)
             {
                 string sRemetente = ConfigurationManager.AppSettings["Web:Remetente"];
                 string sSMTP = ConfigurationManager.AppSettings["Web:SMTP"];

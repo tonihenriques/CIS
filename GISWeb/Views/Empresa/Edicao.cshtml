@@ -52,7 +52,7 @@
                         <div class="col-xs-12 col-sm-12">
                             @Html.EditorFor(d => d.CNPJ, new { htmlAttributes = new { @class = "col-xs-12 col-sm-12", @id = "txtCNPJ" } })
                             @Html.ValidationMessageFor(d => d.CNPJ, string.Empty, new { @style = "font-size: 10px; color: #a94442;" })
-                            @Html.HiddenFor(d => d.IDEmpresa)
+                            @Html.HiddenFor(d => d.UniqueKey)
                         </div>
                     </div>
                 </div>
@@ -68,20 +68,11 @@
             </div>
 
             <div class="row">
-                <div class="col-xs-12 col-sm-6">
+                <div class="col-xs-12 col-sm-12">
                     <div class="form-group">
                         @Html.LabelFor(d => d.RazaoSocial, new { @class = "form-field-select-3 col-xs-12 col-sm-6 no-padding-right" })
                         <div class="col-xs-12 col-sm-12">
                             @Html.EditorFor(d => d.RazaoSocial, new { htmlAttributes = new { @class = "col-xs-12 col-sm-12" } })
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-sm-6">
-                    <div class="form-group">
-                        @Html.LabelFor(d => d.URL_LogoMarca, new { @class = "form-field-select-3 col-xs-12 col-sm-6 no-padding-right" })
-                        <div class="col-xs-12 col-sm-12">
-                            @Html.EditorFor(d => d.URL_LogoMarca, new { htmlAttributes = new { @class = "col-xs-12 col-sm-12", @readonly = "readonly", @id = "URLLogoMarca" } })
-                            @Html.ValidationMessageFor(d => d.URL_LogoMarca, string.Empty, new { @style = "font-size: 10px; color: #a94442;" })
                         </div>
                     </div>
                 </div>

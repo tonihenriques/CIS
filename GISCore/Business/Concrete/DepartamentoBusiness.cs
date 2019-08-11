@@ -1,6 +1,7 @@
 ﻿using GISCore.Business.Abstract;
 using GISModel.DTO.Departamento;
 using GISModel.Entidades;
+using GISModel.Entidades.OBJ;
 using Ninject;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,11 @@ namespace GISCore.Business.Concrete
 
         [Inject]
         public IEmpresaBusiness ContratoBusiness { get; set; }
+
+
+        [Inject]
+        public INivelHierarquicoBusiness NivelHierarquicoBusiness { get; set; }
+
 
         public override void Inserir(Departamento pDepartamento)
         {
@@ -54,6 +60,10 @@ namespace GISCore.Business.Concrete
                 base.Inserir(departamento);
             }
 
+        }
+
+        public List<NivelHierarquico> BuscarNiveis() {
+            return NivelHierarquicoBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao)).ToList();
         }
 
     }
