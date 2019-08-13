@@ -1,4 +1,5 @@
-﻿using GISModel.Enums;
+﻿using GISModel.CustomAttributes;
+using GISModel.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -26,9 +27,10 @@ namespace GISModel.Entidades
         public ETipoCAT ETipoCAT { get; set; }
 
         [Display(Name = "CAT iniciada por:")]
+        [RequiredEnum(ErrorMessage = "O campo 'Tipo de Iniciativa' é obrigatório.")]
         public ETipoIniciativa ETipoIniciativa { get; set; }
 
-        [Display(Name = "Cód. Atentdimento CNS")]
+        [Display(Name = "Cód. Atendimento CNES")]
         public string CodigoCNS { get; set; }
 
         [Display(Name = "Data do Atendimento")]
@@ -59,12 +61,14 @@ namespace GISModel.Entidades
         public string NomeMedico { get; set; }
 
         [Display(Name = "Órgão de Classe")]
+        [RequiredEnum(ErrorMessage = "O órgão de classe é obrigatório.")]
         public EOrgaoClasse EOrgaoClasse { get; set; }
 
         [Display(Name = "Num. Insc. Órgão de Classe")]
         public string NumOrgClasse { get; set; }
 
         [Display(Name = "Un. da Fed. do Órgão de Classe ")]
+        [RequiredEnum(ErrorMessage = "A Unidade da Federação é obrigatório.")]
         public EUnidadeFederacao EUnidadeFederacao { get; set; }
 
         [Display(Name = "Incidente")]

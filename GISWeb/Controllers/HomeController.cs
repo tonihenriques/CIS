@@ -1,6 +1,7 @@
 ﻿using GISCore.Business.Abstract;
 using GISHelpers.Extensions.System;
 using GISModel.DTO.Shared;
+using GISModel.Entidades;
 using GISModel.Enums;
 using GISWeb.Infraestrutura.Filters;
 using GISWeb.Infraestrutura.Provider.Abstract;
@@ -23,31 +24,42 @@ namespace GISWeb.Controllers
     {
 
         [Inject]
+        public IPerfilBusiness PerfilBusiness { get; set; }
+
+        [Inject]
+        public IUsuarioPerfilBusiness UsuarioPerfilBusiness { get; set; }
+
+        [Inject]
+        public IUsuarioBusiness UsuarioBusiness { get; set; }
+
+        [Inject]
         public IIncidenteBusiness IncidenteBusiness { get; set; }
 
         [Inject]
         public ICustomAuthorizationProvider CustomAuthorizationProvider { get; set; }
+
+
 
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult LoadMeusIncidentesBar() {
+        public ActionResult LoadIncidentesBar() {
             try
             {
                 List<string[]> model = new List<string[]>();
 
                 string sqlTotalIncidentesPorMes = @"select 'Pessoa' as Tipo, concat(month(DataInclusao), '/', year(DataInclusao)) as  mesref, COUNT(*) as total
                                                 from OBJIncidente
-                                                where UsuarioInclusao = '" + CustomAuthorizationProvider.UsuarioAutenticado.Login.ToUpper() + @"' and StatusWF in ('RS', 'SO') and Status = 'Em Edição'
+                                                where UsuarioExclusao is null 
                                                 group by concat(month(DataInclusao), '/', year(DataInclusao))
 
                                                 union
 
                                                 select 'Veiculo' as Tipo, concat(month(DataInclusao), '/', year(DataInclusao)) as mesref, COUNT(*) as total
                                                 from OBJIncidenteVeiculo
-                                                where UsuarioInclusao = '" + CustomAuthorizationProvider.UsuarioAutenticado.Login.ToUpper() + @"' and StatusWF in ('RS', 'SO') and Status = 'Em Edição'
+                                                where UsuarioExclusao is null
                                                 group by concat(month(DataInclusao), '/', year(DataInclusao))
                                                 order by Tipo";
 
@@ -117,20 +129,16 @@ namespace GISWeb.Controllers
             }
         }
 
-
-        public ActionResult LoadMeusIncidentesPorTipoAcidente()
+        public ActionResult LoadIncidentesPessoasPorTipoAcidente()
         {
-
             try
             {
-
                 List<string[]> model = new List<string[]>();
 
-                string sqlTotalIncidentesPorMes = @"select 'Pessoa' as tipo, ETipoAcidente, COUNT(*) as total from OBJIncidente where Status = 'Em Edição' and StatusWF in ('RS', 'SO') and UsuarioInclusao = '" + CustomAuthorizationProvider.UsuarioAutenticado.Login.ToUpper() + @"'
-	                                                group by ETipoAcidente
-	                                                union all
-	                                                select 'Veiculo' as tipo, ETipoAcidente, count(*) as total from OBJIncidenteVeiculo where Status = 'Em Edição' and StatusWF in ('RS', 'SO') and UsuarioInclusao = '" + CustomAuthorizationProvider.UsuarioAutenticado.Login.ToUpper() + @"'
+                string sqlTotalIncidentesPorMes = @"select ETipoAcidente, COUNT(*) as total from OBJIncidente 
+                                                    where UsuarioExclusao is null
 	                                                group by ETipoAcidente";
+
                 DataTable result = IncidenteBusiness.GetDataTable(sqlTotalIncidentesPorMes);
                 if (result.Rows.Count > 0)
                 {
@@ -138,21 +146,11 @@ namespace GISWeb.Controllers
 
                     foreach (DataRow row in result.Rows)
                     {
-                        string def = row["tipo"].ToString();
                         string tipo = row["ETipoAcidente"].ToString();
                         string total = row["total"].ToString();
 
-                        string sTipo = string.Empty;
-                        if (def == "Pessoa")
-                        {
-                            ETipoAcidente eTipo = (ETipoAcidente)Enum.Parse(typeof(ETipoAcidente), tipo, true);
-                            sTipo = "Pessoa - " + EnumExtensions.GetDisplayName(eTipo);
-                        }
-                        else
-                        {
-                            ETipoAcidenteVeiculo eTipo = (ETipoAcidenteVeiculo)Enum.Parse(typeof(ETipoAcidenteVeiculo), tipo, true);
-                            sTipo = "Veículo - " + EnumExtensions.GetDisplayName(eTipo);
-                        }
+                        ETipoAcidente eTipo = (ETipoAcidente)Enum.Parse(typeof(ETipoAcidente), tipo, true);
+                        string sTipo = EnumExtensions.GetDisplayName(eTipo);
 
                         chartData += "['" + sTipo + "', " + total + "],";
                     }
@@ -184,14 +182,80 @@ namespace GISWeb.Controllers
                     return Json(new { resultado = new RetornoJSON() { Erro = ex.GetBaseException().Message } });
                 }
             }
+        }
 
+        public ActionResult LoadIncidentesVeiculosPorTipoAcidente()
+        {
 
+            try
+            {
 
+                List<string[]> model = new List<string[]>();
+
+                string sqlTotalIncidentesPorMes = @"select ETipoAcidente, count(*) as total from OBJIncidenteVeiculo 
+                                                    where UsuarioExclusao is null
+	                                                group by ETipoAcidente";
+
+                DataTable result = IncidenteBusiness.GetDataTable(sqlTotalIncidentesPorMes);
+                if (result.Rows.Count > 0)
+                {
+                    string chartData = "['Task', 'Hours per Day'],";
+
+                    foreach (DataRow row in result.Rows)
+                    {
+                        string tipo = row["ETipoAcidente"].ToString();
+                        string total = row["total"].ToString();
+
+                        ETipoAcidenteVeiculo eTipo = (ETipoAcidenteVeiculo)Enum.Parse(typeof(ETipoAcidenteVeiculo), tipo, true);
+                        string sTipo = EnumExtensions.GetDisplayName(eTipo);
+
+                        chartData += "['" + sTipo + "', " + total + "],";
+                    }
+
+                    if (chartData.EndsWith(","))
+                        chartData = chartData.Substring(0, chartData.Length - 1);
+
+                    //Padrão
+                    //['Task', 'Hours per Day'],
+                    //['Contratado', 11],
+                    //['Empregado', 2],
+                    //['Novos Negócio', 2],
+                    //['Obra PART', 2],
+                    //['Doença Ocupacional', 7]
+
+                    return Json(new { resultado = new RetornoJSON() { Conteudo = chartData } });
+                }
+
+                return Json(new { resultado = new RetornoJSON() { Conteudo = "" } });
+            }
+            catch (Exception ex)
+            {
+                if (ex.GetBaseException() == null)
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.Message } });
+                }
+                else
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.GetBaseException().Message } });
+                }
+            }
         }
 
 
         public ActionResult Dashboard() {
             return View();
+        }
+
+        public ActionResult Suporte() {
+
+            var lUsuariosPerfis = (from perfil in PerfilBusiness.Consulta.Where(p => string.IsNullOrEmpty(p.UsuarioExclusao) && (p.Nome.Equals("Administrador") || p.Nome.Equals("Medico"))).ToList()
+                          join usuarioperfil in UsuarioPerfilBusiness.Consulta.Where(p => string.IsNullOrEmpty(p.UsuarioExclusao)).ToList() on perfil.UniqueKey equals usuarioperfil.UKPerfil
+                          join usuario in UsuarioBusiness.Consulta.Where(p => string.IsNullOrEmpty(p.UsuarioExclusao)).ToList() on usuarioperfil.UKUsuario equals usuario.UniqueKey
+                          select new UsuarioPerfil { Perfil = new Perfil() { Nome = perfil.Nome },
+                                                     Usuario = new Usuario() { Login = usuario.Login, Nome = usuario.Nome }
+                                                   }).ToList();
+
+            return View(lUsuariosPerfis);
         }
 
         public ActionResult Sobre()

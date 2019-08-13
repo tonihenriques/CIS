@@ -33,7 +33,7 @@ namespace GISModel.DTO.Incidente
         [Display(Name = "CAT iniciada por:")]
         public ETipoIniciativa? ETipoIniciativa { get; set; }
 
-        [Display(Name = "Cód. Atentdimento CNS")]
+        [Display(Name = "Cód. Atendimento CNES")]
         public string CodigoCNS { get; set; }
 
         [Display(Name = "Data do Atendimento")]
