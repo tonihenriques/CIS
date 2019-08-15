@@ -12,5 +12,7 @@ namespace GISModel.DTO.Inbox
         [Display(Name = "Comentários")]
         public string Comentarios { get; set; }
 
+        public string Tipo { get; set; }
+
     }
 }

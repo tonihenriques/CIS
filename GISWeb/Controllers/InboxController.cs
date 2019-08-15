@@ -6,6 +6,7 @@ using GISModel.DTO.Incidente;
 using GISModel.DTO.IncidenteVeiculo;
 using GISModel.DTO.Shared;
 using GISModel.Entidades;
+using GISModel.Entidades.OBJ;
 using GISModel.Enums;
 using GISWeb.Infraestrutura.Filters;
 using GISWeb.Infraestrutura.Provider.Abstract;
@@ -380,7 +381,36 @@ namespace GISWeb.Controllers
                         return PartialView("_ListarIncidente", lista);
 
                     case "IncidentesVeiculos":
-                        return PartialView("_ListarIncidenteVeiculo");
+
+                        List<VMIncidenteVeiculo> listaVeiculos = new List<VMIncidenteVeiculo>();
+
+                        string sqlVeiculos = @"select i.UniqueKey, i.Codigo, i.DataIncidente, i.ETipoAcidente, d.Sigla, i.AcidenteFatal, i.AcidenteGraveIP102, i.Status, i.MensagemPasso
+                                       from OBJIncidenteVeiculo i, OBJDepartamento d
+                                       where i.Responsavel in (" + string.Join(",", perfis) + @") and i.UsuarioExclusao is null and
+		                                     i.UKOrgao = d.UniqueKey and d.UsuarioExclusao is null
+                                       order by i.datainclusao desc ";
+
+                        DataTable dtInboxVeiculos = PerfilBusiness.GetDataTable(sqlVeiculos);
+                        if (dtInboxVeiculos.Rows.Count > 0)
+                        {
+                            foreach (DataRow row in dtInboxVeiculos.Rows)
+                            {
+                                listaVeiculos.Add(new VMIncidenteVeiculo()
+                                {
+                                    UniqueKey = row[0].ToString(),
+                                    Codigo = row[1].ToString(),
+                                    DataIncidente = ((DateTime)row[2]).ToString("dd/MM/yyyy"),
+                                    ETipoAcidente = ((ETipoAcidenteVeiculo)Enum.Parse(typeof(ETipoAcidenteVeiculo), row[3].ToString())).GetDisplayName(),
+                                    Orgao = row[4].ToString(),
+                                    AcidenteFatal = ((bool)row[5]) ? "Sim" : "Não",
+                                    AcidenteGraveIP102 = ((bool)row[6]) ? "Sim" : "Não",
+                                    Status = row[7].ToString(),
+                                    MensagemPasso = row[8].ToString()
+                                });
+                            }
+                        }
+
+                        return PartialView("_ListarIncidenteVeiculo", listaVeiculos);
 
                     case "QuaseIncidentes":
                         return PartialView("_ListarQuaseIncidente");
@@ -411,37 +441,40 @@ namespace GISWeb.Controllers
 
 
         [RestritoAAjax]
-        public ActionResult AprovarIncidente(string uk)
+        public ActionResult AprovarIncidente(string uk, string tipo)
         {
             try
             {
 
-                Incidente fichaPersistida = IncidenteBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(uk));
-                if (fichaPersistida != null)
+                if (tipo.Equals("Veiculo"))
                 {
+                    IncidenteVeiculo fichaPersistidaVeiculo = IncidenteVeiculoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(uk));
+                    if (fichaPersistidaVeiculo != null)
+                    {
+                        ViewBag.UniqueKey = fichaPersistidaVeiculo.UniqueKey;
+                        ViewBag.Codigo = fichaPersistidaVeiculo.Codigo;
+                        ViewBag.Status = fichaPersistidaVeiculo.Status;
+                        ViewBag.Tipo = "Veiculo";
 
-
-                    //if (fichaPersistida.Configuration.UID.Contains(ConfigurationManager.AppSettings["Custom:Submodulo:Web:RH:Contexto"]))
-                    //{
-                    //    fichaPersistida.Arquivos = ArquivoBusiness.RecuperarPorParamsMultiple("RelacionadosComFicha", "PESQUISA", fichaPersistida, AutorizacaoProvider.UsuarioAutenticado);
-                    //    if (fichaPersistida.Arquivos == null || fichaPersistida.Arquivos.Count == 0)
-                    //        throw new Exception("Não foi encontrado nenhum arquivo anexado ao documento, portanto, não é possível caminhar com o documento em seu fluxo de aprovação.");
-                    //}
-                    //else
-                    //{
-                    //    fichaPersistida.Arquivos = ArquivoBusiness.RecuperarPorParamsMultiple("ObrigatóriosNãoAnexados", fichaPersistida, AutorizacaoProvider.UsuarioAutenticado);
-                    //    if (fichaPersistida.Arquivos != null && fichaPersistida.Arquivos.Count > 0)
-                    //        throw new Exception("Existem arquivos obrigatórios ainda não anexados e, portanto, não é possível caminhar com o documento em seu fluxo de aprovação.");
-                    //}
-
-                    ViewBag.UniqueKey = fichaPersistida.UniqueKey;
-                    ViewBag.Codigo = fichaPersistida.Codigo;
-                    ViewBag.Status = fichaPersistida.Status;
-
-                    return PartialView("_AprovarIncidente");
+                        return PartialView("_AprovarIncidente");
+                    }
                 }
                 else
-                    throw new Exception("As informações fornecidas para aprovação do documento não são válidas.");
+                {
+                    Incidente fichaPersistida = IncidenteBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(uk));
+                    if (fichaPersistida != null)
+                    {
+                        ViewBag.UniqueKey = fichaPersistida.UniqueKey;
+                        ViewBag.Codigo = fichaPersistida.Codigo;
+                        ViewBag.Status = fichaPersistida.Status;
+                        ViewBag.Tipo = "Pessoa";
+
+                        return PartialView("_AprovarIncidente");
+                    }
+                }
+
+                throw new Exception("Não foi possível encontrar as informações necessárias para prosseguir na aprovação.");
+
             }
             catch (Exception ex)
             {
@@ -457,55 +490,112 @@ namespace GISWeb.Controllers
         {
             try
             {
-                Incidente obj = IncidenteBusiness.Consulta.FirstOrDefault(a => 
-                    string.IsNullOrEmpty(a.UsuarioExclusao) && 
-                    a.UniqueKey.Equals(item.UniqueKey) && 
-                    a.Responsavel.ToUpper().Equals(CustomAuthorizationProvider.UsuarioAutenticado.Login.ToUpper()));
-
-                if (obj == null)
+                if (item.Tipo.Equals("Pessoa"))
                 {
-                    throw new Exception("Não foi possível recuperar o incidente através da identificação recebida.");
+                    Incidente obj = IncidenteBusiness.Consulta.FirstOrDefault(a =>
+                                                string.IsNullOrEmpty(a.UsuarioExclusao) &&
+                                                a.UniqueKey.Equals(item.UniqueKey) &&
+                                                a.Responsavel.ToUpper().Equals(CustomAuthorizationProvider.UsuarioAutenticado.Login.ToUpper()));
+
+                    if (obj == null)
+                    {
+                        throw new Exception("Não foi possível recuperar o incidente através da identificação recebida.");
+                    }
+                    else
+                    {
+                        ReiniciarCache(CustomAuthorizationProvider.UsuarioAutenticado.Login);
+
+                        obj.StatusWF = "SO";
+                        obj.DataExclusao = DateTime.Now;
+                        obj.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                        IncidenteBusiness.Alterar(obj);
+
+                        string novoStatus = OperacaoBusiness.RecuperarProximoStatus(obj.Status);
+                        List<string> Responsaveis = OperacaoBusiness.RecuperarResponsavelPorStatus(novoStatus);
+
+                        foreach (string resp in Responsaveis)
+                        {
+                            Incidente obj2 = new Incidente();
+                            PropertyCopy.Copy(obj, obj2);
+
+                            obj2.ID = Guid.NewGuid().ToString();
+                            obj2.UniqueKey = item.UniqueKey;
+
+                            if (novoStatus.Equals("Concluído"))
+                            {
+                                obj2.StatusWF = "SO";
+                            }
+                            else
+                            {
+                                obj2.StatusWF = "RS";
+                            }
+
+                            obj2.MensagemPasso = item.Comentarios;
+                            obj2.Status = novoStatus;
+                            obj2.Responsavel = resp;
+                            obj2.UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                            obj2.UsuarioExclusao = null;
+                            obj2.DataExclusao = DateTime.MaxValue;
+                            obj2.DataAtualizacao = DateTime.Now;
+
+                            IncidenteBusiness.Inserir(obj2);
+
+                            Severino.GravaCookie("MensagemSucesso", "O incidente " + obj2.Codigo + " foi aprovado com sucesso.", 10);
+                        }
+                    }
                 }
                 else
                 {
-                    ReiniciarCache(CustomAuthorizationProvider.UsuarioAutenticado.Login);
+                    IncidenteVeiculo obj = IncidenteVeiculoBusiness.Consulta.FirstOrDefault(a =>
+                                                        string.IsNullOrEmpty(a.UsuarioExclusao) &&
+                                                        a.UniqueKey.Equals(item.UniqueKey) &&
+                                                        a.Responsavel.ToUpper().Equals(CustomAuthorizationProvider.UsuarioAutenticado.Login.ToUpper()));
 
-                    obj.StatusWF = "SO";
-                    obj.DataExclusao = DateTime.Now;
-                    obj.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
-                    IncidenteBusiness.Alterar(obj);
-
-                    string novoStatus = OperacaoBusiness.RecuperarProximoStatus(obj.Status);
-                    List<string> Responsaveis = OperacaoBusiness.RecuperarResponsavelPorStatus(novoStatus);
-                    
-                    foreach (string resp in Responsaveis)
+                    if (obj == null)
                     {
-                        Incidente obj2 = new Incidente();
-                        PropertyCopy.Copy(obj, obj2);
+                        throw new Exception("Não foi possível recuperar o incidente com o veículo através da identificação recebida.");
+                    }
+                    else
+                    {
+                        ReiniciarCache(CustomAuthorizationProvider.UsuarioAutenticado.Login);
 
-                        obj2.ID = Guid.NewGuid().ToString();
-                        obj2.UniqueKey = item.UniqueKey;
+                        obj.StatusWF = "SO";
+                        obj.DataExclusao = DateTime.Now;
+                        obj.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                        IncidenteVeiculoBusiness.Alterar(obj);
 
-                        if (novoStatus.Equals("Concluído"))
+                        string novoStatus = OperacaoBusiness.RecuperarProximoStatus(obj.Status);
+                        List<string> Responsaveis = OperacaoBusiness.RecuperarResponsavelPorStatus(novoStatus);
+
+                        foreach (string resp in Responsaveis)
                         {
-                            obj2.StatusWF = "SO";
-                        }
-                        else
-                        {
-                            obj2.StatusWF = "RS";
-                        }
-                        
-                        obj2.MensagemPasso = item.Comentarios;
-                        obj2.Status = novoStatus;
-                        obj2.Responsavel = resp;
-                        obj2.UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
-                        obj2.UsuarioExclusao = null;
-                        obj2.DataExclusao = DateTime.MaxValue;
-                        obj2.DataAtualizacao = DateTime.Now;
+                            IncidenteVeiculo obj2 = new IncidenteVeiculo();
+                            PropertyCopy.Copy(obj, obj2);
 
-                        IncidenteBusiness.Inserir(obj2);
+                            obj2.ID = Guid.NewGuid().ToString();
+                            obj2.UniqueKey = item.UniqueKey;
 
-                        Severino.GravaCookie("MensagemSucesso", "O incidente " + obj2.Codigo + " foi aprovado com sucesso.", 10);
+                            if (novoStatus.Equals("Concluído"))
+                            {
+                                obj2.StatusWF = "SO";
+                            }
+                            else
+                            {
+                                obj2.StatusWF = "RS";
+                            }
+
+                            obj2.MensagemPasso = item.Comentarios;
+                            obj2.Status = novoStatus;
+                            obj2.Responsavel = resp;
+                            obj2.UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                            obj2.UsuarioExclusao = null;
+                            obj2.DataExclusao = DateTime.MaxValue;
+                            obj2.DataAtualizacao = DateTime.Now;
+
+                            IncidenteVeiculoBusiness.Inserir(obj2);
+
+                            Severino.GravaCookie("MensagemSucesso", "O incidente veículo " + obj2.Codigo + " foi aprovado com sucesso.", 10);
+                        }
                     }
                 }
 

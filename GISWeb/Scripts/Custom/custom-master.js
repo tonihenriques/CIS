@@ -171,8 +171,10 @@ function OnClickBtnDropdownMenu(elementoClicado) {
 }
 
 function AdicionarFuncoesOnClikParaOperacoes() {
+
     $('.lnkAprovar').on('click', function () {
-        OnClickAprovarIncidente($(this));
+        var sTipo = $(this).attr("data-tipo");
+        OnClickAprovarIncidente($(this), sTipo);
     });
 
     $('.lnkAssumir').on('click', function () {
@@ -227,6 +229,12 @@ function AdicionarFuncoesOnClikParaOperacoes() {
         e.preventDefault();
 
         OnClickExcluirArquivo($(this));
+    });
+
+    $('.lnkExcluirArquivoVeiculo').on('click', function (e) {
+        e.preventDefault();
+
+        OnClickExcluirArquivoVeiculo($(this));
     });
 
     $('.lnkDownloadTodosArquivos').on('click', function (e) {
@@ -285,7 +293,6 @@ function AdicionarFuncoesOnClikParaOperacoes() {
         OnClickEditarCAT($(this));
     });
 
-
 }
 
 function AtualizarTelasDetalhes() {
@@ -319,6 +326,10 @@ function EstaNaPesquisaIncidente() {
 
 function EstaNoModalVisualizarDetalhesIncidente() {
     return ($('#modalDetalhesIncidente').data('bs.modal') || { isShown: false }).isShown;
+}
+
+function EstaNoModalVisualizarDetalhesIncidenteVeiculo() {
+    return ($('#modalDetalhesIncidenteVeiculo').data('bs.modal') || { isShown: false }).isShown;
 }
 
 function InitDropZoneSingle(elementoClicado) {
@@ -420,8 +431,15 @@ function InitDropZoneSingle(elementoClicado) {
 
                     if ($('#formVisualizarDetalhes').length !== 0)
                         $('#formVisualizarDetalhes').submit();
-                    else
-                        VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
+                    else {
+                        if ($("#modalDetalhesIncidenteVeiculo").css("display") == "block") {
+                            VisualizarDetalhesIncidenteVeiculo($('#modalDetalhesIncidenteVeiculoCorpo'));
+                        }
+                        else {
+                            VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
+                        }                        
+                    }
+                        
                 }
             }
             else {
@@ -512,6 +530,50 @@ function OnClickExcluirArquivo(origemElemento) {
 
     ExibirMensagemDeConfirmacaoSimples(msg, titulo, excluir, classeBotao);
 }
+
+function OnClickExcluirArquivoVeiculo(origemElemento) {
+    var excluir = function () {
+        $('#detalhesIncidenteVeiculoLoadingTexto').html('...Excluindo arquivo');
+        $('#detalhesIncidenteVeiculoLoading').show();
+
+        $('#modalDetalhesIncidenteVeiculoCorpoLoadingTexto').html('...Excluindo arquivo');
+        $('#modalDetalhesIncidenteVeiculoCorpoLoading').show();
+
+        BloquearDiv("detalhesIncidente");
+
+        $.ajax({
+            method: "POST",
+            url: "/Arquivo/Excluir",
+            data: { ukArquivo: origemElemento.closest("[data-uniquekey]").data("uniquekey") },
+            success: function (content) {
+                $('#detalhesIncidenteLoading').hide();
+                $('#modalDetalhesIncidenteVeiculoCorpoLoading').hide();
+
+                DesbloquearDiv("detalhesIncidente");
+
+                if (content.erro) {
+                    ExibirMensagemGritter('Oops!', content.erro, 'gritter-error');
+                }
+                else {
+                    if ($('#formVisualizarDetalhes').length !== 0) {
+                        $('#conteudoDetalhesIncidente').html('');
+                        $('#detalhesIncidenteVeiculoLoadingTexto').html('...Carregando dados do documento');
+                        $('#formVisualizarDetalhes').submit();
+                    }
+                    else
+                        VisualizarDetalhesIncidenteVeiculo($('#modalDetalhesIncidenteVeiculoCorpo'));
+                }
+            }
+        });
+    }
+
+    var msg = "Você está excluindo este arquivo.";
+    var classeBotao = "btn-danger";
+    var titulo = "Exclusão de Arquivo";
+
+    ExibirMensagemDeConfirmacaoSimples(msg, titulo, excluir, classeBotao);
+}
+
 
 function OnClickDownloadTodosArquivos(origemElemento) {
     $('#detalhesIncidenteLoadingTexto').html('...Gerando pacote zip dos arquivos');

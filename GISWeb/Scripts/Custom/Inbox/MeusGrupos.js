@@ -79,15 +79,15 @@ function AtualizarIncidentes() {
 
 function AtualizarIncidentesVeiculos() {
 
-    alert("Em construção...");
+    alert("a");
 
     $("#result_incidente").html("");
     $(".LoadingLayout").show();
 
-    if (EstaNoModalVisualizarDetalhesIncidente()) {
-        $("#modalDetalhesIncidenteCorpoLoading").show();
-        $('#modalDetalhesIncidenteCorpoLoadingTexto').html('...Atualizando tela');
-        BloquearDiv("modalDetalhesIncidente");
+    if (EstaNoModalVisualizarDetalhesIncidenteVeiculo()) {
+        $("#modalDetalhesIncidenteVeiculoCorpoLoading").show();
+        $('#modalDetalhesIncidenteVeiculoCorpoLoadingTexto').html('...Atualizando tela');
+        BloquearDiv("modalDetalhesIncidenteVeiculo");
     }
     else {
         $('.page-content-area').ace_ajax('startLoading');
@@ -96,13 +96,13 @@ function AtualizarIncidentesVeiculos() {
     $.ajax({
         method: "POST",
         url: "/Inbox/CarregarInboxGrupos",
-        data: { tab: "Incidentes" },
+        data: { tab: "IncidentesVeiculos" },
         error: function (erro) {
             $(".LoadingLayout").hide();
             $('.page-content-area').ace_ajax('stopLoading', true);
 
-            $("#modalDetalhesIncidenteCorpoLoading").hide();
-            $('#modalDetalhesIncidenteCorpoLoadingTexto').html('');
+            $("#modalDetalhesIncidenteVeiculoCorpoLoading").hide();
+            $('#modalDetalhesIncidenteVeiculoCorpoLoadingTexto').html('');
             DesbloquearDiv("modalDetalhesIncidente");
 
             ExibirMensagemGritter('Oops! Erro inesperado', erro.responseText, 'gritter-error');
@@ -111,23 +111,23 @@ function AtualizarIncidentesVeiculos() {
             $(".LoadingLayout").hide();
             $('.page-content-area').ace_ajax('stopLoading', true);
 
-            $("#modalDetalhesIncidenteCorpoLoading").hide();
-            $('#modalDetalhesIncidenteCorpoLoadingTexto').html('');
-            DesbloquearDiv("modalDetalhesIncidente");
+            $("#modalDetalhesIncidenteVeiculoCorpoLoading").hide();
+            $('#modalDetalhesIncidenteVeiculoCorpoLoadingTexto').html('');
+            DesbloquearDiv("modalDetalhesIncidenteVeiculo");
 
             if (content.resultado != null && content.resultado != undefined) {
                 TratarResultadoJSON(content.resultado);
             }
 
-            $("#result_incidente").html(content);
+            $("#result_incidente_veiculo").html(content);
 
-            if ($("#tableResultadoIncidentes").length > 0) {
+            if ($("#tableResultadoIncidentesVeiculos").length > 0) {
                 AplicaTooltip();
 
-                AplicajQdataTable("tableResultadoIncidentes", [null, null, null, null, null, null, null, null, { "bSortable": false }], false, 20);
+                AplicajQdataTable("tableResultadoIncidentesVeiculos", [null, null, null, null, null, null, null, null, { "bSortable": false }], false, 20);
 
                 if ($("#ObjRecemCriado").val() != "") {
-                    $('#modalDetalhesIncidente').modal('show');
+                    $('#modalDetalhesIncidenteVeiculo').modal('show');
                     var obj = $("#" + $("#ObjRecemCriado").val());
                     VisualizarDetalhesIncidente(obj);
                 }
