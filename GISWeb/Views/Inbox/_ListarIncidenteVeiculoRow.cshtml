@@ -1,6 +1,6 @@
 ﻿@model GISModel.DTO.IncidenteVeiculo.VMIncidenteVeiculo
 
-<tr data-codigo="@Model.Codigo" data-uniquekey="@Model.UniqueKey" style="font-size: 8pt; font-family: Tahoma; height: 30px; min-height: 10px;">
+<tr data-codigo="@Model.Codigo" data-uniquekey="@Model.UniqueKey" data-ukwf="@Model.UKWorkflow" data-tipo="Veiculo" style="font-size: 8pt; font-family: Tahoma; height: 30px; min-height: 10px;">
     <td style="vertical-align: middle; padding: 5px 0px 5px 5px;">
         <a id="@Model.UniqueKey" href="#" title="Visualizar informações" class="CustomTooltip lnkAbrirDocumento" onclick="VisualizarDetalhesIncidenteVeiculo(this); return false;" style="text-decoration: none;" data-target="#modalDetalhesIncidenteVeiculo" data-toggle="modal" data-backdrop="static" data-keyboard="false">
             <span style="color: #777; font-weight: bold;">
@@ -30,7 +30,7 @@
     </td>
 
     <td style="vertical-align: middle; padding: 0px; text-align: center;">
-        @Model.Status
+        @Model.StatusWF
     </td>
 
     <td class="hidden-800 hidden-480" style="vertical-align: middle; padding: 0px; text-align: center;">

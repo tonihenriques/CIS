@@ -110,7 +110,7 @@ function AtualizarIncidentesVeiculos() {
         error: function (erro) {
             $(".LoadingLayout").hide();
             $('.page-content-area').ace_ajax('stopLoading', true);
-            ExibirMensagemGritter('Oops! Erro inesperado', erro.responseText, 'gritter-error')
+            ExibirMensagemGritter('Oops! Erro inesperado', erro.responseText, 'gritter-error');
         },
         success: function (content) {
             $(".LoadingLayout").hide();
@@ -136,7 +136,7 @@ function AtualizarIncidentesVeiculos() {
                 $('.btnDropdownMenu').off("click").on('click', function () {
                     $(this).closest('tr').css({ 'background-color': '#dff0d8' });
 
-                    OnClickBtnDropdownMenu($(this));
+                    OnClickBtnDropdownMenuVeiculo($(this));
                 });
             }
 

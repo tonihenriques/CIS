@@ -1,5 +1,5 @@
 ﻿
-function OnClickAprovarIncidente(origemElemento, pTipo) {
+function OnClickAprovarIncidente(origemElemento, pTipo, pWF) {
     $('#modalAprovarX').show();
     $('#modalAprovarFechar').removeClass('disabled');
     $('#modalAprovarFechar').removeAttr('disabled', 'disabled');
@@ -14,7 +14,7 @@ function OnClickAprovarIncidente(origemElemento, pTipo) {
     $.ajax({
         method: 'GET',
         url: '/Inbox/AprovarIncidente',
-        data: { uk: ficha, tipo: pTipo },
+        data: { uk: ficha, tipo: pTipo, ukwf: pWF },
         error: function (erro) {
             $('#modalAprovar').modal('hide');
             ExibirMensagemGritter('Oops!', erro.responseText, 'gritter-error');
@@ -71,7 +71,6 @@ function OnSuccessAprovar(content) {
     ExibirMensagemGritterTodos(content, "Ocorreu algum problema não identificado ao aprovar o documento.");
 
     //AtualizarTelasDetalhes();
-    
     $("#modalDetalhesIncidente").modal("hide");
     $("#modalDetalhesIncidenteVeiculo").modal("hide");
 
@@ -87,7 +86,7 @@ function OnSuccessAprovar(content) {
 }
 
 
-function OnClickAssumirIncidente(origemElemento) {
+function OnClickAssumirIncidente(origemElemento, pTipo, pWF) {
     $('#modalAssumirX').show();
     $('#modalAssumirFechar').removeClass('disabled');
     $('#modalAssumirFechar').removeAttr('disabled', 'disabled');
@@ -102,7 +101,7 @@ function OnClickAssumirIncidente(origemElemento) {
     $.ajax({
         method: 'GET',
         url: '/Inbox/Assumir',
-        data: { uk: ficha },
+        data: { uk: ficha, tipo: pTipo, ukwf: pWF },
         error: function (erro) {
             $('#modalAssumir').modal('hide');
             ExibirMensagemGritter('Oops!', erro.responseText, 'gritter-error');
@@ -167,7 +166,7 @@ function OnSuccessAssumir(content) {
 
 
 
-function OnClickRejeitarIncidente(origemElemento) {
+function OnClickRejeitarIncidente(origemElemento, pTipo, pWF) {
     $('#modalRejeitarX').show();
     $('#modalRejeitarFechar').removeClass('disabled');
     $('#modalRejeitarFechar').removeAttr('disabled', 'disabled');
@@ -182,7 +181,7 @@ function OnClickRejeitarIncidente(origemElemento) {
     $.ajax({
         method: 'GET',
         url: '/Inbox/RejeitarIncidente',
-        data: { uk: ficha },
+        data: { uk: ficha, tipo: pTipo, ukwf: pWF },
         error: function (erro) {
             $('#modalRejeitar').modal('hide');
             ExibirMensagemGritter('Oops!', erro.responseText, 'gritter-error');
@@ -239,6 +238,7 @@ function OnSuccessRejeitar(content) {
 
     //AtualizarTelasDetalhes();
     $("#modalDetalhesIncidente").modal("hide");
+    $("#modalDetalhesIncidenteVeiculo").modal("hide");
 
     if ($(".msgRetornoExterno .alert").length > 0) {
         $(".msgRetornoExterno .alert").hide();

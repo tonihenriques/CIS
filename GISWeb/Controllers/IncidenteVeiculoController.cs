@@ -7,6 +7,7 @@ using GISModel.DTO.Shared;
 using GISModel.Entidades;
 using GISModel.Entidades.OBJ;
 using GISModel.Entidades.OBJ.Tabelas;
+using GISModel.Enums;
 using GISWeb.Infraestrutura.Filters;
 using GISWeb.Infraestrutura.Provider.Abstract;
 using Ninject;
@@ -27,26 +28,29 @@ namespace GISWeb.Controllers
 
         #region Inject 
 
-        [Inject]
-        public IArquivoBusiness ArquivoBusiness { get; set; }
+            [Inject]
+            public IArquivoBusiness ArquivoBusiness { get; set; }
 
-        [Inject]
-        public IESocialBusiness ESocialBusiness { get; set; }
+            [Inject]
+            public IESocialBusiness ESocialBusiness { get; set; }
 
-        [Inject]
-        public IBaseBusiness<Municipio> MunicipioBusiness { get; set; }
+            [Inject]
+            public IBaseBusiness<Municipio> MunicipioBusiness { get; set; }
 
-        [Inject]
-        public IDepartamentoBusiness DepartamentoBusiness { get; set; }
+            [Inject]
+            public IDepartamentoBusiness DepartamentoBusiness { get; set; }
 
-        [Inject]
-        public IIncidenteVeiculoBusiness IncidenteVeiculoBusiness { get; set; }
+            [Inject]
+            public IIncidenteVeiculoBusiness IncidenteVeiculoBusiness { get; set; }
 
-        [Inject]
-        public IOperacaoBusiness OperacaoBusiness { get; set; }
+            [Inject]
+            public IOperacaoBusiness OperacaoBusiness { get; set; }
 
-        [Inject]
-        public ICustomAuthorizationProvider CustomAuthorizationProvider { get; set; }
+            [Inject]
+            public ICustomAuthorizationProvider CustomAuthorizationProvider { get; set; }
+
+            [Inject]
+            public IBaseBusiness<Workflow> WorkflowBusiness { get; set; }
 
         #endregion
 
@@ -71,14 +75,25 @@ namespace GISWeb.Controllers
                 try
                 {
                     entidade.UniqueKey = Guid.NewGuid().ToString();
-
                     entidade.UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
-                    entidade.Status = "Em Edição";
-                    entidade.Responsavel = entidade.UsuarioInclusao;
+                    entidade.Status = StatusIncidente.Em_andamento;
                     entidade.Codigo = "IV-" + DateTime.Now.Year.ToString() + "-" + IncidenteVeiculoBusiness.GetNextNumber("IncidenteVeiculo", "select max(SUBSTRING(codigo, 9, 6)) from objincidenteveiculo").ToString().PadLeft(6, '0');
-                    entidade.StatusWF = "RS";
                     entidade.DataAtualizacao = DateTime.Now;
+
                     IncidenteVeiculoBusiness.Inserir(entidade);
+
+
+
+                    Workflow objWF = new Workflow();
+                    objWF.UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                    objWF.MajorVersion = 1;
+                    objWF.MinorVersion = 1;
+                    objWF.Nome = "Em Edição";
+                    objWF.Status = "RS";
+                    objWF.UKObject = entidade.UniqueKey;
+                    objWF.Responsavel = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+
+                    WorkflowBusiness.Inserir(objWF);
 
                     Severino.GravaCookie("MensagemSucesso", "O incidente com veículo foi cadastrado com sucesso.", 10);
                     Severino.GravaCookie("FuncaoInboxAChamar", "IncidentesVeiculos", 10);
@@ -120,7 +135,21 @@ namespace GISWeb.Controllers
                     List<IncidenteVeiculo> lista = IncidenteVeiculoBusiness.Consulta.Where(a => a.UniqueKey.Equals(uniquekey) && string.IsNullOrEmpty(a.UsuarioExclusao)).ToList();
                     IncidenteVeiculo registro = lista[0];
 
+                    registro.PassoAtual = WorkflowBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UKObject.Equals(registro.UniqueKey));
+
+                   
                     VMIncidenteVeiculo vm = new VMIncidenteVeiculo();
+
+                    if (registro.PassoAtual != null)
+                    {
+                        vm.UKWorkflow = registro.PassoAtual.UniqueKey;
+                        vm.StatusWF = registro.PassoAtual.Nome;
+                    }
+                    else
+                    {
+                        vm.StatusWF = registro.Status.ToString();
+                    }
+
                     vm.UniqueKey = registro.UniqueKey;
                     vm.Codigo = registro.Codigo;
                     vm.Status = registro.Status;
@@ -198,6 +227,35 @@ namespace GISWeb.Controllers
                 }
             }
 
+        }
+
+        [RestritoAAjax]
+        [HttpPost]
+        public ActionResult MontarMenuDeOperacoes(string uk)
+        {
+            try
+            {
+                IncidenteVeiculo fichaPersistida = IncidenteVeiculoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(uk));
+                if (fichaPersistida == null)
+                    throw new Exception("As informações fornecidas para montagem do menu de operações não são válidas.");
+
+                Workflow wfPersistida = WorkflowBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UKObject.Equals(fichaPersistida.UniqueKey));
+                if (wfPersistida == null)
+                {
+                    //Criar método
+                }
+                else
+                {
+                    fichaPersistida.Operacoes = OperacaoBusiness.RecuperarTodasPermitidas(CustomAuthorizationProvider.UsuarioAutenticado.Login, CustomAuthorizationProvider.UsuarioAutenticado.Permissoes, wfPersistida);
+                }
+
+                return PartialView("_MenuOperacoes", fichaPersistida);
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 500;
+                return Content(ex.Message, "text/html");
+            }
         }
 
     }

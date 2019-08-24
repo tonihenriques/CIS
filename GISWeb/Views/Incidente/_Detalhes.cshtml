@@ -67,7 +67,7 @@ else
 
         var classeTitulos = string.Empty;
 
-        if (Model.Status.Contains("Concluído"))
+        if (Model.Status == StatusIncidente.Concluido)
         {
             classeTitulos = "green";
         }
@@ -76,7 +76,7 @@ else
             classeTitulos = "blue";
         }
 
-        <div id="detalhesIncidente" data-uniquekey="@Model.UniqueKey" data-codigo="@Model.Codigo">
+        <div id="detalhesIncidente" data-uniquekey="@Model.UniqueKey" data-codigo="@Model.Codigo" data-ukwf="@Model.UKWorkflow" data-tipo="Pessoa">
             <div class="widget-container-col">
                 <div class="widget-box transparent">
                     <div class="widget-header" style="border-bottom: 1px solid #ddd">
@@ -94,7 +94,7 @@ else
 
                                 @if (Model.Operacoes.Contains(Operacao.Aprovar))
                                 {
-                                    <button class="btn btn-xs btn-success lnkAprovar" data-tipo="Pessoa" data-target="#modalAprovar" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                    <button class="btn btn-xs btn-success lnkAprovar" data-target="#modalAprovar" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                         <i class="ace-icon fa fa-check"></i>
                                         Avançar
                                     </button>
@@ -166,23 +166,23 @@ else
                                             @{
                                                 var revStateColor = string.Empty;
 
-                                                if (Model.Status.Contains("Em Edição"))
+                                                if (Model.StatusWF.Contains("Em Edição"))
                                                 {
                                                     revStateColor = "#478FCA";
                                                 }
-                                                else if (Model.Status.Contains("Em Análise"))
+                                                else if (Model.StatusWF.Contains("Em Análise"))
                                                 {
                                                     revStateColor = "#a0a0a0";
                                                 }
-                                                else if (Model.Status.Contains("Em Processamento"))
+                                                else if (Model.StatusWF.Contains("Em Processamento"))
                                                 {
                                                     revStateColor = "#ffb752";
                                                 }
-                                                else if (Model.Status.Contains("Em Aprovação"))
+                                                else if (Model.StatusWF.Contains("Em Aprovação"))
                                                 {
                                                     revStateColor = "#a0a0a0";
                                                 }
-                                                else if (Model.Status.Contains("Concluído"))
+                                                else if (Model.StatusWF.Contains("Concluído"))
                                                 {
                                                     revStateColor = "#87B87F";
                                                 }
@@ -192,7 +192,7 @@ else
 
                                             <div class="profile-info-value center" style="background-color: @revStateColor; color: #FFFFFF; font-weight: bold; margin-left: 0px;">
                                                 <span style="color: #FFFFFF; font-weight: 600;">
-                                                    @Model.Status
+                                                    @Model.StatusWF
                                                 </span>
                                             </div>
                                         </div>
@@ -633,7 +633,7 @@ else
                                                                     </span>
                                                                 }
 
-                                                                @if (!Model.Status.Contains("Em Edição"))
+                                                                @if (!Model.StatusWF.Contains("Em Edição"))
                                                                 {
                                                                     if (string.IsNullOrEmpty(iEmpregado.UKCAT))
                                                                     {
@@ -659,7 +659,7 @@ else
                                                                     }
                                                                 }
 
-                                                                @if (!Model.Status.Contains("Em Edição") && !Model.Status.Contains("Em Análise"))
+                                                                @if (!Model.StatusWF.Contains("Em Edição") && !Model.StatusWF.Contains("Em Análise"))
                                                                 {
                                                                     if (string.IsNullOrEmpty(iEmpregado.UKCodificacao))
                                                                     {
@@ -748,7 +748,7 @@ else
                                                                     </span>
                                                                 }
 
-                                                                @if (!Model.Status.Contains("Em Edição"))
+                                                                @if (!Model.StatusWF.Contains("Em Edição"))
                                                                 {
                                                                     if (string.IsNullOrEmpty(iEmpregado.UKCAT))
                                                                     {
@@ -773,7 +773,7 @@ else
                                                                     }
                                                                 }
 
-                                                                @if (!Model.Status.Contains("Em Edição") && !Model.Status.Contains("Em Análise"))
+                                                                @if (!Model.StatusWF.Contains("Em Edição") && !Model.StatusWF.Contains("Em Análise"))
                                                                 {
                                                                     if (string.IsNullOrEmpty(iEmpregado.UKCodificacao))
                                                                     {

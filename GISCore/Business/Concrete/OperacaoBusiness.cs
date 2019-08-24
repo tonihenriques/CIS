@@ -6,8 +6,6 @@ using GISModel.Entidades.OBJ;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GISCore.Business.Concrete
 {
@@ -20,7 +18,7 @@ namespace GISCore.Business.Concrete
 
             foreach (Incidente entidade in entidades)
             {
-                if (entidade.Responsavel.ToUpper().Equals(usuarioLogado.ToUpper()))
+                if (entidade.PassoAtual.Responsavel.ToUpper().Equals(usuarioLogado.ToUpper()))
                 {
                     if (!operacoes.Contains(GISModel.Enums.Operacao.Aprovar))
                         operacoes.Add(GISModel.Enums.Operacao.Aprovar);
@@ -31,7 +29,7 @@ namespace GISCore.Business.Concrete
                     if (!operacoes.Contains(GISModel.Enums.Operacao.HistoricoWorkflow))
                         operacoes.Add(GISModel.Enums.Operacao.HistoricoWorkflow);
 
-                    if (!entidade.Status.ToUpper().Equals("EM APROVAÇÃO"))
+                    if (!entidade.PassoAtual.Nome.ToUpper().Equals("EM APROVAÇÃO"))
                     {
                         if (!operacoes.Contains(GISModel.Enums.Operacao.AnexarArquivos))
                             operacoes.Add(GISModel.Enums.Operacao.AnexarArquivos);
@@ -49,7 +47,7 @@ namespace GISCore.Business.Concrete
                             operacoes.Add(GISModel.Enums.Operacao.IncluirEnvolvidos);
                     }
 
-                    if (entidade.Status.ToUpper().Equals("EM EDIÇÃO"))
+                    if (entidade.PassoAtual.Nome.ToUpper().Equals("EM EDIÇÃO"))
                     {
                         if (!operacoes.Contains(GISModel.Enums.Operacao.Excluir))
                             operacoes.Add(GISModel.Enums.Operacao.Excluir);
@@ -62,7 +60,7 @@ namespace GISCore.Business.Concrete
                 }
                 else
                 {
-                    if (permissoes.Where(a => a.Perfil.Equals(entidade.Responsavel)).Count() > 0)
+                    if (permissoes.Where(a => a.Perfil.Equals(entidade.PassoAtual.Responsavel)).Count() > 0)
                     {
                         if (!operacoes.Contains(GISModel.Enums.Operacao.Assumir))
                             operacoes.Add(GISModel.Enums.Operacao.Assumir);
@@ -77,14 +75,13 @@ namespace GISCore.Business.Concrete
 
         }
 
-
         public OperacaoCollection RecuperarTodasPermitidas(string usuarioLogado, List<VMPermissao> permissoes, List<IncidenteVeiculo> entidades)
         {
             var operacoes = new OperacaoCollection();
 
             foreach (IncidenteVeiculo entidade in entidades)
             {
-                if (entidade.Responsavel.ToUpper().Equals(usuarioLogado.ToUpper()))
+                if (entidade.PassoAtual.Responsavel.ToUpper().Equals(usuarioLogado.ToUpper()))
                 {
                     if (!operacoes.Contains(GISModel.Enums.Operacao.Aprovar))
                         operacoes.Add(GISModel.Enums.Operacao.Aprovar);
@@ -95,7 +92,7 @@ namespace GISCore.Business.Concrete
                     if (!operacoes.Contains(GISModel.Enums.Operacao.HistoricoWorkflow))
                         operacoes.Add(GISModel.Enums.Operacao.HistoricoWorkflow);
 
-                    if (!entidade.Status.ToUpper().Equals("EM APROVAÇÃO"))
+                    if (!entidade.PassoAtual.Nome.ToUpper().Equals("EM APROVAÇÃO"))
                     {
                         if (!operacoes.Contains(GISModel.Enums.Operacao.AnexarArquivos))
                             operacoes.Add(GISModel.Enums.Operacao.AnexarArquivos);
@@ -113,7 +110,7 @@ namespace GISCore.Business.Concrete
                             operacoes.Add(GISModel.Enums.Operacao.IncluirEnvolvidos);
                     }
 
-                    if (entidade.Status.ToUpper().Equals("EM EDIÇÃO"))
+                    if (entidade.PassoAtual.Nome.ToUpper().Equals("EM EDIÇÃO"))
                     {
                         if (!operacoes.Contains(GISModel.Enums.Operacao.Excluir))
                             operacoes.Add(GISModel.Enums.Operacao.Excluir);
@@ -126,7 +123,7 @@ namespace GISCore.Business.Concrete
                 }
                 else
                 {
-                    if (permissoes.Where(a => a.Perfil.Equals(entidade.Responsavel)).Count() > 0)
+                    if (permissoes.Where(a => a.Perfil.Equals(entidade.PassoAtual.Responsavel)).Count() > 0)
                     {
                         if (!operacoes.Contains(GISModel.Enums.Operacao.Assumir))
                             operacoes.Add(GISModel.Enums.Operacao.Assumir);
@@ -143,18 +140,81 @@ namespace GISCore.Business.Concrete
 
 
 
-        public OperacaoCollection RecuperarTodasPermitidas(string usuarioLogado, List<VMPermissao> permissoes, Incidente entidade)
+        public OperacaoCollection RecuperarTodasPermitidas(string usuarioLogado, List<VMPermissao> permissoes, List<Workflow> entidades)
         {
             var operacoes = new OperacaoCollection();
 
-            if (entidade.Responsavel.ToUpper().Equals(usuarioLogado.ToUpper()))
+            foreach (Workflow PassoAtual in entidades)
+            {
+                if (PassoAtual.Responsavel.ToUpper().Equals(usuarioLogado.ToUpper()))
+                {
+                    if (!operacoes.Contains(GISModel.Enums.Operacao.Aprovar))
+                        operacoes.Add(GISModel.Enums.Operacao.Aprovar);
+
+                    if (!operacoes.Contains(GISModel.Enums.Operacao.AlterarDados))
+                        operacoes.Add(GISModel.Enums.Operacao.AlterarDados);
+
+                    if (!operacoes.Contains(GISModel.Enums.Operacao.HistoricoWorkflow))
+                        operacoes.Add(GISModel.Enums.Operacao.HistoricoWorkflow);
+
+                    if (!PassoAtual.Nome.ToUpper().Equals("EM APROVAÇÃO"))
+                    {
+                        if (!operacoes.Contains(GISModel.Enums.Operacao.AnexarArquivos))
+                            operacoes.Add(GISModel.Enums.Operacao.AnexarArquivos);
+
+                        if (!operacoes.Contains(GISModel.Enums.Operacao.ExcluirArquivos))
+                            operacoes.Add(GISModel.Enums.Operacao.ExcluirArquivos);
+
+                        if (!operacoes.Contains(GISModel.Enums.Operacao.IncluirCAT))
+                            operacoes.Add(GISModel.Enums.Operacao.IncluirCAT);
+
+                        if (!operacoes.Contains(GISModel.Enums.Operacao.IncluirCodificacao))
+                            operacoes.Add(GISModel.Enums.Operacao.IncluirCodificacao);
+
+                        if (!operacoes.Contains(GISModel.Enums.Operacao.IncluirEnvolvidos))
+                            operacoes.Add(GISModel.Enums.Operacao.IncluirEnvolvidos);
+                    }
+
+                    if (PassoAtual.Nome.ToUpper().Equals("EM EDIÇÃO"))
+                    {
+                        if (!operacoes.Contains(GISModel.Enums.Operacao.Excluir))
+                            operacoes.Add(GISModel.Enums.Operacao.Excluir);
+                    }
+                    else
+                    {
+                        if (!operacoes.Contains(GISModel.Enums.Operacao.Reprovar))
+                            operacoes.Add(GISModel.Enums.Operacao.Reprovar);
+                    }
+                }
+                else
+                {
+                    if (permissoes.Where(a => a.Perfil.Equals(PassoAtual.Responsavel)).Count() > 0)
+                    {
+                        if (!operacoes.Contains(GISModel.Enums.Operacao.Assumir))
+                            operacoes.Add(GISModel.Enums.Operacao.Assumir);
+                    }
+
+                    if (!operacoes.Contains(GISModel.Enums.Operacao.HistoricoWorkflow))
+                        operacoes.Add(GISModel.Enums.Operacao.HistoricoWorkflow);
+                }
+            }
+
+            return operacoes;
+
+        }
+
+        public OperacaoCollection RecuperarTodasPermitidas(string usuarioLogado, List<VMPermissao> permissoes, Workflow PassoAtual)
+        {
+            var operacoes = new OperacaoCollection();
+
+            if (PassoAtual.Responsavel.ToUpper().Equals(usuarioLogado.ToUpper()))
             {
                 operacoes.Add(GISModel.Enums.Operacao.Aprovar);
                 //operacoes.Add(GISModel.Enums.Operacao.Encaminhar);
                 operacoes.Add(GISModel.Enums.Operacao.AlterarDados);
                 operacoes.Add(GISModel.Enums.Operacao.HistoricoWorkflow);
 
-                if (!entidade.Status.ToUpper().Equals("EM APROVAÇÃO"))
+                if (!PassoAtual.Nome.ToUpper().Equals("EM APROVAÇÃO"))
                 {
                     operacoes.Add(GISModel.Enums.Operacao.AnexarArquivos);
                     operacoes.Add(GISModel.Enums.Operacao.ExcluirArquivos);
@@ -162,8 +222,8 @@ namespace GISCore.Business.Concrete
                     operacoes.Add(GISModel.Enums.Operacao.IncluirCodificacao);
                     operacoes.Add(GISModel.Enums.Operacao.IncluirEnvolvidos);
                 }
-                
-                if (entidade.Status.ToUpper().Equals("EM EDIÇÃO"))
+
+                if (PassoAtual.Nome.ToUpper().Equals("EM EDIÇÃO"))
                 {
                     operacoes.Add(GISModel.Enums.Operacao.Excluir);
                 }
@@ -172,9 +232,9 @@ namespace GISCore.Business.Concrete
                     operacoes.Add(GISModel.Enums.Operacao.Reprovar);
                 }
             }
-            else 
+            else
             {
-                if (permissoes.Where(a => a.Perfil.Equals(entidade.Responsavel)).Count() > 0)
+                if (permissoes.Where(a => a.Perfil.Equals(PassoAtual.Responsavel)).Count() > 0)
                 {
                     operacoes.Add(GISModel.Enums.Operacao.Assumir);
                 }

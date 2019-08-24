@@ -87,6 +87,8 @@ namespace GISCore.Repository.Configuration
 
         public DbSet<Codificacao> Codificacao { get; set; }
 
+        public DbSet<Workflow> Workflow { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
 
         {

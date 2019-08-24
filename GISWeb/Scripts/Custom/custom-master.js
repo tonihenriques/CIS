@@ -170,19 +170,59 @@ function OnClickBtnDropdownMenu(elementoClicado) {
     });
 }
 
+function OnClickBtnDropdownMenuVeiculo(elementoClicado) {
+
+    var ficha = elementoClicado.closest('[data-uniquekey]').attr('data-uniquekey');
+
+    var loading = '' +
+        '<li class="center">' +
+        '<img src="' + baseApplicationURL + '/Images/slack_loading.gif" width="32px" />' +
+        '</li>';
+
+    $("#menuOperacoes-" + ficha).html(loading);
+
+    $.ajax({
+        method: 'POST',
+        url: '/IncidenteVeiculo/MontarMenuDeOperacoes',
+        data: { uk: ficha },
+        error: function (erro) {
+            $('#menuOperacoes-' + ficha.replace("/", "")).html("<li class=\"action-buttons\">" +
+                "<a>" +
+                "<span class=\"lnkSemOperacao orange2 CustomTooltip\" title=\"Nenhuma operação disponível\">" +
+                "    <i class=\"ace-icon fa fa-exclamation-triangle bigger-150\"></i>" +
+                "</span>" +
+                "</a>" +
+                "</li>");
+            ExibirMensagemGritter('Oops!', erro.responseText, 'gritter-error')
+        },
+        success: function (content) {
+            $('#menuOperacoes-' + ficha.replace("/", "")).html(content);
+            AplicaTooltip();
+            AdicionarFuncoesOnClikParaOperacoes();
+        }
+    });
+}
+
+
+
 function AdicionarFuncoesOnClikParaOperacoes() {
 
     $('.lnkAprovar').on('click', function () {
-        var sTipo = $(this).attr("data-tipo");
-        OnClickAprovarIncidente($(this), sTipo);
+        var sTipo = $(this).closest("[data-tipo]").attr("data-tipo");
+        var sWF = $(this).closest("[data-ukwf]").attr("data-ukwf");
+        OnClickAprovarIncidente($(this), sTipo, sWF);
     });
 
     $('.lnkAssumir').on('click', function () {
-        OnClickAssumirIncidente($(this));
+        var sTipo = $(this).closest("[data-tipo]").attr("data-tipo");
+        var sWF = $(this).closest("[data-ukwf]").attr("data-ukwf");
+        OnClickAssumirIncidente($(this), sTipo, sWF);
     });
 
     $('.lnkReprovar').on('click', function () {
-        OnClickRejeitarIncidente($(this));
+        var sTipo = $(this).closest("[data-tipo]").attr("data-tipo");
+        var sWF = $(this).closest("[data-ukwf]").attr("data-ukwf");
+        OnClickRejeitarIncidente($(this), sTipo, sWF);
     });
 
     $('.lnkUploadArquivo').off("click").on('click', function (e) {
