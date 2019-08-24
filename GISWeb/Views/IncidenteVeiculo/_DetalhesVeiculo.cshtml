@@ -1,7 +1,6 @@
 ﻿@using GISModel.DTO.IncidenteVeiculo
 @using GISModel.Entidades
 @using GISModel.Entidades.OBJ
-@using GISModel.DTO.Envolvidos
 @using GISModel.Enums
 
 
@@ -67,7 +66,7 @@ else
 
         var classeTitulos = string.Empty;
 
-        if (Model.Status.Contains("Concluído"))
+        if (Model.Status == StatusIncidente.Concluido)
         {
             classeTitulos = "green";
         }
@@ -76,7 +75,7 @@ else
             classeTitulos = "blue";
         }
 
-        <div id="detalhesIncidente" data-uniquekey="@Model.UniqueKey" data-codigo="@Model.Codigo">
+        <div id="detalhesIncidente" data-uniquekey="@Model.UniqueKey" data-codigo="@Model.Codigo" data-ukwf="@Model.UKWorkflow" data-tipo="Veiculo">
             <div class="widget-container-col">
                 <div class="widget-box transparent">
                     <div class="widget-header" style="border-bottom: 1px solid #ddd">
@@ -94,7 +93,7 @@ else
 
                                 @if (Model.Operacoes.Contains(Operacao.Aprovar))
                                 {
-                                    <button class="btn btn-xs btn-success lnkAprovar" data-tipo="Veiculo" data-target="#modalAprovar" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                    <button class="btn btn-xs btn-success lnkAprovar" data-target="#modalAprovar" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                         <i class="ace-icon fa fa-check"></i>
                                         Aprovar
                                     </button>
@@ -166,23 +165,23 @@ else
                                             @{
                                                 var revStateColor = string.Empty;
 
-                                                if (Model.Status.Contains("Em Edição"))
+                                                if (Model.StatusWF.Contains("Em Edição"))
                                                 {
                                                     revStateColor = "#478FCA";
                                                 }
-                                                else if (Model.Status.Contains("Em Análise"))
+                                                else if (Model.StatusWF.Contains("Em Análise"))
                                                 {
                                                     revStateColor = "#a0a0a0";
                                                 }
-                                                else if (Model.Status.Contains("Em Processamento"))
+                                                else if (Model.StatusWF.Contains("Em Processamento"))
                                                 {
                                                     revStateColor = "#ffb752";
                                                 }
-                                                else if (Model.Status.Contains("Em Aprovação"))
+                                                else if (Model.StatusWF.Contains("Em Aprovação"))
                                                 {
                                                     revStateColor = "#a0a0a0";
                                                 }
-                                                else if (Model.Status.Contains("Concluído"))
+                                                else if (Model.StatusWF.Contains("Concluído"))
                                                 {
                                                     revStateColor = "#87B87F";
                                                 }
@@ -192,7 +191,7 @@ else
 
                                             <div class="profile-info-value center" style="background-color: @revStateColor; color: #FFFFFF; font-weight: bold; margin-left: 0px;">
                                                 <span style="color: #FFFFFF; font-weight: 600;">
-                                                    @Model.Status
+                                                    @Model.StatusWF
                                                 </span>
                                             </div>
                                         </div>

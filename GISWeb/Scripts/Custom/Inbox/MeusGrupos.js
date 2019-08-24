@@ -13,7 +13,15 @@
 
 function AtualizarIncidentes() {
 
+    $(".tabMenuIncidente").addClass("active");
+    $(".tabMenuIncidenteVeiculo").removeClass("active");
+
+    $("#result_incidente").addClass("fade");
+    $("#result_incidente").addClass("in");
+    $("#result_incidente").addClass("active");
+
     $("#result_incidente").html("");
+    $("#result_incidente_veiculo").html("");
     $(".LoadingLayout").show();
 
     if (EstaNoModalVisualizarDetalhesIncidente()) {
@@ -53,6 +61,9 @@ function AtualizarIncidentes() {
 
             $("#result_incidente").html(content);
 
+            $("#TotalIG").text($("#TotalItensIncidente").val());
+            $("#TotalIVG").text($("#TotalItensIncidenteVeiculo").val());
+
             if ($("#tableResultadoIncidentes").length > 0) {
                 AplicaTooltip();
 
@@ -79,10 +90,17 @@ function AtualizarIncidentes() {
 
 function AtualizarIncidentesVeiculos() {
 
-    alert("a");
+    $(".tabMenuIncidente").removeClass("active");
+    $(".tabMenuIncidenteVeiculo").addClass("active");
+
+    $("#result_incidente_veiculo").addClass("fade");
+    $("#result_incidente_veiculo").addClass("in");
+    $("#result_incidente_veiculo").addClass("active");
 
     $("#result_incidente").html("");
+    $("#result_incidente_veiculo").html("");
     $(".LoadingLayout").show();
+    $('.page-content-area').ace_ajax('startLoading');
 
     if (EstaNoModalVisualizarDetalhesIncidenteVeiculo()) {
         $("#modalDetalhesIncidenteVeiculoCorpoLoading").show();
@@ -100,20 +118,11 @@ function AtualizarIncidentesVeiculos() {
         error: function (erro) {
             $(".LoadingLayout").hide();
             $('.page-content-area').ace_ajax('stopLoading', true);
-
-            $("#modalDetalhesIncidenteVeiculoCorpoLoading").hide();
-            $('#modalDetalhesIncidenteVeiculoCorpoLoadingTexto').html('');
-            DesbloquearDiv("modalDetalhesIncidente");
-
             ExibirMensagemGritter('Oops! Erro inesperado', erro.responseText, 'gritter-error');
         },
         success: function (content) {
             $(".LoadingLayout").hide();
             $('.page-content-area').ace_ajax('stopLoading', true);
-
-            $("#modalDetalhesIncidenteVeiculoCorpoLoading").hide();
-            $('#modalDetalhesIncidenteVeiculoCorpoLoadingTexto').html('');
-            DesbloquearDiv("modalDetalhesIncidenteVeiculo");
 
             if (content.resultado != null && content.resultado != undefined) {
                 TratarResultadoJSON(content.resultado);
@@ -129,13 +138,13 @@ function AtualizarIncidentesVeiculos() {
                 if ($("#ObjRecemCriado").val() != "") {
                     $('#modalDetalhesIncidenteVeiculo').modal('show');
                     var obj = $("#" + $("#ObjRecemCriado").val());
-                    VisualizarDetalhesIncidente(obj);
+                    VisualizarDetalhesIncidenteVeiculo(obj);
                 }
 
                 $('.btnDropdownMenu').off("click").on('click', function () {
                     $(this).closest('tr').css({ 'background-color': '#dff0d8' });
 
-                    OnClickBtnDropdownMenu($(this));
+                    OnClickBtnDropdownMenuVeiculo($(this));
                 });
 
             }

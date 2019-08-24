@@ -412,7 +412,6 @@
     <Content Include="Views\Incidente\PesquisaEnvolvidosProprio.cshtml" />
     <Content Include="Views\Incidente\PesquisaEnvolvidosTerceiro.cshtml" />
     <Content Include="Views\IncidenteVeiculo\Novo.cshtml" />
-    <Content Include="Views\IncidenteVeiculo\_Detalhes.cshtml" />
     <Content Include="Views\Home\Dashboard.cshtml" />
     <Content Include="Views\IncidenteVeiculo\_DetalhesVeiculo.cshtml" />
     <Content Include="Views\IncidenteVeiculo\_MenuOperacoes.cshtml" />

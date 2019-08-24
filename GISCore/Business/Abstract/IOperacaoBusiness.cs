@@ -14,7 +14,12 @@ namespace GISCore.Business.Abstract
         OperacaoCollection RecuperarTodasPermitidas(string usuarioLogado, List<VMPermissao> permissoes, List<IncidenteVeiculo> entidades);
 
 
-        OperacaoCollection RecuperarTodasPermitidas(string usuarioLogado, List<VMPermissao> permissoes, Incidente entidade);
+        OperacaoCollection RecuperarTodasPermitidas(string usuarioLogado, List<VMPermissao> permissoes, List<Workflow> entidades);
+
+        OperacaoCollection RecuperarTodasPermitidas(string usuarioLogado, List<VMPermissao> permissoes, Workflow PassoAtual);
+
+
+
 
         string RecuperarProximoStatus(string statusAtual);
 

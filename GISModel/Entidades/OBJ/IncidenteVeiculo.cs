@@ -104,16 +104,11 @@ namespace GISModel.Entidades.OBJ
         public DateTime? DataAtualizacao { get; set; }
 
 
-
-        public string Status { get; set; }
-
-        public string StatusWF { get; set; }
-
-        public string Responsavel { get; set; }
-
-        public string MensagemPasso { get; set; }
+        public StatusIncidente Status { get; set; }
 
         public OperacaoCollection Operacoes { get; set; }
+
+        public Workflow PassoAtual { get; set; }
 
     }
 }

@@ -131,6 +131,9 @@ namespace GISWeb.Controllers
             [Inject]
             public IFornecedorBusiness FornecedorBusiness { get; set; }
 
+            [Inject]
+            public IBaseBusiness<Workflow> WorkflowBusiness { get; set; }
+
         #endregion
 
         public ActionResult Index()
@@ -301,14 +304,27 @@ namespace GISWeb.Controllers
                 try
                 {
                     entidade.UniqueKey = Guid.NewGuid().ToString();
-
                     entidade.UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
-                    entidade.Status = "Em Edição";
-                    entidade.Responsavel = entidade.UsuarioInclusao;
+                    entidade.Status = StatusIncidente.Em_andamento;
                     entidade.Codigo = "I-" + DateTime.Now.Year.ToString() + "-" + IncidenteBusiness.GetNextNumber("Incidente", "select max(SUBSTRING(codigo, 8, 6)) from objincidente").ToString().PadLeft(6, '0');
-                    entidade.StatusWF = "RS";
                     entidade.DataAtualizacao = DateTime.Now;
+
                     IncidenteBusiness.Inserir(entidade);
+
+
+
+                    Workflow objWF = new Workflow();
+                    objWF.UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                    objWF.MajorVersion = 1;
+                    objWF.MinorVersion = 1;
+                    objWF.Nome = "Em Edição";
+                    objWF.Status = "RS";
+                    objWF.UKObject = entidade.UniqueKey;
+                    objWF.Responsavel = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+
+                    WorkflowBusiness.Inserir(objWF);
+
+
 
                     Severino.GravaCookie("MensagemSucesso", "O incidente foi cadastrado com sucesso.", 10);
                     Severino.GravaCookie("FuncaoInboxAChamar", "Incidentes", 10);
@@ -361,8 +377,8 @@ namespace GISWeb.Controllers
                     entidade.UKDiretoria = null;
                     entidade.Codigo = obj.Codigo;
                     entidade.Status = obj.Status;
-                    entidade.StatusWF = obj.StatusWF;
-                    entidade.Responsavel = obj.Responsavel;
+                    //entidade.StatusWF = obj.StatusWF;
+                    //entidade.Responsavel = obj.Responsavel;
                     IncidenteBusiness.Inserir(entidade);
 
                     return Json(new { resultado = new RetornoJSON() { Sucesso = "Incidente " + entidade.Codigo + " atualizado com Sucesso." } });
@@ -664,7 +680,22 @@ namespace GISWeb.Controllers
                     List<Incidente> lista = IncidenteBusiness.Consulta.Where(a => a.UniqueKey.Equals(uniquekey) && string.IsNullOrEmpty(a.UsuarioExclusao)).ToList();
                     Incidente registro = lista[0];
 
+                    registro.PassoAtual = WorkflowBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UKObject.Equals(registro.UniqueKey));
+
+
                     VMIncidente vm = new VMIncidente();
+
+                    if (registro.PassoAtual != null)
+                    {
+                        vm.UKWorkflow = registro.PassoAtual.UniqueKey;
+                        vm.StatusWF = registro.PassoAtual.Nome;
+                    }
+                    else
+                    {
+                        vm.StatusWF = registro.Status.ToString();
+                    }
+
+
                     vm.UniqueKey = registro.UniqueKey;
                     vm.Codigo = registro.Codigo;
                     vm.Status = registro.Status;
@@ -678,7 +709,7 @@ namespace GISWeb.Controllers
                     if (registro.ETipoEntrada != 0)
                         vm.TipoEntrada = registro.ETipoEntrada.GetDisplayName();
 
-
+                    
                     
 
                     Municipio mun = MunicipioBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(registro.UKMunicipio));
@@ -783,7 +814,15 @@ namespace GISWeb.Controllers
                 if (fichaPersistida == null)
                     throw new Exception("As informações fornecidas para montagem do menu de operações não são válidas.");
 
-                fichaPersistida.Operacoes = OperacaoBusiness.RecuperarTodasPermitidas(CustomAuthorizationProvider.UsuarioAutenticado.Login, CustomAuthorizationProvider.UsuarioAutenticado.Permissoes, fichaPersistida);
+                List<Workflow> listaWF = WorkflowBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UKObject.Equals(fichaPersistida.UniqueKey)).ToList();
+                if (listaWF.Count == 0)
+                {
+                    //Criar método
+                }
+                else
+                {
+                    fichaPersistida.Operacoes = OperacaoBusiness.RecuperarTodasPermitidas(CustomAuthorizationProvider.UsuarioAutenticado.Login, CustomAuthorizationProvider.UsuarioAutenticado.Permissoes, listaWF);
+                }
 
                 return PartialView("_MenuOperacoes", fichaPersistida);
             }
@@ -949,10 +988,10 @@ namespace GISWeb.Controllers
                     throw new Exception("Não foi possível encontrar o incidente.");
                 }
 
-                if (objIncidente.Responsavel.Equals(CustomAuthorizationProvider.UsuarioAutenticado.Login) && !objIncidente.Status.Equals("Em Aprovação"))
-                {
-                    ViewBag.PodeEditar = true;
-                }
+                //if (objIncidente.Responsavel.Equals(CustomAuthorizationProvider.UsuarioAutenticado.Login) && !objIncidente.Status.Equals("Em Aprovação"))
+                //{
+                //    ViewBag.PodeEditar = true;
+                //}
 
                 Codificacao cod = CodificacaoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(UKCodificacao));
                 if (cod == null)
@@ -1287,10 +1326,10 @@ namespace GISWeb.Controllers
                     throw new Exception("Não foi possível encontrar o incidente.");
                 }
 
-                if (objIncidente.Responsavel.Equals(CustomAuthorizationProvider.UsuarioAutenticado.Login) && !objIncidente.Status.Equals("Em Aprovação"))
-                {
-                    ViewBag.PodeEditar = true;
-                }
+                //if (objIncidente.Responsavel.Equals(CustomAuthorizationProvider.UsuarioAutenticado.Login) && !objIncidente.Status.Equals("Em Aprovação"))
+                //{
+                //    ViewBag.PodeEditar = true;
+                //}
 
                 VMNovaCAT obj = new VMNovaCAT()
                 {
@@ -1582,12 +1621,13 @@ namespace GISWeb.Controllers
 
 
 
-                string sql = @"select top 100 UniqueKey, Codigo, DataIncidente, AcidenteFatal, AcidenteGraveIP102, 
-                                          ETipoEntrada, ETipoAcidente, Status,
+                string sql = @"select top 100 o.UniqueKey, Codigo, DataIncidente, AcidenteFatal, AcidenteGraveIP102, 
+                                          ETipoEntrada, ETipoAcidente, o.Status,
                                           (select Sigla from OBJDepartamento where UniqueKey = o.UKOrgao and UsuarioExclusao is null) as Orgao,
-                                          (select Descricao from OBJMunicipio where UniqueKey = o.UKMunicipio and UsuarioExclusao is null) as Municipio
-                           from OBJIncidente o
-                           where o.UsuarioExclusao is null " + sWhere + @"
+                                          (select Descricao from OBJMunicipio where UniqueKey = o.UKMunicipio and UsuarioExclusao is null) as Municipio,
+                                          w.status as StatusWF
+                           from OBJIncidente o, OBJWorkflow w
+                           where o.UniqueKey = w.UKObject and o.UsuarioExclusao is null and w.UsuarioExclusao is null " + sWhere + @"
                            order by Codigo";
 
                 List<VMIncidente> lista = new List<VMIncidente>();
@@ -1605,7 +1645,8 @@ namespace GISWeb.Controllers
                             ETipoAcidente = ((ETipoAcidente)Enum.Parse(typeof(ETipoAcidente), row["ETipoAcidente"].ToString(), true)).GetDisplayName(),
                             AcidenteFatal = ((int)row["ETipoAcidente"]).Equals(0) ? "Não" : "Sim",
                             AcidenteGraveIP102 = ((bool)row["AcidenteGraveIP102"]) ? "Sim" : "Não",
-                            Status = row["Status"].ToString(),
+                            Status = ((StatusIncidente)Enum.Parse(typeof(StatusIncidente), row["Status"].ToString(), true)),
+                            StatusWF = row["StatusWF"].ToString(),
                             Orgao = row["Orgao"].ToString(),
                             Municipio = row["Municipio"].ToString()
                         });
@@ -1694,9 +1735,11 @@ namespace GISWeb.Controllers
                 string sql = @"select top 100 o.UniqueKey, o.Codigo, o.DataIncidente, o.AcidenteFatal, o.AcidenteGraveIP102, 
                                           o.ETipoEntrada, o.ETipoAcidente, o.Status,
                                           (select Sigla from OBJDepartamento where UniqueKey = o.UKOrgao and UsuarioExclusao is null) as Orgao,
-                                          (select Descricao from OBJMunicipio where UniqueKey = o.UKMunicipio and UsuarioExclusao is null) as Municipio
-                           from OBJIncidente o, RELRegistroEmpregadoProprio re, OBJEmpregadoProprio ep " + sFrom + @"
-                           where o.UsuarioExclusao is null and 
+                                          (select Descricao from OBJMunicipio where UniqueKey = o.UKMunicipio and UsuarioExclusao is null) as Municipio,
+                                          w.status as StatusWF
+                           from OBJIncidente o, OBJWorkflow w, RELRegistroEmpregadoProprio re, OBJEmpregadoProprio ep " + sFrom + @"
+                           where o.UniqueKey = w.UKObject and
+                                 o.UsuarioExclusao is null and w.UsuarioExclusao is null and 
 	                             o.UniqueKey = re.UKRegistro and re.UKEmpregadoProprio = ep.UniqueKey " + sWhere + @"
                            order by Codigo";
 
@@ -1715,7 +1758,8 @@ namespace GISWeb.Controllers
                             ETipoAcidente = ((ETipoAcidente)Enum.Parse(typeof(ETipoAcidente), row["ETipoAcidente"].ToString(), true)).GetDisplayName(),
                             AcidenteFatal = ((int)row["ETipoAcidente"]).Equals(0) ? "Não" : "Sim",
                             AcidenteGraveIP102 = ((bool)row["AcidenteGraveIP102"]) ? "Sim" : "Não",
-                            Status = row["Status"].ToString(),
+                            Status = ((StatusIncidente)Enum.Parse(typeof(StatusIncidente), row["Status"].ToString(), true)),
+                            StatusWF = row["StatusWF"].ToString(),
                             Orgao = row["Orgao"].ToString(),
                             Municipio = row["Municipio"].ToString()
                         });
@@ -1814,9 +1858,11 @@ namespace GISWeb.Controllers
                 string sql = @"select top 100 o.UniqueKey, o.Codigo, o.DataIncidente, o.AcidenteFatal, o.AcidenteGraveIP102, 
                                           o.ETipoEntrada, o.ETipoAcidente, o.Status,
                                           (select Sigla from OBJDepartamento where UniqueKey = o.UKOrgao and UsuarioExclusao is null) as Orgao,
-                                          (select Descricao from OBJMunicipio where UniqueKey = o.UKMunicipio and UsuarioExclusao is null) as Municipio
-                           from OBJIncidente o, RELRegistroEmpregadoContratado rc, OBJEmpregadoContratado ec " + sFrom + @"
-                           where o.UsuarioExclusao is null and 
+                                          (select Descricao from OBJMunicipio where UniqueKey = o.UKMunicipio and UsuarioExclusao is null) as Municipio,
+                                          w.status as StatusWF  
+                           from OBJIncidente o, OBJWorkflow w, RELRegistroEmpregadoContratado rc, OBJEmpregadoContratado ec " + sFrom + @"
+                           where w.UniqueKey = w.UKObject and
+                                 o.UsuarioExclusao is null and w.UsuarioExclusao is null and 
 	                             o.UniqueKey = rc.UKRegistro and rc.UKEmpregadoContratado = ec.UniqueKey  " + sWhere + @"
                            order by o.Codigo";
 
@@ -1835,7 +1881,8 @@ namespace GISWeb.Controllers
                             ETipoAcidente = ((ETipoAcidente)Enum.Parse(typeof(ETipoAcidente), row["ETipoAcidente"].ToString(), true)).GetDisplayName(),
                             AcidenteFatal = ((int)row["ETipoAcidente"]).Equals(0) ? "Não" : "Sim",
                             AcidenteGraveIP102 = ((bool)row["AcidenteGraveIP102"]) ? "Sim" : "Não",
-                            Status = row["Status"].ToString(),
+                            Status = ((StatusIncidente)Enum.Parse(typeof(StatusIncidente), row["Status"].ToString(), true)),
+                            StatusWF = row["StatusWF"].ToString(),
                             Orgao = row["Orgao"].ToString(),
                             Municipio = row["Municipio"].ToString()
                         });
@@ -1961,9 +2008,11 @@ namespace GISWeb.Controllers
                 string sql = @"select top 100 o.UniqueKey, o.Codigo, o.DataIncidente, o.AcidenteFatal, o.AcidenteGraveIP102, 
                                           o.ETipoEntrada, o.ETipoAcidente, o.Status,
                                           (select Sigla from OBJDepartamento where UniqueKey = o.UKOrgao and UsuarioExclusao is null) as Orgao,
-                                          (select Descricao from OBJMunicipio where UniqueKey = o.UKMunicipio and UsuarioExclusao is null) as Municipio
-                               from objincidente o, RELRegistroEmpregadoContratado rc, OBJCodificacao oc
-                               where o.UsuarioExclusao is null and
+                                          (select Descricao from OBJMunicipio where UniqueKey = o.UKMunicipio and UsuarioExclusao is null) as Municipio,
+                                          w.status as StatusWF  
+                               from objincidente o, OBJWorkflow w, RELRegistroEmpregadoContratado rc, OBJCodificacao oc
+                               where w.UniqueKey = w.UKObject and
+                                     o.UsuarioExclusao is null and w.UsuarioExclusao is null and
 	                                 o.UniqueKey = rc.UKRegistro and rc.UsuarioExclusao is null and
 	                                 rc.UKCodificacao = oc.UniqueKey " + sWhere + @"
 
@@ -1972,11 +2021,13 @@ namespace GISWeb.Controllers
                                select top 100 o.UniqueKey, o.Codigo, o.DataIncidente, o.AcidenteFatal, o.AcidenteGraveIP102, 
                                           o.ETipoEntrada, o.ETipoAcidente, o.Status,
                                           (select Sigla from OBJDepartamento where UniqueKey = o.UKOrgao and UsuarioExclusao is null) as Orgao,
-                                          (select Descricao from OBJMunicipio where UniqueKey = o.UKMunicipio and UsuarioExclusao is null) as Municipio
-                               from OBJIncidente o, RELRegistroEmpregadoProprio rp, OBJCodificacao oc
-                               where o.UsuarioExclusao is null and
-	                                o.UniqueKey = rp.UKRegistro and rp.UsuarioExclusao is null and
-	                                rp.UKCodificacao = oc.UniqueKey " + sWhere + @"
+                                          (select Descricao from OBJMunicipio where UniqueKey = o.UKMunicipio and UsuarioExclusao is null) as Municipio,
+                                          w.status as StatusWF
+                               from OBJIncidente o, OBJWorkflow w, RELRegistroEmpregadoProprio rp, OBJCodificacao oc
+                               where w.UniqueKey = w.UKObject and
+                                     o.UsuarioExclusao is null and w.UsuarioExclusao is null and
+	                                 o.UniqueKey = rp.UKRegistro and rp.UsuarioExclusao is null and
+	                                 rp.UKCodificacao = oc.UniqueKey " + sWhere + @"
                               order by o.Codigo";
 
                 List<VMIncidente> lista = new List<VMIncidente>();
@@ -1994,7 +2045,8 @@ namespace GISWeb.Controllers
                             ETipoAcidente = ((ETipoAcidente)Enum.Parse(typeof(ETipoAcidente), row["ETipoAcidente"].ToString(), true)).GetDisplayName(),
                             AcidenteFatal = ((int)row["ETipoAcidente"]).Equals(0) ? "Não" : "Sim",
                             AcidenteGraveIP102 = ((bool)row["AcidenteGraveIP102"]) ? "Sim" : "Não",
-                            Status = row["Status"].ToString(),
+                            Status = ((StatusIncidente)Enum.Parse(typeof(StatusIncidente), row["Status"].ToString(), true)),
+                            StatusWF = row["StatusWF"].ToString(),
                             Orgao = row["Orgao"].ToString(),
                             Municipio = row["Municipio"].ToString()
                         });
@@ -2110,9 +2162,11 @@ namespace GISWeb.Controllers
                 string sql = @"select top 100 o.UniqueKey, o.Codigo, o.DataIncidente, o.AcidenteFatal, o.AcidenteGraveIP102, 
                                           o.ETipoEntrada, o.ETipoAcidente, o.Status,
                                           (select Sigla from OBJDepartamento where UniqueKey = o.UKOrgao and UsuarioExclusao is null) as Orgao,
-                                          (select Descricao from OBJMunicipio where UniqueKey = o.UKMunicipio and UsuarioExclusao is null) as Municipio
-                               from objincidente o, RELRegistroEmpregadoContratado rc, objcat oc
-                               where o.UsuarioExclusao is null and
+                                          (select Descricao from OBJMunicipio where UniqueKey = o.UKMunicipio and UsuarioExclusao is null) as Municipio,
+                                          w.status as StatusWF
+                               from objincidente o, OBJWorkflow w, RELRegistroEmpregadoContratado rc, objcat oc
+                               where o.UniqueKey = w.UKObject and
+                                     o.UsuarioExclusao is null and w.UsuarioExclusao is null and
 	                                 o.UniqueKey = rc.UKRegistro and rc.UsuarioExclusao is null and
 	                                 rc.UKCAT = oc.UniqueKey " + sWhere + @"
 
@@ -2121,11 +2175,13 @@ namespace GISWeb.Controllers
                                select top 100 o.UniqueKey, o.Codigo, o.DataIncidente, o.AcidenteFatal, o.AcidenteGraveIP102, 
                                           o.ETipoEntrada, o.ETipoAcidente, o.Status,
                                           (select Sigla from OBJDepartamento where UniqueKey = o.UKOrgao and UsuarioExclusao is null) as Orgao,
-                                          (select Descricao from OBJMunicipio where UniqueKey = o.UKMunicipio and UsuarioExclusao is null) as Municipio
-                               from OBJIncidente o, RELRegistroEmpregadoProprio rp, objcat oc
-                               where o.UsuarioExclusao is null and
-	                                o.UniqueKey = rp.UKRegistro and rp.UsuarioExclusao is null and
-	                                rp.UKCAT = oc.UniqueKey " + sWhere + @"
+                                          (select Descricao from OBJMunicipio where UniqueKey = o.UKMunicipio and UsuarioExclusao is null) as Municipio,
+                                          w.status as StatusWF
+                               from OBJIncidente o, OBJWorkflow w, RELRegistroEmpregadoProprio rp, objcat oc
+                               where o.UniqueKey = w.UKObject and
+                                     o.UsuarioExclusao is null and w.UsuarioExclusao is null and
+	                                 o.UniqueKey = rp.UKRegistro and rp.UsuarioExclusao is null and
+	                                 rp.UKCAT = oc.UniqueKey " + sWhere + @"
                               order by o.Codigo";
 
                 List<VMIncidente> lista = new List<VMIncidente>();
@@ -2143,7 +2199,8 @@ namespace GISWeb.Controllers
                             ETipoAcidente = ((ETipoAcidente)Enum.Parse(typeof(ETipoAcidente), row["ETipoAcidente"].ToString(), true)).GetDisplayName(),
                             AcidenteFatal = ((int)row["ETipoAcidente"]).Equals(0) ? "Não" : "Sim",
                             AcidenteGraveIP102 = ((bool)row["AcidenteGraveIP102"]) ? "Sim" : "Não",
-                            Status = row["Status"].ToString(),
+                            Status = ((StatusIncidente)Enum.Parse(typeof(StatusIncidente), row["Status"].ToString(), true)),
+                            StatusWF = row["StatusWF"].ToString(),
                             Orgao = row["Orgao"].ToString(),
                             Municipio = row["Municipio"].ToString()
                         });

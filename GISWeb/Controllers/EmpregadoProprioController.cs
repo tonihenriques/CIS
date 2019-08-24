@@ -223,10 +223,10 @@ namespace GISWeb.Controllers
                         {
                             throw new Exception("Não foi possível encontrar o incidente.");
                         }
-                        if (objIncidente.Responsavel.Equals(CustomAuthorizationProvider.UsuarioAutenticado.Login) && !objIncidente.Status.Equals("Em Aprovação"))
-                        {
-                            ViewBag.PodeEditar = true;
-                        }
+                        //if (objIncidente.Responsavel.Equals(CustomAuthorizationProvider.UsuarioAutenticado.Login) && !objIncidente.Status.Equals("Em Aprovação"))
+                        //{
+                        //    ViewBag.PodeEditar = true;
+                        //}
 
 
 

@@ -55,7 +55,7 @@ namespace GISWeb.Controllers
 
 
 
-        public readonly MemoryCache memoryCacheDefault = MemoryCache.Default;
+        public MemoryCache memoryCacheDefault = MemoryCache.Default;
 
         public void ReiniciarCache(string Login)
         {
