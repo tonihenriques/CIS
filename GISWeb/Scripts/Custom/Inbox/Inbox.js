@@ -73,6 +73,8 @@ function OnSuccessAprovar(content) {
     //AtualizarTelasDetalhes();
     
     $("#modalDetalhesIncidente").modal("hide");
+    $("#modalDetalhesIncidenteVeiculo").modal("hide");
+
     $("#ObjRecemCriado").val("");
     
     if ($(".msgRetornoExterno .alert").length > 0) {

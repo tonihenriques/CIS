@@ -303,11 +303,19 @@ function AtualizarTelasDetalhes() {
             VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
         }
 
+        if (EstaNoModalVisualizarDetalhesIncidenteVeiculo()) {
+            VisualizarDetalhesIncidenteVeiculo($('#modalDetalhesIncidenteVeiculoCorpo'));
+        }
+
         AtualizarIncidentes();
     } else if (EstaNaPesquisaIncidente()) {
 
         if (EstaNoModalVisualizarDetalhesIncidente()) {
             VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
+        }
+
+        if (EstaNoModalVisualizarDetalhesIncidenteVeiculo()) {
+            VisualizarDetalhesIncidenteVeiculo($('#modalDetalhesIncidenteVeiculoCorpo'));
         }
         
         AtualizarRowPesquisa();
