@@ -1,4 +1,5 @@
 ﻿using GISModel.Entidades;
+using GISModel.Enums;
 using System.Collections.Generic;
 
 namespace GISModel.DTO.IncidenteVeiculo
@@ -8,18 +9,31 @@ namespace GISModel.DTO.IncidenteVeiculo
 
         public string UniqueKey { get; set; }
 
-        public string Codigo { get; set; }
 
-        public string Status { get; set; }
+
+        public string UKWorkflow { get; set; }
+
+        public string NomeWF { get; set; }
+
+        public string StatusWF { get; set; }
 
         public string MensagemPasso { get; set; }
+
+
+
+
+
+        public string Codigo { get; set; }
+
+        public StatusIncidente Status { get; set; }
+
+        
 
 
 
         public string NumeroSmart { get; set; }
 
         public string ETipoAcidente { get; set; }
-
 
         public string Orgao { get; set; }
 
@@ -28,7 +42,6 @@ namespace GISModel.DTO.IncidenteVeiculo
         public string DataIncidente { get; set; }
 
         public string HoraIncidente { get; set; }
-
 
         public string Municipio { get; set; }
 

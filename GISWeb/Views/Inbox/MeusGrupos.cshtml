@@ -19,46 +19,27 @@
                     <input id="ObjRecemCriado" type="hidden" style="display: none;" value="@ViewBag.ObjRecemCriado" />
 
                     <ul class="nav nav-tabs" id="myTab" style="float: right;">
-                        <li class="active">
+                        <li class="tabMenuIncidente">
                             <a data-toggle="tab" href="#result_incidente" onclick="AtualizarIncidentes();">
                                 Incidente
-                                @*<span class="badge badge-info">0</span>*@
+                                <span class="badge badge-info" id="TotalIG">@ViewBag.Grupos</span>
                             </a>
                         </li>
-                        <li>
+                        <li class="tabMenuIncidenteVeiculo">
                             <a data-toggle="tab" href="#result_incidente_veiculo" onclick="AtualizarIncidentesVeiculos();">
                                 Incidente Veículo
-                                @*<span class="badge badge-info">0</span>*@
+                                <span class="badge badge-info" id="TotalIVG">@ViewBag.GruposVeiculo</span>
                             </a>
                         </li>
-                        @*<li>
-                                <a data-toggle="tab" href="#result_q_incidente" onclick="AtualizarQuaseIncidentes();">
-                                    Q. Incidente
-                                </a>
-                            </li>
-                            <li>
-                                <a data-toggle="tab" href="#result_q_incidente_veiculo" onclick="AtualizarQuaseIncidentesVeiculos();">
-                                    Q. Incidente Veículo
-                                </a>
-                            </li>*@
                     </ul>
 
-
-
                     <div class="tabbable">
-
                         <div class="tab-content" style="float: left; width: 100%; margin-top: 0px; padding: 0; border-top: 1px solid #c5d0dc;">
-
                             <div id="result_incidente" class="tab-pane fade in active">
                             </div>
 
                             <div id="result_incidente_veiculo" class="tab-pane fade">
                             </div>
-
-                            @*<div id="result_q_incidente" class="tab-pane fade">
-                                </div>
-                                <div id="result_q_incidente_veiculo" class="tab-pane fade">
-                                </div>*@
                         </div>
                     </div>
 

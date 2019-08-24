@@ -1,5 +1,6 @@
 ﻿using GISModel.CustomAttributes;
 using GISModel.DTO;
+using GISModel.Entidades.OBJ;
 using GISModel.Enums;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -113,16 +114,13 @@ namespace GISModel.Entidades
         public DateTime? DataAtualizacao { get; set; }
 
 
+        public StatusIncidente Status { get; set; }
 
-        public string Status { get; set; }
-
-        public string StatusWF { get; set; }
-
-        public string Responsavel { get; set; }
-
-        public string MensagemPasso { get; set; }
 
         public OperacaoCollection Operacoes { get; set; }
+
+
+        public Workflow PassoAtual { get; set; }
 
     }
 }

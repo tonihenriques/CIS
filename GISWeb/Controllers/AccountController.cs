@@ -12,7 +12,7 @@ using System.Web.UI;
 
 namespace GISWeb.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
 
         #region
@@ -88,6 +88,13 @@ namespace GISWeb.Controllers
         
         public ActionResult Logout()
         {
+            try
+            {
+                ReiniciarCache(AutorizacaoProvider.UsuarioAutenticado.Login);
+            }
+            catch { }
+            
+
             AutorizacaoProvider.LogOut();
             Session.Clear();
             return RedirectToAction("Login", "Account");

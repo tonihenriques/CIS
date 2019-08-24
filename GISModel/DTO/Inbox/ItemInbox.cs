@@ -9,6 +9,10 @@ namespace GISModel.DTO.Inbox
 
         public string UniqueKey { get; set; }
 
+
+        public string UKWorkflow { get; set; }
+
+
         [Display(Name = "Comentários")]
         public string Comentarios { get; set; }
 
