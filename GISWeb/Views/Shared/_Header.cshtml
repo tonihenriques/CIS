@@ -9,7 +9,7 @@
         <div class="navbar-header pull-left">
             @if (ViewBag.UKArquivoLogoEmp != null)
             {
-                <a href="/SuperBI/" class="navbar-brand" style="margin-top: 4px;">
+                <a href="/" class="navbar-brand" style="margin-top: 4px;">
                     <small>
                         <img src="~/Images/logo-cemig.png" />
                     </small>
@@ -18,7 +18,7 @@
             }
             else
             {
-                <a href="/SuperBI/" class="navbar-brand">
+                <a href="/" class="navbar-brand">
                     <small>
                         <img src="~/Images/logo-cemig-white.png" class="white" width="85px" />
                     </small>
@@ -28,13 +28,13 @@
             <button class="pull-right navbar-toggle navbar-toggle-img collapsed" type="button" data-toggle="collapse" data-target=".navbar-buttons">
                 <span class="sr-only">Toggle user menu</span>
 
-                @if (string.IsNullOrWhiteSpace(ViewBag.LoginUsuario))
+                @if (string.IsNullOrWhiteSpace(ViewBag.MatriculaUsuario))
                 {
                     <img class="nav-user-photo" src="@Url.Action("FotoPerfil", "Account")" />
                 }
                 else
                 {
-                    <img class="nav-user-photo" src="@Url.Action("FotoPerfil", "Account", new { login = ViewBag.LoginUsuario })" />
+                    <img class="nav-user-photo" src="@Url.Action("FotoPerfil", "Account", new { login = ViewBag.MatriculaUsuario })" />
                 }
             </button>
 
@@ -97,13 +97,13 @@
 
                 <li class="light-blue dropdown-modal user-min">
                     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                        @if (string.IsNullOrWhiteSpace(ViewBag.LoginUsuario))
+                        @if (string.IsNullOrWhiteSpace(ViewBag.MatriculaUsuario))
                         {
                             <img class="nav-user-photo" src="~/Content/Ace/avatars/unknown.png" />
                         }
                         else
                         {
-                            <img class="nav-user-photo" src="@Url.Action("FotoPerfil", "Account", new { login = ViewBag.LoginUsuario })" alt="Foto do Perfil" />
+                            <img class="nav-user-photo" src="@Url.Action("FotoPerfil", "Account", new { login = ViewBag.MatriculaUsuario })" alt="Foto do Perfil" />
                         }
 
                         <span class="user-info">
@@ -122,14 +122,18 @@
                     </a>
 
                     <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-                        <li>
-                            <a href="#" data-target="#modalAlterarSenha" data-toggle="modal" data-backdrop="static" data-keyboard="false" id="btnAlterarSenha">
-                                <i class="ace-icon fa fa-key"></i>
-                                Alterar Senha
-                            </a>
-                        </li>
 
-                        <li class="divider"></li>
+                        @if (ViewBag.TipoDeAcesso != null && ViewBag.TipoDeAcesso == GISModel.Enums.TipoDeAcesso.Sistema)
+                        {
+                            <li>
+                                <a href="#" data-target="#modalAlterarSenha" data-toggle="modal" data-backdrop="static" data-keyboard="false" id="btnAlterarSenha">
+                                    <i class="ace-icon fa fa-key"></i>
+                                    Alterar Senha
+                                </a>
+                            </li>
+
+                            <li class="divider"></li>
+                        }
 
                         <li>
                             <a data-url="@Url.Action("Perfil", "Account")" href="@Url.Action("Perfil", "Account")">

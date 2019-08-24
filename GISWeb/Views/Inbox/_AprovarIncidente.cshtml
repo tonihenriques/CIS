@@ -14,6 +14,7 @@ new
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(i => i.UniqueKey, new { @Value = ViewBag.UniqueKey })
+    @Html.HiddenFor(i => i.Tipo, new { @Value = ViewBag.Tipo })
 
     <div class="row">
         <div class="col-xs-12 col-sm-12">

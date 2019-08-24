@@ -1,4 +1,5 @@
-﻿using GISModel.DTO;
+﻿using GISModel.CustomAttributes;
+using GISModel.DTO;
 using GISModel.Enums;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -25,12 +26,15 @@ namespace GISModel.Entidades
 
 
         [Display(Name ="Tipo de Entrada")]
+        [RequiredEnum(ErrorMessage = "O Tipo de Entrada é obrigatório.")]
         public ETipoEntrada ETipoEntrada { get; set; }
 
+
         [Display(Name = "Centro (Empresa)")]
+        [RequiredEnum(ErrorMessage = "O campo 'Centro' é obrigatório.")]
         public ECentroEmpresa Centro { get; set; }
 
-        [Required(ErrorMessage = "A regional é obrigatória")]
+        [RequiredEnum(ErrorMessage = "A regional é obrigatória")]
         public Regional Regional { get; set; }
         
         [Display(Name ="Data do Incidente")]
@@ -43,12 +47,14 @@ namespace GISModel.Entidades
         public string HoraIncidente { get; set; }
 
         [Display(Name ="Tipo de Acidente")]
+        [RequiredEnum(ErrorMessage = "O campo 'Tipo de Acidente' é obrigatório.")]
         public ETipoAcidente ETipoAcidente { get; set; }
 
         [Display(Name = "Local do Acidente")]
         public string LocalAcidente { get; set; }
 
         [Display(Name = "Tipo do Local do Acidente")]
+        [RequiredEnum(ErrorMessage = "O campo 'Tipo do Local do Acidente' é obrigatório.")]
         public ETipoLocalAcid TipoLocalAcidente { get; set; }
         
         [Display(Name = "Desc. Logradouro")]

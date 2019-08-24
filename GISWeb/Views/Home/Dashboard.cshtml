@@ -1,0 +1,93 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <h3 class="header smaller lighter red">CIS Web - Dashboard</h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6 col-xs-12">
+        <p style="font-weight: bold; margin-bottom: 5px; font-size: 14px; padding-bottom: 10px;">Total Incidentes por Mês</p>
+        <div id="chart_div1" style="height: 400px;"></div>
+    </div>
+
+    <div class="col-sm-6 col-xs-12">
+        <p style="font-weight: bold; margin-bottom: 5px; font-size: 14px; padding-bottom: 10px;">Total por Tipo de Acidente</p>
+        <div id="piechart" style="width: 900px; height: 400px;"></div>
+    </div>
+</div>
+
+
+
+
+@section Scripts
+{
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript">
+
+        jQuery(function ($) {
+
+            google.charts.load('current', {packages: ['corechart', 'bar']});
+            google.charts.setOnLoadCallback(drawMaterial);
+
+        });
+
+        function drawMaterial() {
+
+            var data = google.visualization.arrayToDataTable([
+                ['Mês', 'Pessoa', { role: 'annotation'} ,'Veículo', { role: 'annotation'}],
+                ['Janeiro',  9,'9',      6, '6'],
+                ['Fevereiro',  10,'10',      2,'2'],
+                ['Março',  11,'11',      4,'4'],
+                ['Abril',  12,'12',       4,'4'],
+                ['Maio', 15, '15', 5, '5'],
+                ['Junho',  12,'12',      4,'4']
+            ]);
+
+            var options = {
+                title: 'Total Incidentes por Mês',
+                chartArea: {
+                    backgroundColor: 'transparent',
+                    left: 60,
+                    height: '250px',
+                    width: '100%'
+                },
+            };
+
+            var materialChart = new google.charts.Bar(document.getElementById('chart_div1'));
+            materialChart.draw(data, options);
+
+            google.charts.load('current', {'packages':['corechart']});
+            google.charts.setOnLoadCallback(drawChart);
+        }
+
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+              ['Task', 'Hours per Day'],
+              ['Contratado',     11],
+              ['Empregado',      2],
+              ['Novos Negócio',  2],
+              ['Obra PART', 2],
+              ['Doença Ocupacional',    7]
+            ]);
+
+            var options = {
+              title: ''
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+            chart.draw(data, options);
+          }
+
+    </script>
+
+
+}
+
+

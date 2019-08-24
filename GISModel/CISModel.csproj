@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="CustomAttributes\CustomValidationCNPJAttribute.cs" />
     <Compile Include="CustomAttributes\CustomValidationCPFAttribute.cs" />
+    <Compile Include="CustomAttributes\RequiredEnumAttribute.cs" />
     <Compile Include="DTO\Account\AutenticacaoModel.cs" />
     <Compile Include="DTO\Account\NovaSenhaViewModel.cs" />
     <Compile Include="DTO\Contrato\ContratoViewModel.cs" />

@@ -1,0 +1,883 @@
+﻿@using GISModel.DTO.IncidenteVeiculo
+@using GISModel.Entidades
+@using GISModel.Entidades.OBJ
+@using GISModel.DTO.Envolvidos
+@using GISModel.Enums
+
+
+@model VMIncidenteVeiculo
+
+
+@if (Model == null)
+{
+    if (ViewBag.Erro != null && !string.IsNullOrEmpty(ViewBag.Erro))
+    {
+        <div class="space-6"></div>
+
+        <div class="alert alert-warning">
+            <strong>
+                <i class="ace-icon fa fa-meh-o"></i>
+                Oops!
+            </strong>
+
+            @ViewBag.Erro
+
+        </div>
+    }
+    else
+    {
+        <div class="space-6"></div>
+
+        <div class="alert alert-warning">
+            <strong>
+                <i class="ace-icon fa fa-meh-o"></i>
+                Oops!
+            </strong>
+
+            Não foi possível recuperar as informações do incidente.
+
+        </div>
+    }
+}
+else
+{
+
+    if (ViewBag.Erro != null && !string.IsNullOrEmpty(ViewBag.Erro))
+    {
+        <div class="space-6"></div>
+
+        <div class="alert alert-warning">
+            <strong>
+                <i class="ace-icon fa fa-meh-o"></i>
+                Oops!
+            </strong>
+
+            @ViewBag.Erro
+
+        </div>
+    }
+    else
+    {
+
+        var path = string.Empty;
+        if (Request.ApplicationPath.Length > 1)
+        {
+            path = Request.ApplicationPath;
+        }
+
+        var classeTitulos = string.Empty;
+
+        if (Model.Status.Contains("Concluído"))
+        {
+            classeTitulos = "green";
+        }
+        else
+        {
+            classeTitulos = "blue";
+        }
+
+        <div id="detalhesIncidente" data-uniquekey="@Model.UniqueKey" data-codigo="@Model.Codigo">
+            <div class="widget-container-col">
+                <div class="widget-box transparent">
+                    <div class="widget-header" style="border-bottom: 1px solid #ddd">
+                        <h5 class="widget-title">
+                            <i class="ace-icon fa fa-info-circle"></i>
+                            <a href="#" data-action="collapse" class="@classeTitulos">
+                                <b>INFORMAÇÕES PRINCIPAIS</b>
+                            </a>
+                        </h5>
+
+
+
+                        <div class="widget-toolbar no-border" style="height: 38px; padding-top: 5px;">
+                            <div class="btn-group pull-right">
+
+                                @if (Model.Operacoes.Contains(Operacao.Aprovar))
+                                {
+                                    <button class="btn btn-xs btn-success lnkAprovar" data-tipo="Veiculo" data-target="#modalAprovar" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        Aprovar
+                                    </button>
+
+                                    Model.Operacoes.Remove(Operacao.Aprovar);
+
+                                    if (Model.Operacoes.Contains(Operacao.Reprovar))
+                                    {
+                                        <button class="btn btn-xs btn-danger lnkReprovar" data-target="#modalRejeitar" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                            <i class="ace-icon fa fa-remove"></i>
+                                            Reprovar
+                                        </button>
+
+                                        Model.Operacoes.Remove(Operacao.Reprovar);
+                                    }
+                                }
+                                else if (Model.Operacoes.Contains(Operacao.Assumir))
+                                {
+                                    <button class="btn btn-xs btn-info lnkAssumir" data-target="#modalAssumir" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-claim="true">
+                                        <i class="ace-icon fa fa-arrow-circle-down"></i>
+                                        Assumir
+                                    </button>
+
+                                    Model.Operacoes.Remove(Operacao.Assumir);
+                                }
+                                else if (Model.Operacoes.Contains(Operacao.Encaminhar))
+                                {
+                                    <button class="btn btn-xs btn-info lnkAtribuir" data-target="#modalEncaminhar" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-claim="false">
+                                        <i class="ace-icon fa fa-random"></i>
+                                        Atribuir
+                                    </button>
+
+                                    Model.Operacoes.Remove(Operacao.Encaminhar);
+                                }
+                                else
+                                {
+                                    <button class="btn btn-xs btn-default" data-toggle="dropdown" aria-expanded="false">
+                                        <i class=" ace-icon fa fa-bars">
+                                        </i>
+                                        Menu
+                                    </button>
+                                }
+
+                                <button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                    <span class="ace-icon fa fa-caret-down icon-only"></span>
+                                </button>
+
+                                <ul class="dropdown-menu dropdown-only-icon dropdown-yellow2 dropdown-menu-right dropdown-caret dropdown-close">
+                                    @{
+                                        Html.RenderPartial("~/Views/IncidenteVeiculo/_MenuOperacoes.cshtml", ((IncidenteVeiculo)ViewBag.Incidente));
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="widget-body">
+                        <div class="widget-main">
+                            <div class="row">
+
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="profile-user-info profile-user-info-striped">
+
+                                        <div class="profile-info-row">
+
+                                            @{
+                                                var revStateColor = string.Empty;
+
+                                                if (Model.Status.Contains("Em Edição"))
+                                                {
+                                                    revStateColor = "#478FCA";
+                                                }
+                                                else if (Model.Status.Contains("Em Análise"))
+                                                {
+                                                    revStateColor = "#a0a0a0";
+                                                }
+                                                else if (Model.Status.Contains("Em Processamento"))
+                                                {
+                                                    revStateColor = "#ffb752";
+                                                }
+                                                else if (Model.Status.Contains("Em Aprovação"))
+                                                {
+                                                    revStateColor = "#a0a0a0";
+                                                }
+                                                else if (Model.Status.Contains("Concluído"))
+                                                {
+                                                    revStateColor = "#87B87F";
+                                                }
+                                            }
+
+                                            <div class="profile-info-name"> Status </div>
+
+                                            <div class="profile-info-value center" style="background-color: @revStateColor; color: #FFFFFF; font-weight: bold; margin-left: 0px;">
+                                                <span style="color: #FFFFFF; font-weight: 600;">
+                                                    @Model.Status
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"></div>
+
+                                            <div class="profile-info-value" style="background-color: #edf3f4; border-top: 1px solid #f7fbff"></div>
+                                        </div>
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Código </div>
+
+                                            <div class="profile-info-value">
+                                                <span>@Model.Codigo</span>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Nº SMART </div>
+
+                                            <div class="profile-info-value">
+                                                <span>@Model.NumeroSmart</span>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Data Incidente </div>
+
+                                            <div class="profile-info-value">
+                                                <span id="labelTitulo">
+                                                    <span>@Model.DataIncidente</span>
+                                                </span>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Hora Incidente </div>
+
+                                            <div class="profile-info-value">
+                                                <span id="labelTitulo">
+                                                    <span>@Model.HoraIncidente</span>
+                                                </span>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Acidente Fatal? </div>
+
+                                            <div class="profile-info-value">
+                                                <span id="labelTitulo">
+                                                    <span>@Model.AcidenteFatal</span>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Acid. grave (IP 10.2)? </div>
+
+                                            <div class="profile-info-value">
+                                                <span id="labelTitulo">
+                                                    <span>@Model.AcidenteGraveIP102</span>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="profile-user-info profile-user-info-striped">
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Estado </div>
+
+                                            <div class="profile-info-value">
+                                                <span>@Model.Estado</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Município </div>
+
+                                            <div class="profile-info-value">
+                                                <span>@Model.Municipio</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Regional </div>
+
+                                            <div class="profile-info-value">
+                                                <span>@Model.Regional</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Órgão </div>
+
+                                            <div class="profile-info-value">
+                                                <span>@Model.Orgao</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Local Acidente </div>
+
+                                            <div class="profile-info-value">
+                                                <span>@Model.LocalAcidente</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Tipo Local Acidente </div>
+
+                                            <div class="profile-info-value">
+                                                <span>
+                                                    @Model.TipoLocalAcidente
+                                                </span>
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+
+                            </div> <!-- Row -->
+
+                            <div class="space-4"></div>
+
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="profile-user-info profile-user-info-striped">
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Tipo Entrada </div>
+
+                                            <div class="profile-info-value">
+                                                <span>
+                                                    @Model.TipoEntrada
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> e-Social </div>
+
+                                            <div class="profile-info-value">
+                                                <span class="CustomTooltip" title="@ViewBag.ESocialDesc">
+                                                    @Model.ESocial
+                                                </span>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Logradouro </div>
+
+                                            <div class="profile-info-value">
+                                                <span>@Model.Logradouro</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Nº Logradouro </div>
+
+                                            <div class="profile-info-value">
+                                                <span>@Model.NumeroLogradouro</span>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="profile-user-info profile-user-info-striped">
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Centro </div>
+
+                                            <div class="profile-info-value">
+                                                <span>@Model.Centro</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Data Criação </div>
+
+                                            <div class="profile-info-value">
+                                                <span>@Model.DataInclusao</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Usuário Criação </div>
+
+                                            <div class="profile-info-value">
+                                                <span>@Model.UsuarioInclusao</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Última Atualização </div>
+
+                                            <div class="profile-info-value">
+                                                <span>@Model.DataAtualizacao</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div> <!-- Row -->
+
+                            <div class="space-4"></div>
+
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12">
+                                    <div class="profile-user-info profile-user-info-striped">
+
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name"> Descrição </div>
+
+                                            <div class="profile-info-value">
+                                                <span>@Model.Descricao</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div> <!-- Row -->
+
+                        </div> <!-- widget-main -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="widget-container-col">
+                <div class="widget-box transparent">
+                    @{
+                        var totalArquivosAnexados = 0;
+
+                        if (Model.Arquivos != null && Model.Arquivos.Count > 0)
+                        {
+                            totalArquivosAnexados = Model.Arquivos.Count;
+                        }
+                    }
+
+                    <div class="widget-header @classeTitulos" style="border-bottom: 1px solid #ddd">
+                        <h5 class="widget-title">
+                            <i class="ace-icon fa fa-cloud-download"></i>
+                            <a href="#" data-action="collapse" class="@classeTitulos">
+                                <b>ARQUIVOS ANEXADOS <span style="color: #617b5d">(@totalArquivosAnexados)</span></b>
+                            </a>
+                        </h5>
+
+                        <div class="widget-toolbar action-buttons no-border" style="height: 38px; padding-top: 5px;">
+
+                            @if (Model.Arquivos != null && Model.Arquivos.Count > 0)
+                            {
+                                <span>&nbsp;</span>
+
+                                <a href="@path/Arquivo/Download/@Model.UniqueKey" target="_blank" class="CustomTooltip" title="Baixar Todos os Arquivos">
+                                    <i class="ace-icon fa fa-download red2 bigger-150"></i>
+                                </a>
+                            }
+
+                            @if (Model.Operacoes.Contains(Operacao.AnexarArquivos))
+                            {
+                                <span>&nbsp;</span>
+
+                                <a href="#" class="CustomTooltip lnkUploadArquivo" title="Anexar Novo Arquivo" data-target="#modalArquivo" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                    <i class="ace-icon fa fa-cloud-upload bigger-170"></i>
+                                </a>
+                            }
+
+                        </div>
+                    </div>
+
+                    <div class="widget-body">
+                        <div class="widget-main">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="timeline-container">
+                                        @{
+                                            if (Model.Arquivos != null && Model.Arquivos.Count > 0)
+                                            {
+                                                foreach (Arquivo arq in Model.Arquivos)
+                                                {
+                                                    <div class="timeline-item clearfix" data-uniquekey="@arq.UniqueKey">
+                                                        <div class="timeline-info CustomTooltip" title="Anexados">
+                                                            <i class="timeline-indicator ace-icon fa fa-minus btn btn-primary no-hover"></i>
+                                                        </div>
+
+                                                        <div class="widget-box transparent collapsed">
+                                                            <div class="widget-header widget-header-small">
+                                                                <h5 class="widget-title smaller">
+                                                                    <a href="@path/Arquivo/Visualizar/@arq.UniqueKey" target="_blank" class="CustomTooltip blue" title="Visualizar">
+                                                                        @arq.NomeLocal
+                                                                    </a>
+                                                                </h5>
+
+                                                                <span class="widget-toolbar no-border action-buttons">
+                                                                    <a href="#" data-action="collapse">
+                                                                        <i class="ace-icon fa fa-chevron-down bigger-125"></i>
+                                                                    </a>
+                                                                </span>
+                                                            </div>
+                                                            <div class="padding-8 clearfix">
+                                                            </div>
+                                                            <div class="widget-body">
+                                                                <div class="widget-main">
+
+                                                                    <div class="widget-toolbox clearfix">
+                                                                        <div class="row">
+
+                                                                            <div class="pull-left" style="font-size: 11px">
+                                                                                <i class="ace-icon fa fa-cloud bigger-110 blue"></i>
+
+                                                                                <span>&nbsp;Arquivo anexado em @arq.DataInclusao por @arq.UsuarioInclusao</span>
+                                                                            </div>
+
+                                                                            @if (Model.Operacoes.Contains(Operacao.ExcluirArquivos))
+                                                                            {
+                                                                                <div class="pull-right action-buttons">
+                                                                                    <a href="#" class="red2 lnkExcluirArquivoVeiculo CustomTooltip" title="Excluir">
+                                                                                        <i class="ace-icon fa fa-remove bigger-125"></i>
+                                                                                    </a>
+                                                                                </div>
+                                                                            }
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <div class="timeline-item clearfix">
+                                                    <div class="timeline-info">
+                                                        <i class="timeline-indicator ace-icon fa fa-exclamation-triangle btn btn-warning no-hover"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h5 class="text-warning smaller-90">
+                                                            <strong>
+                                                                Nenhum arquivo anexado até o momento.
+                                                            </strong>
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            @*<div class="widget-container-col">
+                    <div class="widget-box transparent">
+                        <div class="widget-header @classeTitulos" style="border-bottom: 1px solid #ddd">
+                            <h5 class="widget-title">
+                                <i class="ace-icon fa fa-users"></i>
+                                <a href="#" data-action="collapse" class="@classeTitulos">
+                                    <b>ENVOLVIDOS</b>
+                                </a>
+                            </h5>
+
+                            @if (Model.Operacoes.Contains(Operacao.IncluirEnvolvidos))
+                            {
+                                <div class="widget-toolbar action-buttons no-border" style="height: 38px; padding-top: 5px;">
+                                    <span>&nbsp;</span>
+                                    <a href="#" class="CustomTooltip green lnkNovoEmpregadoProprio" title="Novo Empregado Próprio" data-target="#modalNewEmpProp" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                        <i class="ace-icon fa fa-user bigger-150"></i>
+                                    </a>
+
+                                    <span>&nbsp;</span>
+                                    <a href="#" class="CustomTooltip orange lnkNovoEmpregadoTerceiro" title="Novo Empregado Terceirizado" data-target="#modalNewEmpTerc" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                        <i class="ace-icon fa fa-user bigger-150"></i>
+                                    </a>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="widget-body">
+                            <div class="widget-main">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12">
+
+                                        @if ((Model.EnvolvidosProprio != null && Model.EnvolvidosProprio.Count > 0) ||
+                                             (Model.EnvolvidosTerceiro != null && Model.EnvolvidosTerceiro.Count > 0))
+                                        {
+
+                                            <table id="tableEnvolvidos" class="table table-striped table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="center" width="25px;">&nbsp;</th>
+                                                        <th>Número</th>
+                                                        <th>Nome</th>
+                                                        <th>Função</th>
+                                                        <th width="135px"></th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+
+                                                    @foreach (VMProprio iEmpregado in Model.EnvolvidosProprio)
+                                                    {
+                                                        <tr>
+                                                            <td class="CustomTooltip green center" title="Empregado próprio">
+                                                                <i class="ace-icon fa fa-user bigger-130" />
+                                                            </td>
+
+                                                            <td>@iEmpregado.NumeroPessoal</td>
+                                                            <td>@iEmpregado.Nome</td>
+                                                            <td>@iEmpregado.Funcao</td>
+
+                                                            <td class="center">
+                                                                <div class="hidden-sm hidden-xs action-buttons">
+                                                                    @if (!string.IsNullOrEmpty(iEmpregado.UKLesaoDoenca))
+                                                                    {
+                                                                        <span class="orange CustomTooltip" title="Houve lesão">
+                                                                            <i class="ace-icon fa fa-exclamation-triangle bigger-130"></i>
+                                                                        </span>
+                                                                    }
+
+                                                                    @if (!Model.Status.Contains("Em Edição"))
+                                                                    {
+                                                                        if (string.IsNullOrEmpty(iEmpregado.UKCAT))
+                                                                        {
+                                                                            if (Model.Operacoes.Contains(Operacao.IncluirCAT))
+                                                                            {
+                                                                                <a class="grey CustomTooltip lkNovaCAT" href="#" data-tipo="Proprio" data-uniquekeyrel="@iEmpregado.UKRel" title="Cadastrar CAT" data-target="#modalNovaCAT" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                                    <i class="ace-icon fa fa-life-ring bigger-130"></i>
+                                                                                </a>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <a class="grey CustomTooltip lkNovaCAT" href="#" title="Nenhuma CAT cadastrada">
+                                                                                    <i class="ace-icon fa fa-life-ring bigger-130"></i>
+                                                                                </a>
+                                                                            }
+
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <a class="orange CustomTooltip lkEditarCAT" href="#" title="Gerenciar CAT" data-tipo="Proprio" data-ukincidente="@Model.UniqueKey" data-ukcat="@iEmpregado.UKCAT" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar CAT" data-target="#modalEditarCAT" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                                <i class="ace-icon fa fa-life-ring bigger-130"></i>
+                                                                            </a>
+                                                                        }
+                                                                    }
+
+                                                                    @if (!Model.Status.Contains("Em Edição") && !Model.Status.Contains("Em Análise"))
+                                                                    {
+                                                                        if (string.IsNullOrEmpty(iEmpregado.UKCodificacao))
+                                                                        {
+                                                                            if (Model.Operacoes.Contains(Operacao.IncluirCodificacao))
+                                                                            {
+                                                                                <a class="grey CustomTooltip lkNovaCodificacao" href="#" data-tipo="Proprio" data-uniquekeyrel="@iEmpregado.UKRel" title="Cadastrar Codificação" data-target="#modalNovaCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                                    <i class="ace-icon fa fa-bell bigger-130"></i>
+                                                                                </a>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <a class="grey CustomTooltip lkNovaCodificacao" href="#" title="Nenhuma codificação cadastrada">
+                                                                                    <i class="ace-icon fa fa-bell bigger-130"></i>
+                                                                                </a>
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <a class="red CustomTooltip lkEditarCodificacao" href="#" data-tipo="Proprio" data-ukincidente="@Model.UniqueKey" data-ukcodificacao="@iEmpregado.UKCodificacao" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar Codificação" data-target="#modalEditarCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                                <i class="ace-icon fa fa-bell bigger-130"></i>
+                                                                            </a>
+                                                                        }
+                                                                    }
+
+                                                                    <a href='#' class="green CustomTooltip lkEditProprio" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar Empregado" data-target="#modalEditEmpProp" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                        <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                                                    </a>
+
+                                                                    @if (Model.Operacoes.Contains(Operacao.IncluirEnvolvidos))
+                                                                    {
+                                                                        <a class="red CustomTooltip" href="#" title="Excluir Empregado" onclick="ExcluirEnvolvidoProprio('@iEmpregado.UKRel', '@iEmpregado.Nome'); return false;">
+                                                                            <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                                                        </a>
+                                                                    }
+                                                                </div>
+
+                                                                <div class="hidden-md hidden-lg">
+                                                                    <div class="inline pos-rel">
+                                                                        <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
+                                                                            <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                                                                        </button>
+
+                                                                        <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                                                            <li>
+                                                                                <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
+                                                                                    <span class="blue">
+                                                                                        <i class="ace-icon fa fa-search-plus bigger-120"></i>
+                                                                                    </span>
+                                                                                </a>
+                                                                            </li>
+
+                                                                            <li>
+                                                                                <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
+                                                                                    <span class="red">
+                                                                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                                                                    </span>
+                                                                                </a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+
+                                                    }
+
+
+                                                    @foreach (VMTerceiro iEmpregado in Model.EnvolvidosTerceiro)
+                                                    {
+                                                        <tr>
+                                                            <td class="CustomTooltip orange center" title="Empregado contratado">
+                                                                <i class="ace-icon fa fa-user bigger-130" />
+                                                            </td>
+
+                                                            <td>@iEmpregado.CPF</td>
+                                                            <td>@iEmpregado.Nome</td>
+                                                            <td>@iEmpregado.Funcao</td>
+
+                                                            <td class="center">
+                                                                <div class="hidden-sm hidden-xs action-buttons">
+
+                                                                    @if (!string.IsNullOrEmpty(iEmpregado.UKLesaoDoenca))
+                                                                    {
+                                                                        <span class="orange CustomTooltip" title="Houve lesão">
+                                                                            <i class="ace-icon fa fa-exclamation-triangle bigger-130"></i>
+                                                                        </span>
+                                                                    }
+
+                                                                    @if (!Model.Status.Contains("Em Edição"))
+                                                                    {
+                                                                        if (string.IsNullOrEmpty(iEmpregado.UKCAT))
+                                                                        {
+                                                                            if (Model.Operacoes.Contains(Operacao.IncluirCodificacao))
+                                                                            {
+                                                                                <a class="grey CustomTooltip lkNovaCAT" href="#" title="Cadastrar CAT" data-tipo="Contratado" data-uniquekeyrel="@iEmpregado.UKRel" data-target="#modalNovaCAT" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                                    <i class="ace-icon fa fa-life-ring bigger-130"></i>
+                                                                                </a>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <a class="grey CustomTooltip lkNovaCAT" href="#" title="Nenhuma CAT cadastrada">
+                                                                                    <i class="ace-icon fa fa-life-ring bigger-130"></i>
+                                                                                </a>
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <a class="orange CustomTooltip lkEditarCAT" href="#" title="Gerenciar CAT" data-ukincidente="@Model.UniqueKey" data-tipo="Contratado" data-ukincidente="@Model.UniqueKey" data-ukcat="@iEmpregado.UKCAT" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar CAT" data-target="#modalEditarCAT" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                                <i class="ace-icon fa fa-life-ring bigger-130"></i>
+                                                                            </a>
+                                                                        }
+                                                                    }
+
+                                                                    @if (!Model.Status.Contains("Em Edição") && !Model.Status.Contains("Em Análise"))
+                                                                    {
+                                                                        if (string.IsNullOrEmpty(iEmpregado.UKCodificacao))
+                                                                        {
+                                                                            if (Model.Operacoes.Contains(Operacao.IncluirCodificacao))
+                                                                            {
+                                                                                <a class="grey CustomTooltip lkNovaCodificacao" href="#" data-tipo="Contratado" data-uniquekeyrel="@iEmpregado.UKRel" title="Cadastrar Codificação" data-target="#modalNovaCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                                    <i class="ace-icon fa fa-bell bigger-130"></i>
+                                                                                </a>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <a class="grey CustomTooltip lkNovaCodificacao" href="#" title="Nenhuma codificação cadastrada">
+                                                                                    <i class="ace-icon fa fa-bell bigger-130"></i>
+                                                                                </a>
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <a class="red CustomTooltip lkEditarCodificacao" href="#" data-ukincidente="@Model.UniqueKey" data-tipo="Contratado" data-ukcodificacao="@iEmpregado.UKCodificacao" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar Codificação" data-target="#modalEditarCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+
+                                                                                <i class="ace-icon fa fa-bell bigger-130"></i>
+                                                                            </a>
+                                                                        }
+                                                                    }
+
+                                                                    <a href='#' class="green CustomTooltip lkEditTerceiro" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar Empregado" data-target="#modalEditEmpTerc" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                                        <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                                                    </a>
+
+                                                                    @if (Model.Operacoes.Contains(Operacao.IncluirEnvolvidos))
+                                                                    {
+                                                                        <a class="red CustomTooltip" href="#" title="Excluir Empregado" onclick="ExcluirEnvolvidoTerceiro('@iEmpregado.UKRel', '@iEmpregado.Nome'); return false;">
+                                                                            <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                                                        </a>
+                                                                    }
+                                                                </div>
+
+                                                                <div class="hidden-md hidden-lg">
+                                                                    <div class="inline pos-rel">
+                                                                        <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
+                                                                            <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                                                                        </button>
+
+                                                                        <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                                                            <li>
+                                                                                <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
+                                                                                    <span class="blue">
+                                                                                        <i class="ace-icon fa fa-search-plus bigger-120"></i>
+                                                                                    </span>
+                                                                                </a>
+                                                                            </li>
+
+                                                                            <li>
+                                                                                <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
+                                                                                    <span class="red">
+                                                                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                                                                    </span>
+                                                                                </a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+
+                                                    }
+
+                                                </tbody>
+                                            </table>
+
+
+
+                                        }
+                                        else
+                                        {
+                                            <div class="timeline-item clearfix">
+                                                <div class="timeline-info">
+                                                    <i class="timeline-indicator ace-icon fa fa-exclamation-triangle btn btn-warning no-hover"></i>
+                                                </div>
+                                                <div>
+                                                    <h5 class="text-warning smaller-90">
+                                                        <strong>
+                                                            Nenhum envolvido cadastrado até o momento.
+                                                        </strong>
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div> <!-- Col -->
+                                </div> <!-- Row -->
+
+                            </div> <!-- widget-main -->
+                        </div>
+                    </div>
+                </div>*@
+
+        </div>
+    }
+}
+
+<style type="text/css">
+
+    .profile-user-info {
+        width: 100%;
+        margin: 0;
+    }
+</style>

@@ -142,7 +142,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.Observacao, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
                     <div class="col-xs-12 col-sm-12">
-                        @Html.EditorFor(model => model.Diagnostico, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(model => model.Observacao, new { htmlAttributes = new { @class = "form-control" } })
                     </div>
                 </div>
             </div>
@@ -171,7 +171,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.EOrgaoClasse, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
                     <div class="col-xs-12 col-sm-12">
-                        @Html.EnumDropDownListFor(model => model.Afatamento, "Afastamento...", htmlAttributes: new { @class = "chosen-select form-control" })
+                        @Html.EnumDropDownListFor(model => model.EOrgaoClasse, "Órgão de Classe...", htmlAttributes: new { @class = "chosen-select form-control" })
                     </div>
                 </div>
             </div>
@@ -191,7 +191,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.EUnidadeFederacao, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
                     <div class="col-xs-12 col-sm-12">
-                        @Html.EnumDropDownListFor(model => model.EUnidadeFederacao, "Afastamento...", htmlAttributes: new { @class = "chosen-select form-control" })
+                        @Html.EnumDropDownListFor(model => model.EUnidadeFederacao, "Unidade de Federação...", htmlAttributes: new { @class = "chosen-select form-control" })
                     </div>
                 </div>
             </div>

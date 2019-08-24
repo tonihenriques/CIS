@@ -45,6 +45,14 @@
                 <input type="hidden" id="MenuAtual" value="@ViewBag.MenuID" />
             }
 
+            @*<li class="hover">
+                <a href="@path/Home/Dashboard">
+                    <i class="menu-icon ace-icon fa fa-inbox"></i>
+                    <span class="menu-text"> Dashboard </span>
+                    <b class="arrow"></b>
+                </a>
+            </li>*@
+
             <li class="hover">
                 <a href="#" class="dropdown-toggle">
                     <i class="menu-icon ace-icon fa fa-inbox"></i>
@@ -76,24 +84,24 @@
             <li class="hover">
                 <a href="#" class="dropdown-toggle">
                     <i class="menu-icon ace-icon fa fa-home"></i>
-                    <span class="menu-text"> Área de Trabalho </span>
+                    <span class="menu-text"> Pesquisa </span>
                     <b class="arrow fa fa-angle-down"></b>
                 </a>
                 <b class="arrow"></b>
 
                 <ul class="submenu">
-                    <li class="hover">
+                    @*<li class="hover">
                         <a href="@path/Usuario/">
                             <i class="menu-icon fa fa-caret-right"></i>
                             Meus Incidentes
                         </a>
                         <b class="arrow"></b>
-                    </li>
+                    </li>*@
 
                     <li class="hover">
                         <a href="#" class="dropdown-toggle">
                             <i class="menu-icon ace-icon fa fa-search"></i>
-                            <span class="menu-text"> Pesquisa </span>
+                            <span class="menu-text"> Incidentes </span>
                             <b class="arrow fa fa-angle-down"></b>
                         </a>
 
@@ -103,7 +111,7 @@
                             <li class="hover">
                                 <a href="#" class="dropdown-toggle">
                                     <i class="menu-icon fa fa-caret-right"></i>
-                                    <span class="menu-text"> Incidentes </span>
+                                    <span class="menu-text"> Pessoas </span>
                                     <b class="arrow fa fa-angle-down"></b>
                                 </a>
 
@@ -149,6 +157,44 @@
                                         </a>
                                         <b class="arrow"></b>
                                     </li>
+                                </ul>
+
+                            </li>
+
+                            <li class="hover">
+                                <a href="#" class="dropdown-toggle">
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    <span class="menu-text"> Veículos </span>
+                                    <b class="arrow fa fa-angle-down"></b>
+                                </a>
+
+                                <b class="arrow"></b>
+
+                                <ul class="submenu">
+                                    <li class="hover">
+                                        <a href="@path/Incidente/PesquisaDadosBase">
+                                            <i class="menu-icon fa fa-caret-right"></i>
+                                            Por Dados Base
+                                        </a>
+                                        <b class="arrow"></b>
+                                    </li>
+
+                                    <li class="hover">
+                                        <a href="@path/Incidente/PesquisaEnvolvidosProprio">
+                                            <i class="menu-icon fa fa-caret-right"></i>
+                                            Por Estagiário
+                                        </a>
+                                        <b class="arrow"></b>
+                                    </li>
+
+                                    <li class="hover">
+                                        <a href="@path/Incidente/PesquisaEnvolvidosTerceiro">
+                                            <i class="menu-icon fa fa-caret-right"></i>
+                                            Por Veículo
+                                        </a>
+                                        <b class="arrow"></b>
+                                    </li>
+
                                 </ul>
 
                             </li>
@@ -309,7 +355,7 @@
             @if (permissoes.Any(a => a.Perfil.Equals("Administrador")))
             {
 
-                <li class="hover">
+                @*<li class="hover">
                     <a href="#" class="dropdown-toggle">
                         <i class="menu-icon ace-icon fa fa-area-chart"></i>
                         <span class="menu-text"> Relatórios </span>
@@ -335,7 +381,7 @@
                             <b class="arrow"></b>
                         </li>
                     </ul>
-                </li>
+                </li>*@
 
             }
 
@@ -350,20 +396,13 @@
                 <ul class="submenu">
 
                     <li class="hover">
-                        <a href="@path/Empresa/">
+                        <a href="@path/Home/Suporte">
                             <i class="menu-icon fa fa-caret-right"></i>
-                            Administradores
+                            Equipe de Suporte
                         </a>
                         <b class="arrow"></b>
                     </li>
 
-                    <li class="hover">
-                        <a href="@path/Usuario/">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            Chamados
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
                 </ul>
             </li>
 

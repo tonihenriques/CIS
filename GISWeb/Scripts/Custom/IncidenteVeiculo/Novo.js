@@ -89,11 +89,25 @@
 
 function OnBeginCadastrarAcidente(jqXHR, settings) {
 
+    if ($("#Acidente").prop("checked") == true) {
+        $("#Acidente").val(true);
+    }
+    else {
+        $("#Acidente").val(false);
+    }
+
     if ($("#AcidenteFatal").prop("checked") == true) {
         $("#AcidenteFatal").val(true);
     }
     else {
         $("#AcidenteFatal").val(false);
+    }
+
+    if ($("#AcidentePotencial").prop("checked") == true) {
+        $("#AcidentePotencial").val(true);
+    }
+    else {
+        $("#AcidentePotencial").val(false);
     }
 
     if ($("#AcidenteGraveIP102").prop("checked") == true) {
@@ -103,9 +117,9 @@ function OnBeginCadastrarAcidente(jqXHR, settings) {
         $("#AcidenteGraveIP102").val(false);
     }
 
+
     var form = $("#formCadastroAcidente");
     settings.data = form.serialize();
-
 
     $(".LoadingLayout").show();
     $('.page-content-area').ace_ajax('startLoading');

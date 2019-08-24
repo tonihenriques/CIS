@@ -21,6 +21,7 @@ namespace GISWeb.Infraestrutura.Filters
             {
                 filterContext.Controller.ViewBag.NomeUsuario = AutorizacaoProvider.UsuarioAutenticado.Nome;
                 filterContext.Controller.ViewBag.MatriculaUsuario = AutorizacaoProvider.UsuarioAutenticado.Login;
+                filterContext.Controller.ViewBag.TipoDeAcesso = AutorizacaoProvider.UsuarioAutenticado.TipoDeAcesso;
                 filterContext.Controller.ViewBag.Permissoes = AutorizacaoProvider.UsuarioAutenticado.Permissoes;
             }
         }

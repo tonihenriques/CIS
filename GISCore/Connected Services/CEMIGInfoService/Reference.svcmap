@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="8397d315-deec-4dc3-a883-3f677d6f40b3" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="https://gedex.cemig.com.br/interop/webhost/facadeservices/infoservice.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="InfoService.xsd" MetadataType="Schema" ID="9592ec7b-b632-491e-ba15-a25f74e4c3c3" SourceId="1" SourceUrl="https://gedex.cemig.com.br/INTEROP/WebHost/facadeservices/InfoService.svc?xsd=xsd2" />
+    <MetadataFile FileName="InfoService.disco" MetadataType="Disco" ID="92d8737d-9afb-4f2d-ba89-ba8558e2992d" SourceId="1" SourceUrl="https://gedex.cemig.com.br/INTEROP/WebHost/facadeservices/InfoService.svc?disco" />
+    <MetadataFile FileName="InfoService.wsdl" MetadataType="Wsdl" ID="182bc8ac-cef4-4223-99de-4366755acd1c" SourceId="1" SourceUrl="https://gedex.cemig.com.br/INTEROP/WebHost/facadeservices/InfoService.svc?wsdl" />
+    <MetadataFile FileName="InfoService1.wsdl" MetadataType="Wsdl" ID="227393f0-1978-4e74-a494-2852fe8e1a50" SourceId="1" SourceUrl="https://gedex.cemig.com.br/INTEROP/WebHost/facadeservices/InfoService.svc?wsdl=wsdl0" />
+    <MetadataFile FileName="InfoService1.xsd" MetadataType="Schema" ID="915a91fd-b40c-4f26-a891-98fd627b3428" SourceId="1" SourceUrl="https://gedex.cemig.com.br/INTEROP/WebHost/facadeservices/InfoService.svc?xsd=xsd1" />
+    <MetadataFile FileName="InfoService2.xsd" MetadataType="Schema" ID="e4a5368a-de69-4447-be23-c91c3e82c5c4" SourceId="1" SourceUrl="https://gedex.cemig.com.br/INTEROP/WebHost/facadeservices/InfoService.svc?xsd=xsd0" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

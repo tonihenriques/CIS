@@ -15,8 +15,9 @@ function BuscarTotalDocsInbox() {
         success: function (data) {
 
             $(".liNavbarInboxBadgeTotalPessoal").html(data.resultado.Total);
-            $(".totalDocsPessoal").html(data.resultado.Pessoal);
-            $(".totalDocsGrupos").html(data.resultado.Grupos);
+
+            $(".totalDocsPessoal").html(data.resultado.Pessoal + data.resultado.PessoalVeiculo);
+            $(".totalDocsGrupos").html(data.resultado.Grupos + data.resultado.GruposVeiculo);
 
             $("#liNavbarInbox").show();
         }
@@ -82,6 +83,60 @@ function VisualizarDetalhesIncidente(elementoclicado) {
 
 }
 
+function VisualizarDetalhesIncidenteVeiculo(elementoclicado) {
+
+    //$(".modal-body").css("max-height", (window.innerHeight - 120) + "px");
+    var codigoIncidente = $(elementoclicado).closest("[data-codigo]").attr("data-codigo");
+    var ukIncidente = $(elementoclicado).closest("[data-uniquekey]").attr("data-uniquekey");
+
+    $('#modalDetalhesIncidenteVeiculoTituloName').html('[<a href="#" class="lnkRevisaoEspecifica blue" data-target="#modalObterLinkEsp" data-toggle="modal">' + codigoIncidente + '</a>]');
+
+    $('#modalDetalhesIncidenteVeiculoTitulo').html('');
+    $('#modalDetalhesIncidenteVeiculoTitulo').hide();
+
+    $('#modalDetalhesIncidenteVeiculoCorpo').attr('data-codigo', codigoIncidente);
+    $('#modalDetalhesIncidenteVeiculoCorpo').attr('data-uniquekey', ukIncidente);
+
+    $('#modalDetalhesIncidenteVeiculoX').show();
+    $('#modalDetalhesIncidenteVeiculoCorpo').html('');
+    $('#modalDetalhesIncidenteVeiculoCorpoLoadingTexto').html('...Carregando dados do incidente');
+    $('#modalDetalhesIncidenteVeiculoCorpoLoading').show();
+
+    $.post('/IncidenteVeiculo/Detalhes', { uniquekey: ukIncidente }, function (content) {
+        $('#modalDetalhesIncidenteVeiculoCorpoLoading').hide();
+
+        if (content.resultado != null && content.resultado != undefined) {
+
+            if (content.resultado.Erro != null && content.resultado.Erro != undefined && content.resultado.Erro != "") {
+                var divErro = "" +
+                    "<div class=\"alert alert-danger\">" +
+                    "<strong>" +
+                    "<i class=\"ace-icon fa fa-meh-o\"></i> " +
+                    "Oops! " +
+                    "</strong>" +
+
+                    "<span>" + content.resultado.Erro + "</span>" +
+                    "<br />" +
+                    "</div>";
+
+                $('#modalDetalhesIncidenteVeiculoCorpo').html(divErro);
+
+            }
+        } else {
+
+            
+            $('#modalDetalhesIncidenteVeiculoCorpo').html(content);
+
+            AplicaTooltip();
+
+            AdicionarFuncoesOnClikParaOperacoes();
+        }
+    });
+
+}
+
+
+
 function OnClickBtnDropdownMenu(elementoClicado) {
 
     var ficha = elementoClicado.closest('[data-uniquekey]').attr('data-uniquekey');
@@ -116,8 +171,10 @@ function OnClickBtnDropdownMenu(elementoClicado) {
 }
 
 function AdicionarFuncoesOnClikParaOperacoes() {
+
     $('.lnkAprovar').on('click', function () {
-        OnClickAprovarIncidente($(this));
+        var sTipo = $(this).attr("data-tipo");
+        OnClickAprovarIncidente($(this), sTipo);
     });
 
     $('.lnkAssumir').on('click', function () {
@@ -172,6 +229,12 @@ function AdicionarFuncoesOnClikParaOperacoes() {
         e.preventDefault();
 
         OnClickExcluirArquivo($(this));
+    });
+
+    $('.lnkExcluirArquivoVeiculo').on('click', function (e) {
+        e.preventDefault();
+
+        OnClickExcluirArquivoVeiculo($(this));
     });
 
     $('.lnkDownloadTodosArquivos').on('click', function (e) {
@@ -230,7 +293,6 @@ function AdicionarFuncoesOnClikParaOperacoes() {
         OnClickEditarCAT($(this));
     });
 
-
 }
 
 function AtualizarTelasDetalhes() {
@@ -241,11 +303,19 @@ function AtualizarTelasDetalhes() {
             VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
         }
 
+        if (EstaNoModalVisualizarDetalhesIncidenteVeiculo()) {
+            VisualizarDetalhesIncidenteVeiculo($('#modalDetalhesIncidenteVeiculoCorpo'));
+        }
+
         AtualizarIncidentes();
     } else if (EstaNaPesquisaIncidente()) {
 
         if (EstaNoModalVisualizarDetalhesIncidente()) {
             VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
+        }
+
+        if (EstaNoModalVisualizarDetalhesIncidenteVeiculo()) {
+            VisualizarDetalhesIncidenteVeiculo($('#modalDetalhesIncidenteVeiculoCorpo'));
         }
         
         AtualizarRowPesquisa();
@@ -264,6 +334,10 @@ function EstaNaPesquisaIncidente() {
 
 function EstaNoModalVisualizarDetalhesIncidente() {
     return ($('#modalDetalhesIncidente').data('bs.modal') || { isShown: false }).isShown;
+}
+
+function EstaNoModalVisualizarDetalhesIncidenteVeiculo() {
+    return ($('#modalDetalhesIncidenteVeiculo').data('bs.modal') || { isShown: false }).isShown;
 }
 
 function InitDropZoneSingle(elementoClicado) {
@@ -365,8 +439,15 @@ function InitDropZoneSingle(elementoClicado) {
 
                     if ($('#formVisualizarDetalhes').length !== 0)
                         $('#formVisualizarDetalhes').submit();
-                    else
-                        VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
+                    else {
+                        if ($("#modalDetalhesIncidenteVeiculo").css("display") == "block") {
+                            VisualizarDetalhesIncidenteVeiculo($('#modalDetalhesIncidenteVeiculoCorpo'));
+                        }
+                        else {
+                            VisualizarDetalhesIncidente($('#modalDetalhesIncidenteCorpo'));
+                        }                        
+                    }
+                        
                 }
             }
             else {
@@ -457,6 +538,50 @@ function OnClickExcluirArquivo(origemElemento) {
 
     ExibirMensagemDeConfirmacaoSimples(msg, titulo, excluir, classeBotao);
 }
+
+function OnClickExcluirArquivoVeiculo(origemElemento) {
+    var excluir = function () {
+        $('#detalhesIncidenteVeiculoLoadingTexto').html('...Excluindo arquivo');
+        $('#detalhesIncidenteVeiculoLoading').show();
+
+        $('#modalDetalhesIncidenteVeiculoCorpoLoadingTexto').html('...Excluindo arquivo');
+        $('#modalDetalhesIncidenteVeiculoCorpoLoading').show();
+
+        BloquearDiv("detalhesIncidente");
+
+        $.ajax({
+            method: "POST",
+            url: "/Arquivo/Excluir",
+            data: { ukArquivo: origemElemento.closest("[data-uniquekey]").data("uniquekey") },
+            success: function (content) {
+                $('#detalhesIncidenteLoading').hide();
+                $('#modalDetalhesIncidenteVeiculoCorpoLoading').hide();
+
+                DesbloquearDiv("detalhesIncidente");
+
+                if (content.erro) {
+                    ExibirMensagemGritter('Oops!', content.erro, 'gritter-error');
+                }
+                else {
+                    if ($('#formVisualizarDetalhes').length !== 0) {
+                        $('#conteudoDetalhesIncidente').html('');
+                        $('#detalhesIncidenteVeiculoLoadingTexto').html('...Carregando dados do documento');
+                        $('#formVisualizarDetalhes').submit();
+                    }
+                    else
+                        VisualizarDetalhesIncidenteVeiculo($('#modalDetalhesIncidenteVeiculoCorpo'));
+                }
+            }
+        });
+    }
+
+    var msg = "Você está excluindo este arquivo.";
+    var classeBotao = "btn-danger";
+    var titulo = "Exclusão de Arquivo";
+
+    ExibirMensagemDeConfirmacaoSimples(msg, titulo, excluir, classeBotao);
+}
+
 
 function OnClickDownloadTodosArquivos(origemElemento) {
     $('#detalhesIncidenteLoadingTexto').html('...Gerando pacote zip dos arquivos');

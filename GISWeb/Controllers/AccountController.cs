@@ -1,10 +1,12 @@
 ﻿using GISCore.Business.Abstract;
 using GISModel.DTO.Account;
+using GISModel.Entidades;
 using GISWeb.Infraestrutura.Filters;
 using GISWeb.Infraestrutura.Provider.Abstract;
 using Ninject;
 using System;
 using System.Configuration;
+using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI;
 
@@ -21,6 +23,12 @@ namespace GISWeb.Controllers
             [Inject]
             public IUsuarioBusiness UsuarioBusiness { get; set; }
 
+            [Inject]
+            public IEmpresaBusiness EmpresaBusiness { get; set; }
+
+            [Inject]
+            public IDepartamentoBusiness DepartamentoBusiness { get; set; }
+
         #endregion
 
         public ActionResult Login()
@@ -32,6 +40,27 @@ namespace GISWeb.Controllers
         [DadosUsuario]
         public ActionResult Perfil()
         {
+
+            Usuario usr = UsuarioBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(AutorizacaoProvider.UsuarioAutenticado.UniqueKey));
+            if (usr != null)
+            {
+                Departamento dp = DepartamentoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(usr.UKDepartamento));
+                if (dp != null)
+                {
+                    ViewBag.Departamento = dp.Sigla + ", " + dp.Descricao;
+                }
+
+                Empresa emp = EmpresaBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(usr.UKEmpresa));
+                if (emp != null)
+                {
+                    ViewBag.Empresa = emp.NomeFantasia;
+                }
+
+                ViewBag.DataInclusao = usr.DataInclusao.ToString("dd/MM/yyyy HH:mm");
+
+                return View(AutorizacaoProvider.UsuarioAutenticado);
+            }
+
             return View();
         }
 

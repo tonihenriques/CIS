@@ -1,5 +1,5 @@
 ﻿
-function OnClickAprovarIncidente(origemElemento) {
+function OnClickAprovarIncidente(origemElemento, pTipo) {
     $('#modalAprovarX').show();
     $('#modalAprovarFechar').removeClass('disabled');
     $('#modalAprovarFechar').removeAttr('disabled', 'disabled');
@@ -14,7 +14,7 @@ function OnClickAprovarIncidente(origemElemento) {
     $.ajax({
         method: 'GET',
         url: '/Inbox/AprovarIncidente',
-        data: { uk: ficha },
+        data: { uk: ficha, tipo: pTipo },
         error: function (erro) {
             $('#modalAprovar').modal('hide');
             ExibirMensagemGritter('Oops!', erro.responseText, 'gritter-error');
@@ -73,6 +73,8 @@ function OnSuccessAprovar(content) {
     //AtualizarTelasDetalhes();
     
     $("#modalDetalhesIncidente").modal("hide");
+    $("#modalDetalhesIncidenteVeiculo").modal("hide");
+
     $("#ObjRecemCriado").val("");
     
     if ($(".msgRetornoExterno .alert").length > 0) {

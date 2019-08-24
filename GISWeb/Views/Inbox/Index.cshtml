@@ -21,16 +21,16 @@
 
                     <ul class="nav nav-tabs" id="myTab" style="float: right;">
 
-                        <li class="active">
+                        <li class="tabMenuIncidente">
                             <a data-toggle="tab" href="#result_incidente" onclick="AtualizarIncidentes();">
                                 Incidente
-                                @*<span class="badge badge-info">0</span>*@
+                                <span class="badge badge-info" id="TotalI">@ViewBag.Pessoal</span>
                             </a>
                         </li>
-                        <li>
+                        <li class="tabMenuIncidenteVeiculo">
                             <a data-toggle="tab" href="#result_incidente_veiculo" onclick="AtualizarIncidentesVeiculos();">
                                 Incidente Veículo
-                                @*<span class="badge badge-info">0</span>*@
+                                <span class="badge badge-info" id="TotalIV">@ViewBag.PessoalVeiculo</span>
                             </a>
                         </li>
                     </ul>
@@ -39,10 +39,10 @@
 
                     <div class="tabbable">
                         <div class="tab-content" style="float: left; width: 100%; margin-top: 0px; padding: 0; border-top: 1px solid #c5d0dc;">
-                            <div id="result_incidente" class="tab-pane fade in active">
+                            <div id="result_incidente" class="tab-pane">
                             </div>
 
-                            <div id="result_incidente_veiculo" class="tab-pane fade">
+                            <div id="result_incidente_veiculo" class="tab-pane">
                             </div>
                         </div>
                     </div>

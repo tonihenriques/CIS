@@ -13,9 +13,15 @@
 
 function AtualizarIncidentes() {
 
-    
+    $(".tabMenuIncidente").addClass("active");
+    $(".tabMenuIncidenteVeiculo").removeClass("active");
+
+    $("#result_incidente").addClass("fade");
+    $("#result_incidente").addClass("in");
+    $("#result_incidente").addClass("active");
 
     $("#result_incidente").html("");
+    $("#result_incidente_veiculo").html("");
     $(".LoadingLayout").show();
 
     if (EstaNoModalVisualizarDetalhesIncidente()) {
@@ -56,6 +62,9 @@ function AtualizarIncidentes() {
 
             $("#result_incidente").html(content);
 
+            $("#TotalI").text($("#TotalItensIncidente").val());
+            $("#TotalIV").text($("#TotalItensIncidenteVeiculo").val());
+
             if ($("#tableResultadoIncidentes").length > 0) {
                 AplicaTooltip();
 
@@ -82,6 +91,14 @@ function AtualizarIncidentes() {
 
 function AtualizarIncidentesVeiculos() {
 
+    $(".tabMenuIncidente").removeClass("active");
+    $(".tabMenuIncidenteVeiculo").addClass("active");
+    
+    $("#result_incidente_veiculo").addClass("fade");
+    $("#result_incidente_veiculo").addClass("in");
+    $("#result_incidente_veiculo").addClass("active");
+
+    $("#result_incidente").html("");
     $("#result_incidente_veiculo").html("");
     $(".LoadingLayout").show();
     $('.page-content-area').ace_ajax('startLoading');
@@ -108,7 +125,19 @@ function AtualizarIncidentesVeiculos() {
             if ($("#tableResultadoIncidentesVeiculos").length > 0) {
                 AplicaTooltip();
 
-                AplicajQdataTable("tableResultadoIncidentesVeiculos", [null, null, null, null, null, null, null, { "bSortable": false }], false, 20);
+                AplicajQdataTable("tableResultadoIncidentesVeiculos", [null, null, null, null, null, null, null, null, { "bSortable": false }], false, 20);
+
+                if ($("#ObjRecemCriado").val() != "") {
+                    $('#modalDetalhesIncidenteVeiculo').modal('show');
+                    var obj = $("#" + $("#ObjRecemCriado").val());
+                    VisualizarDetalhesIncidenteVeiculo(obj);
+                }
+
+                $('.btnDropdownMenu').off("click").on('click', function () {
+                    $(this).closest('tr').css({ 'background-color': '#dff0d8' });
+
+                    OnClickBtnDropdownMenu($(this));
+                });
             }
 
         }

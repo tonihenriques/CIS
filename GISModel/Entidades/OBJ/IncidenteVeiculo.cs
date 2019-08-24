@@ -1,4 +1,5 @@
-﻿using GISModel.DTO;
+﻿using GISModel.CustomAttributes;
+using GISModel.DTO;
 using GISModel.Enums;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -30,12 +31,14 @@ namespace GISModel.Entidades.OBJ
 
 
         [Display(Name = "Tipo de Entrada")]
+        [RequiredEnum(ErrorMessage = "Informe o tipo de entrada.")]
         public ETipoEntradaVeiculo ETipoEntrada { get; set; }
 
         [Display(Name = "Centro (Empresa)")]
+        [RequiredEnum(ErrorMessage = "Informe o centro.")]
         public ECentroEmpresa Centro { get; set; }
 
-        [Required(ErrorMessage = "A regional é obrigatória")]
+        [RequiredEnum(ErrorMessage = "A regional é obrigatória")]
         [Display(Name = "Área de Trabalho")]
         public Regional Regional { get; set; }
 
@@ -48,7 +51,7 @@ namespace GISModel.Entidades.OBJ
         public string UKOrgao { get; set; }
 
         [Display(Name = "Data do Incidente")]
-        [Required(ErrorMessage = "Informe a data do incidente")]
+        [Required(ErrorMessage = "Informe a data do incidente.")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         [Column(TypeName = "date")]
         public DateTime DataIncidente { get; set; }
@@ -60,12 +63,14 @@ namespace GISModel.Entidades.OBJ
 
 
         [Display(Name = "Tipo de Acidente")]
+        [RequiredEnum(ErrorMessage = "Informe o tipo do acidente")]
         public ETipoAcidenteVeiculo ETipoAcidente { get; set; }
 
         [Display(Name = "Local do Acidente")]
         public string LocalAcidente { get; set; }
 
         [Display(Name = "Tipo do Local do Acidente")]
+        [RequiredEnum(ErrorMessage = "O Tipo do Local do Acidente é obrigatório.")]
         public ETipoLocalAcid TipoLocalAcidente { get; set; }
 
         [Display(Name = "Desc. Logradouro")]
