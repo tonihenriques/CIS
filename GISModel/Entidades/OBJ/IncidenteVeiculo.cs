@@ -27,9 +27,6 @@ namespace GISModel.Entidades.OBJ
         [Display(Name = "Acidente Potencial?")]
         public bool AcidentePotencial { get; set; }
 
-
-
-
         [Display(Name = "Tipo de Entrada")]
         [RequiredEnum(ErrorMessage = "Informe o tipo de entrada.")]
         public ETipoEntradaVeiculo ETipoEntrada { get; set; }
@@ -41,8 +38,6 @@ namespace GISModel.Entidades.OBJ
         [RequiredEnum(ErrorMessage = "A regional é obrigatória")]
         [Display(Name = "Área de Trabalho")]
         public Regional Regional { get; set; }
-
-
 
         [Display(Name = "Diretoria")]
         public string UKDiretoria { get; set; }
@@ -58,9 +53,6 @@ namespace GISModel.Entidades.OBJ
 
         [Display(Name = "Horário do Incidente")]
         public string HoraIncidente { get; set; }
-
-
-
 
         [Display(Name = "Tipo de Acidente")]
         [RequiredEnum(ErrorMessage = "Informe o tipo do acidente")]
@@ -79,10 +71,6 @@ namespace GISModel.Entidades.OBJ
         [Display(Name = "Número do Logradouro ")]
         public string NumeroLogradouro { get; set; }
 
-
-
-
-
         //Cada gerência da Sede possui um CNPJ no msm endereço
         //Portanto, não tem como definirmos uma classe específica
         [Display(Name = "CNPJ do local do Acidente")]
@@ -93,19 +81,12 @@ namespace GISModel.Entidades.OBJ
         [DataType(DataType.MultilineText)]
         public string Descricao { get; set; }
 
-
-
-
-
         [Display(Name = "Nº Boletim de Ocorrência")]
         public string NumeroBoletimOcorrencia { get; set; }
 
         [Display(Name = "Data Boletim de Ocorrência")]
         [Column(TypeName = "date")]
         public DateTime? DataBoletimOcorrencia { get; set; }
-
-
-
 
         [Display(Name = "Cidade")]
         public string UKMunicipio { get; set; }
@@ -116,12 +97,8 @@ namespace GISModel.Entidades.OBJ
         public string UKESocial { get; set; }
 
 
-
-
         [Display(Name = "Acid. grave (IP 10.2)?")]
         public bool AcidenteGraveIP102 { get; set; }
-
-
 
         [Display(Name = "Data Atualização")]
         public DateTime? DataAtualizacao { get; set; }

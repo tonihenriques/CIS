@@ -14,12 +14,9 @@ namespace GISModel.DTO.IncidenteVeiculo
 
         public string MensagemPasso { get; set; }
 
-
-
         public string NumeroSmart { get; set; }
 
         public string ETipoAcidente { get; set; }
-
 
         public string Orgao { get; set; }
 
@@ -57,8 +54,6 @@ namespace GISModel.DTO.IncidenteVeiculo
         public string Centro { get; set; }
 
         public string Regional { get; set; }
-
-
 
         public string UsuarioInclusao { get; set; }
 
