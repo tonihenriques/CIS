@@ -225,6 +225,12 @@ function AdicionarFuncoesOnClikParaOperacoes() {
         OnClickRejeitarIncidente($(this), sTipo, sWF);
     });
 
+
+    $('.lnkHistoricoWF').on('click', function () {
+        OnClickHistoricoWF($(this));
+    });
+
+
     $('.lnkUploadArquivo').off("click").on('click', function (e) {
         e.preventDefault();
 

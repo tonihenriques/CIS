@@ -416,6 +416,7 @@
     <Content Include="Views\IncidenteVeiculo\_MenuOperacoes.cshtml" />
     <Content Include="Views\Home\Sobre.cshtml" />
     <Content Include="Views\Home\Suporte.cshtml" />
+    <Content Include="Views\Inbox\_VisulizarWorkflow.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,0 +1,524 @@
+﻿@using GISModel.DTO.Inbox
+@model List<VMWorkflow>
+
+
+@if (Model == null || Model.Count == 0)
+{
+    <div class="space-10"></div>
+
+    <div class="alert alert-danger">
+        <strong>
+            <i class="ace-icon fa fa-meh-o"></i>
+            Oops!
+        </strong>
+
+        Não foi localizado nenhum workflow relacionado a este incidente.
+        <br />
+    </div>
+}
+else
+{
+
+
+    var collapseClasse = "";
+    var collapseSentidoSeta = "up";
+
+    var labelStatusClasse = string.Empty;
+    var widgetHeaderClasse = string.Empty;
+
+    var widgetHeaderComplemento = string.Empty;
+
+    foreach (VMWorkflow workflow in Model)
+    {
+        if (workflow.Status.Equals("Em andamento"))
+        {
+            widgetHeaderClasse = "blue";
+            labelStatusClasse = "label-primary";
+
+            widgetHeaderComplemento = "";
+        }
+        else if (workflow.Status.Equals("Concluído"))
+        {
+            widgetHeaderClasse = "green";
+            labelStatusClasse = "label-success";
+
+            widgetHeaderComplemento = ", finalizado em <b>" + workflow.Passos.First<VMWorkflowStep>().DataInclusao.ToString("dd/MM/yyyy HH:mm") + "</b>";
+        }
+        else
+        {
+            widgetHeaderClasse = "text-warning";
+            labelStatusClasse = "label-yellow";
+
+            widgetHeaderComplemento = ", abortado em <b>" + workflow.Passos.First<VMWorkflowStep>().DataExclusao.ToString("dd/MM/yyyy HH:mm") + "</b>";
+        }
+
+        string InicioFLuxo = workflow.Passos.First<VMWorkflowStep>().DataInclusao.ToString("dd/MM/yyyy HH:mm");
+
+        <div class="widget-container-col">
+            <div class="widget-box transparent @collapseClasse">
+                <div class="widget-header" style="border-bottom: 1px solid #ddd">
+                    <h5 class="widget-title @widgetHeaderClasse">
+                        <i class="ace-icon fa fa-retweet"></i>
+                        <small>Iniciado em <b>@InicioFLuxo</b>@Html.Raw(widgetHeaderComplemento)</small>
+                    </h5>
+
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="collapse">
+                            <i class="1 ace-icon fa fa-chevron-@collapseSentidoSeta bigger-125"></i>
+                        </a>
+                    </div>
+
+                    <div class="widget-toolbar no-border">
+                        <span class="label label-xlg @labelStatusClasse middle" style="font-weight: 700">@workflow.Status.ToString().Replace("_", " ")</span>
+                    </div>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main">
+                        <div class="timeline-container" style="padding-right: 5px">
+
+                            @{ 
+                                var liTitleEE = string.Empty;
+                                var liTitleAN = string.Empty;
+                                var liTitleEP = string.Empty;
+                                var liTitleEA = string.Empty;
+                                var liTitleCO = string.Empty;
+
+                                var liClasseEE = string.Empty;
+                                var liClasseAN = string.Empty;
+                                var liClasseEP = string.Empty;
+                                var liClasseEA = string.Empty;
+                                var liClasseCO = string.Empty;
+
+                                var cEE = string.Empty;
+                                var cAN = string.Empty;
+                                var cEP = string.Empty;
+                                var cEA = string.Empty;
+                                var cCO = string.Empty;
+
+                                var elEE = string.Empty;
+                                var elAN = string.Empty;
+                                var elEP = string.Empty;
+                                var elEA = string.Empty;
+                                var elCO = string.Empty;
+
+                                var iEE = string.Empty;
+                                var iAN = string.Empty;
+                                var iEP = string.Empty;
+                                var iEA = string.Empty;
+                                var iCO = string.Empty;
+
+                                foreach (VMWorkflowStep wfStep in workflow.Passos)
+                                {
+                                    if (wfStep.Status.Equals("SO"))
+                                    {
+                                        if (wfStep.Nome.Equals("Em Edição"))
+                                        {
+                                            liClasseEE = "CustomTooltip";
+                                            liTitleEE = "Por " + wfStep.NomeResponsavel + " [" + wfStep.Responsavel + "] em " + wfStep.DataInclusao.ToString("dd/MM/yyyy HH:mm");
+                                        }
+                                        else if (wfStep.Nome.Equals("Em Análise"))
+                                        {
+                                            liClasseAN = "CustomTooltip";
+                                            liTitleAN = "Por " + wfStep.NomeResponsavel + " [" + wfStep.Responsavel + "] em " + wfStep.DataInclusao.ToString("dd/MM/yyyy HH:mm");
+                                        }
+                                        else if (wfStep.Nome.Equals("Em Processamento"))
+                                        {
+                                            liClasseEP = "CustomTooltip";
+                                            liTitleEP = "Por " + wfStep.NomeResponsavel + " [" + wfStep.Responsavel + "] em " + wfStep.DataInclusao.ToString("dd/MM/yyyy HH:mm");
+                                        }
+                                        else if (wfStep.Nome.Equals("Em Aprovação"))
+                                        {
+                                            liClasseEA = "CustomTooltip";
+                                            liTitleEA = "Por " + wfStep.NomeResponsavel + " [" + wfStep.Responsavel + "] em " + wfStep.DataInclusao.ToString("dd/MM/yyyy HH:mm");
+                                        }
+                                    }
+                                    else if (wfStep.Status.Equals("RS"))
+                                    {
+                                        if (wfStep.Nome.Equals("Em Edição"))
+                                        {
+                                            //cEE = "complete";
+                                            //elEE = "background-color: #5293c4;";
+
+                                            iEE = "fa-user blue";
+                                            iAN = "fa-hourglass-start grey";
+                                            iEP = "fa-hourglass-start grey";
+                                            iEA = "fa-hourglass-start grey";
+                                            iCO = "fa-hourglass-start grey";
+
+                                            liClasseEE = "CustomTooltip";
+                                            liTitleEE = "Com " + wfStep.NomeResponsavel + " [" + wfStep.Responsavel + "] em " + wfStep.DataInclusao.ToString("dd/MM/yyyy HH:mm");
+                                        }
+                                        else if (wfStep.Nome.Equals("Em Análise"))
+                                        {
+                                            cEE = "complete";
+                                            elEE = "background-color: #5293c4;";
+
+                                            iEE = "fa-user blue";
+                                            iAN = "fa-user blue";
+                                            iEP = "fa-hourglass-start grey";
+                                            iEA = "fa-hourglass-start grey";
+                                            iCO = "fa-hourglass-start grey";
+
+                                            liClasseAN = "CustomTooltip";
+                                            liTitleEE = "Com " + wfStep.NomeResponsavel + " [" + wfStep.Responsavel + "] em " + wfStep.DataInclusao.ToString("dd/MM/yyyy HH:mm");
+                                        }
+                                        else if (wfStep.Nome.Equals("Em Processamento"))
+                                        {
+                                            cEE = "complete";
+                                            cAN = "complete";
+                                            elAN = "background-color: #5293c4;";
+
+                                            iEE = "fa-user blue";
+                                            iAN = "fa-user blue";
+                                            iEP = "fa-user blue";
+                                            iEA = "fa-hourglass-start grey";
+                                            iCO = "fa-hourglass-start grey";
+
+                                            liClasseEP = "CustomTooltip";
+                                            liTitleEE = "Com " + wfStep.NomeResponsavel + " [" + wfStep.Responsavel + "] em " + wfStep.DataInclusao.ToString("dd/MM/yyyy HH:mm");
+                                        }
+                                        else if (wfStep.Nome.Equals("Em Aprovação"))
+                                        {
+                                            cEE = "complete";
+                                            cAN = "complete";
+                                            cEP = "complete";
+                                            elEP = "background-color: #5293c4;";
+
+                                            iEE = "fa-user blue";
+                                            iAN = "fa-user blue";
+                                            iEP = "fa-user blue";
+                                            iEA = "fa-user blue";
+                                            iCO = "fa-hourglass-start grey";
+
+                                            liClasseEA = "CustomTooltip";
+                                            liTitleEE = "Com " + wfStep.NomeResponsavel + " [" + wfStep.Responsavel + "] em " + wfStep.DataInclusao.ToString("dd/MM/yyyy HH:mm");
+                                        }
+                                        else
+                                        {
+                                            cEE = "complete";
+                                            cAN = "complete";
+                                            cEP = "complete";
+                                            cEA = "complete";
+                                            cCO = "complete";
+
+                                            iEE = "fa-user blue";
+                                            iAN = "fa-user blue";
+                                            iEP = "fa-user blue";
+                                            iEA = "fa-user blue";
+                                            iCO = "fa-user blue";
+                                        }
+
+                                    }
+                                    
+                                }
+
+
+                            }
+
+                            <div class="hidden-640">
+                                <ul class="steps">
+                                    <li data-step="1" class="@cEE @liClasseEE" title="@liTitleEE">
+                                        <span class="step" style="@elEE"><i class="ace-icon bigger-110 fa @iEE"></i></span>
+                                        <span class="title">Em Edição</span>
+                                    </li>
+                                    <li data-step="1" class="@cAN liClasseAN" title="@liTitleAN">
+                                        <span class="step" style="@elAN"><i class="ace-icon bigger-110 fa @iAN"></i></span>
+                                        <span class="title">Médico</span>
+                                    </li>
+                                    <li data-step="1" class="@cEP @liClasseEP" title="@liTitleEP">
+                                        <span class="step" style="@elEP"><i class="ace-icon bigger-110 fa @iEP"></i></span>
+                                        <span class="title">Técnico de Segurança</span>
+                                    </li>
+                                    <li data-step="1" class="@cEA @liClasseEA" title="@liTitleEA">
+                                        <span class="step" style="@elEA"><i class="ace-icon bigger-110 fa @iEA"></i></span>
+                                        <span class="title">Aprovação</span>
+                                    </li>
+                                    <li data-step="1" class="@cCO" title="">
+                                        <span class="step" style="@elCO"><i class="ace-icon bigger-110 fa @iCO"></i></span>
+                                        <span class="title">Finalizado</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+
+                            @{
+                                @*if (workflow.Template != null && workflow.Template.Count > 0)
+                                {
+                                    var inc = 0;
+                                    var liTitle = string.Empty;
+                                    var liClasse = string.Empty;
+                                    var liIcone = string.Empty;
+                                    var diferenciarProximoLiPorAtual = false;
+                                    var diferenciarProximoLiPorCancelado = false;
+                                    var liEstiloNoLiberacao = string.Empty;
+
+                                    <div class="hidden-640">
+                                        <ul class="steps">
+                                            @foreach (WorkflowStep wfStep in workflow.Template)
+                                            {
+                                                inc += 1;
+
+                                                if (diferenciarProximoLiPorAtual || diferenciarProximoLiPorCancelado)
+                                                {
+                                                    if (diferenciarProximoLiPorAtual)
+                                                    {
+                                                        liIcone = "fa-hourglass-start grey";
+                                                        liTitle = "";
+                                                    }
+                                                    else
+                                                    {
+                                                        liIcone = "fa-times red";
+                                                    }
+
+                                                    liClasse = "";
+                                                }
+                                                else if (wfStep.Status == StatusWorkflowStep.APROVADO)
+                                                {
+                                                    liTitle = "Por " + wfStep.CreationUser.Description + " [" + wfStep.CreationUser.Name + "] em " + wfStep.CreationDate;
+                                                    liClasse = "complete";
+                                                    liIcone = "";
+                                                }
+                                                else if (wfStep.Status == StatusWorkflowStep.ATUAL)
+                                                {
+                                                    if (wfStep.CreationUser.Name.StartsWith("GEDEX-S"))
+                                                    {
+                                                        liTitle = "Com Grupo " + wfStep.CreationUser.Name.Replace("GEDEX-S - WF-", "");
+                                                        liIcone = "fa-users blue";
+                                                    }
+                                                    else if (wfStep.CreationUser.Name.StartsWith("GEDEX::"))
+                                                    {
+                                                        liTitle = "Com Grupo " + wfStep.CreationUser.Name.Replace("GEDEX::", "").Replace("::", " - ").Replace("ETAPA-", "E.");
+                                                        liIcone = "fa-users blue";
+                                                    }
+                                                    else
+                                                    {
+                                                        liTitle = "Com " + wfStep.CreationUser.Description + " [" + wfStep.CreationUser.Name + "]";
+                                                        liIcone = "fa-user blue";
+                                                    }
+
+                                                    liClasse = "active";
+
+                                                    diferenciarProximoLiPorAtual = true;
+                                                }
+                                                else if (wfStep.Status == StatusWorkflowStep.CANCELADO)
+                                                {
+                                                    liTitle = "Por " + wfStep.CreationUser.Description + " [" + wfStep.CreationUser.Name + "] em " + wfStep.CreationDate;
+                                                    liClasse = "";
+                                                    liIcone = "fa-times red";
+
+                                                    diferenciarProximoLiPorCancelado = true;
+                                                }
+                                                else if (wfStep.Name == "Liberação Automática")
+                                                {
+                                                    liTitle = "Por GEDEX";
+                                                    liClasse = "active";
+                                                    liEstiloNoLiberacao = "background-color: #5293c4;";
+                                                }
+
+                                                <li data-step="@inc.ToString()" class="@liClasse CustomTooltip" title="@liTitle">
+                                                    <span class="step" style="@liEstiloNoLiberacao"><i class="ace-icon bigger-110 fa @liIcone"></i></span>
+                                                    <span class="title">@wfStep.Name</span>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                }*@
+
+                                var dia = "dd/MM/yyyy";
+                                var hora = string.Empty;
+
+                                var statusEstilo = string.Empty;
+                                var labelPassoClasse = string.Empty;
+                                var verboAcao = string.Empty;
+
+                                foreach (VMWorkflowStep wfStep in workflow.Passos)
+                                {
+                                    if (wfStep.Status.Equals("RS"))
+                                    {
+                                        <div class="space-20"></div>
+
+                                        <div class="timeline-items">
+                                            <div class="timeline-item clearfix">
+
+                                                <div class="timeline-info">
+                                                    @{
+                                                        var recipient = string.Empty;
+                                                        var timelineIcone = string.Empty;
+
+                                                        if (wfStep.Responsavel.Contains("Medico") || wfStep.Responsavel.Contains("Técnico de Segurança"))
+                                                        {
+                                                            recipient = "Grupo " + wfStep.Responsavel.Replace("Medico", "Médico");
+                                                            timelineIcone = "fa-users";
+                                                            <i class="timeline-indicator ace-icon fa @timelineIcone btn btn-primary no-hover green" style="width: 42px; height: 42px; font-size: 20px; padding: 2px"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            recipient = wfStep.NomeResponsavel + " [" + wfStep.Responsavel + "]";
+                                                            timelineIcone = "fa-user";
+                                                            <img src="@Url.Action("FotoPerfil", "Account", new { login = wfStep.Responsavel })">
+                                                        }
+                                                    }
+                                                </div>
+
+                                                <div class="widget-box transparent" style="margin-top: 5px">
+                                                    <div class="widget-header widget-header-small" style="background-color: #d9edf7;">
+                                                        <h5 class="widget-title smaller">
+                                                            <span style="font-weight: 700; font-family: sans-serif">RESPONSÁVEL: @recipient</span>
+                                                        </h5>
+
+                                                        <div class="widget-toolbar no-border">
+                                                            <span class="label label-primary label-white middle" style="font-weight: 700">@wfStep.Nome.ToUpper()</span>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        
+                                        //var recipient = string.Empty;
+                                        //var timelineIcone = string.Empty;
+
+                                        //if (wfStep.CreationUser.Name.StartsWith("GEDEX-S"))
+                                        //{
+                                        //    recipient = "Grupo " + wfStep.CreationUser.Name.Replace("GEDEX-S - WF-", "");
+                                        //    timelineIcone = "fa-users";
+                                        //}
+                                        //else if (wfStep.CreationUser.Name.StartsWith("GEDEX::"))
+                                        //{
+                                        //    recipient = "Grupo " + wfStep.CreationUser.Name.Replace("GEDEX::", "").Replace("::", " - ").Replace("ETAPA-", "E.");
+                                        //    timelineIcone = "fa-users";
+                                        //}
+                                        //else
+                                        //{
+                                        //    recipient = wfStep.CreationUser.Description + " [" + wfStep.CreationUser.Name + "]";
+                                        //    timelineIcone = "fa-user";
+                                        //}
+
+                                        if (!wfStep.DataInclusao.ToString().Contains(dia))
+                                        {
+                                            dia = wfStep.DataInclusao.ToString("dd/MM/yyyy");
+
+                                            <div class="space-20"></div>
+
+                                            <span class="timeline-label grey" style="padding-left: 8px">
+                                                <i class="ace-icon fa fa-th-large"></i>
+                                                <b>@dia</b>
+                                            </span>
+                                        }
+
+                                        hora = wfStep.DataInclusao.ToString("HH:mm");
+
+                                        if (wfStep.Status.Equals("SO"))
+                                        {
+                                            statusEstilo = "background-color: #dff0d8; color: #3c763d;";
+                                            labelPassoClasse = "label-success";
+                                            verboAcao = "APROVOU";
+                                        }
+                                        else if (wfStep.Status.Equals("RJ"))
+                                        {
+                                            statusEstilo = "background-color: #f2dede; color: #a94442;";
+                                            labelPassoClasse = "label-danger";
+                                            verboAcao = "REJEITOU";
+                                        }
+                                        else if (wfStep.Status.Equals("CL"))
+                                        {
+                                            statusEstilo = "background-color: #d9edf7; color: #31708f;";
+                                            labelPassoClasse = "label-primary";
+                                            verboAcao = "ASSUMIU";
+                                        }
+                                        else if (wfStep.Status.Equals("EN"))
+                                        {
+                                            statusEstilo = "background-color: #d9edf7; color: #31708f;";
+                                            labelPassoClasse = "label-primary";
+                                            verboAcao = "ENCAMINHOU";
+                                        }
+                                        else
+                                        {
+                                            statusEstilo = "background-color: #fcf8e3; color: #8a6d3b;";
+                                            labelPassoClasse = "label-warning";
+                                            verboAcao = "CANCELOU";
+                                        }
+
+                                        <div class="timeline-items">
+                                            <div class="timeline-item clearfix">
+
+
+                                                @if (wfStep.Status.Equals("CL"))
+                                                {
+                                                    <div class="timeline-info">
+                                                        <img src="@Url.Action("FotoPerfil", "Account", new { login = wfStep.UsuarioExclusao })">
+                                                        <span class="label grey" style="background-color: #ffffff; font-weight: 700">@hora</span>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="timeline-info">
+                                                        <img src="@Url.Action("FotoPerfil", "Account", new { login = wfStep.Responsavel })">
+                                                        <span class="label grey" style="background-color: #ffffff; font-weight: 700">@hora</span>
+                                                    </div>
+                                                }
+
+
+
+                                                <div class="widget-box transparent">
+                                                    <div class="widget-header widget-header-small" style="@statusEstilo">
+                                                        <h5 class="widget-title smaller">
+                                                            @if (wfStep.Status.Equals("CL"))
+                                                            {
+                                                                <span style="font-weight: 700; font-family: sans-serif">@wfStep.NomeUsuarioExclusao [@wfStep.UsuarioExclusao] @verboAcao este passo</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span style="font-weight: 700; font-family: sans-serif">@wfStep.NomeResponsavel [@wfStep.Responsavel] @verboAcao este passo</span>
+                                                            }
+                                                        </h5>
+
+                                                        <div class="widget-toolbar no-border">
+                                                            <span class="label @labelPassoClasse label-white middle" style="font-weight: 700">@wfStep.Nome.ToUpper()</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="widget-body">
+                                                        <div class="widget-main">
+                                                            <div class="pull-left">
+                                                                <i class="ace-icon fa fa-comments bigger-125" style="@statusEstilo.Replace("background-", "")"></i>
+                                                                &nbsp;
+                                                            </div>
+
+                                                            @if (!string.IsNullOrWhiteSpace(wfStep.MensagemPasso))
+                                                            {
+                                                                <span>@wfStep.MensagemPasso</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span style="font-style: italic">Nenhum comentário.</span>
+                                                            }
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="space-10"></div>
+
+        collapseClasse = "collapsed";
+        collapseSentidoSeta = "down";
+    }
+
+
+
+}
