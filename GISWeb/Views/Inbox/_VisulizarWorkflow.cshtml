@@ -108,7 +108,7 @@ else
                                 var iEA = string.Empty;
                                 var iCO = string.Empty;
 
-                                foreach (VMWorkflowStep wfStep in workflow.Passos)
+                                foreach (VMWorkflowStep wfStep in workflow.Passos.OrderBy(a => a.DataInclusao))
                                 {
                                     if (wfStep.Status.Equals("SO"))
                                     {
@@ -146,7 +146,7 @@ else
                                             iEA = "fa-hourglass-start grey";
                                             iCO = "fa-hourglass-start grey";
 
-                                            liClasseEE = "CustomTooltip";
+                                            liClasseEE = "active CustomTooltip";
                                             liTitleEE = "Com " + wfStep.NomeResponsavel + " [" + wfStep.Responsavel + "] em " + wfStep.DataInclusao.ToString("dd/MM/yyyy HH:mm");
                                         }
                                         else if (wfStep.Nome.Equals("Em Análise"))
@@ -160,7 +160,7 @@ else
                                             iEA = "fa-hourglass-start grey";
                                             iCO = "fa-hourglass-start grey";
 
-                                            liClasseAN = "CustomTooltip";
+                                            liClasseAN = "active CustomTooltip";
                                             liTitleEE = "Com " + wfStep.NomeResponsavel + " [" + wfStep.Responsavel + "] em " + wfStep.DataInclusao.ToString("dd/MM/yyyy HH:mm");
                                         }
                                         else if (wfStep.Nome.Equals("Em Processamento"))
@@ -175,7 +175,7 @@ else
                                             iEA = "fa-hourglass-start grey";
                                             iCO = "fa-hourglass-start grey";
 
-                                            liClasseEP = "CustomTooltip";
+                                            liClasseEP = "active CustomTooltip";
                                             liTitleEE = "Com " + wfStep.NomeResponsavel + " [" + wfStep.Responsavel + "] em " + wfStep.DataInclusao.ToString("dd/MM/yyyy HH:mm");
                                         }
                                         else if (wfStep.Nome.Equals("Em Aprovação"))
@@ -191,7 +191,7 @@ else
                                             iEA = "fa-user blue";
                                             iCO = "fa-hourglass-start grey";
 
-                                            liClasseEA = "CustomTooltip";
+                                            liClasseEA = "active CustomTooltip";
                                             liTitleEE = "Com " + wfStep.NomeResponsavel + " [" + wfStep.Responsavel + "] em " + wfStep.DataInclusao.ToString("dd/MM/yyyy HH:mm");
                                         }
                                         else
@@ -207,6 +207,7 @@ else
                                             iEP = "fa-user blue";
                                             iEA = "fa-user blue";
                                             iCO = "fa-user blue";
+
                                         }
 
                                     }
@@ -222,7 +223,7 @@ else
                                         <span class="step" style="@elEE"><i class="ace-icon bigger-110 fa @iEE"></i></span>
                                         <span class="title">Em Edição</span>
                                     </li>
-                                    <li data-step="1" class="@cAN liClasseAN" title="@liTitleAN">
+                                    <li data-step="1" class="@cAN @liClasseAN" title="@liTitleAN">
                                         <span class="step" style="@elAN"><i class="ace-icon bigger-110 fa @iAN"></i></span>
                                         <span class="title">Médico</span>
                                     </li>
@@ -334,7 +335,7 @@ else
 
                                 foreach (VMWorkflowStep wfStep in workflow.Passos)
                                 {
-                                    if (wfStep.Status.Equals("RS"))
+                                    if (wfStep.Status.Equals("RS") && !wfStep.Nome.Equals("Concluído"))
                                     {
                                         <div class="space-20"></div>
 
@@ -376,7 +377,7 @@ else
                                             </div>
                                         </div>
                                     }
-                                    else
+                                    else if (!wfStep.Status.Equals("RS") && !wfStep.Nome.Equals("Concluído"))
                                     {
                                         
                                         //var recipient = string.Empty;

@@ -2,6 +2,19 @@
     DatePTBR();
 
     BuscarTotalDocsInbox();
+
+    setInterval(function () {
+
+        if (!$("body").hasClass("modal-open")) return;
+
+        var modalDialog = $(".modal.in > .modal-dialog");
+        var backdrop = $(".modal.in > .modal-backdrop");
+        var backdropHeight = backdrop.height();
+        var modalDialogHeight = modalDialog.height();
+
+        if (modalDialogHeight > backdropHeight) backdrop.height(modalDialogHeight + 100);
+
+    }, 500);
 });
 
 
@@ -28,7 +41,7 @@ function BuscarTotalDocsInbox() {
 
 function VisualizarDetalhesIncidente(elementoclicado) {
 
-    $(".modal-body").css("max-height", (window.innerHeight - 120) + "px");
+    //$(".modal-body").css("max-height", (window.innerHeight - 120) + "px");
 
     var codigoIncidente = $(elementoclicado).closest("[data-codigo]").attr("data-codigo");
     var ukIncidente = $(elementoclicado).closest("[data-uniquekey]").attr("data-uniquekey");
@@ -86,6 +99,7 @@ function VisualizarDetalhesIncidente(elementoclicado) {
 function VisualizarDetalhesIncidenteVeiculo(elementoclicado) {
 
     //$(".modal-body").css("max-height", (window.innerHeight - 120) + "px");
+
     var codigoIncidente = $(elementoclicado).closest("[data-codigo]").attr("data-codigo");
     var ukIncidente = $(elementoclicado).closest("[data-uniquekey]").attr("data-uniquekey");
 
@@ -367,6 +381,44 @@ function AtualizarTelasDetalhes() {
         AtualizarRowPesquisa();
     }
 }
+
+
+
+
+
+function OnClickHistoricoWF(origemElemento) {
+
+    $('#modalVisualizarWorkflowX').show();
+    $('#modalVisualizarWorkflowFechar').removeClass('disabled');
+    $('#modalVisualizarWorkflowFechar').removeAttr('disabled', 'disabled');
+    $('#modalVisualizarWorkflowProsseguir').removeClass('disabled');
+    $('#modalVisualizarWorkflowProsseguir').removeAttr('disabled', 'disabled');
+    $('#modalVisualizarWorkflowProsseguir').hide();
+    $('#modalVisualizarWorkflowCorpo').html('');
+    $('#modalVisualizarWorkflowCorpoLoading').show();
+
+    var ficha = origemElemento.closest('[data-uniquekey]').attr('data-uniquekey');
+
+    $.ajax({
+        method: 'POST',
+        url: '/Inbox/VisulizarWorkflow',
+        data: { UKObj: ficha },
+        error: function (erro) {
+            $('#modalVisualizarWorkflow').modal('hide');
+            ExibirMensagemGritter('Oops!', erro.responseText, 'gritter-error');
+        },
+        success: function (content) {
+            $('#modalVisualizarWorkflowCorpoLoading').hide();
+            $('#modalVisualizarWorkflowLoading').hide();
+            $('#modalVisualizarWorkflowCorpo').html(content);
+
+            AplicaTooltip();
+
+        }
+    });
+}
+
+
 
 
 

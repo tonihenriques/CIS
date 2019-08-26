@@ -648,6 +648,7 @@ namespace GISWeb.Controllers
                     objWF.Status = "SO";
                     objWF.DataExclusao = dtNow;
                     objWF.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                    objWF.MensagemPasso = item.Comentarios;
                     WorkflowBusiness.Alterar(objWF);
 
 
@@ -662,16 +663,7 @@ namespace GISWeb.Controllers
 
                         obj2.ID = Guid.NewGuid().ToString();
                         obj2.UniqueKey = item.UniqueKey;
-
-                        if (novoStatus.Equals("Concluído"))
-                        {
-                            obj2.Status = "SO";
-                        }
-                        else
-                        {
-                            obj2.Status = "RS";
-                        }
-
+                        obj2.Status = "RS";
                         obj2.MensagemPasso = item.Comentarios;
                         obj2.Nome = novoStatus;
                         obj2.Responsavel = resp;
@@ -707,6 +699,7 @@ namespace GISWeb.Controllers
 
                         objWF.Status = "SO";
                         objWF.DataExclusao = DateTime.Now;
+                        objWF.MensagemPasso = item.Comentarios;
                         objWF.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
                         WorkflowBusiness.Alterar(objWF);
 
@@ -720,16 +713,7 @@ namespace GISWeb.Controllers
 
                             obj2.ID = Guid.NewGuid().ToString();
                             obj2.UniqueKey = item.UniqueKey;
-
-                            if (novoStatus.Equals("Concluído"))
-                            {
-                                obj2.Status = "SO";
-                            }
-                            else
-                            {
-                                obj2.Status = "RS";
-                            }
-
+                            obj2.Status = "RS";
                             obj2.MensagemPasso = item.Comentarios;
                             obj2.Nome = novoStatus;
                             obj2.Responsavel = resp;
@@ -843,6 +827,7 @@ namespace GISWeb.Controllers
                         obj.Status = "CL";
                         obj.DataExclusao = dtNow;
                         obj.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                        obj.MensagemPasso = item.Comentarios;
                         WorkflowBusiness.Alterar(obj);
 
                         if (first)
@@ -1009,6 +994,7 @@ namespace GISWeb.Controllers
                         objWF.Status = "RJ";
                         objWF.DataExclusao = dtNow;
                         objWF.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                        objWF.MensagemPasso = item.Comentarios;
                         WorkflowBusiness.Alterar(objWF);
 
                         string novoStatus = OperacaoBusiness.RecuperarStatusAnterior(objWF.Nome);
@@ -1090,9 +1076,7 @@ namespace GISWeb.Controllers
                         ReiniciarCache(CustomAuthorizationProvider.UsuarioAutenticado.Login);
 
                         objWF.Status = "RJ";
-
-                        
-
+                        objWF.MensagemPasso = item.Comentarios;
                         objWF.DataExclusao = dtNow;
                         objWF.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
                         WorkflowBusiness.Alterar(objWF);

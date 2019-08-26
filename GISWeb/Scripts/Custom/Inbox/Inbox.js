@@ -1,36 +1,6 @@
 ﻿
 
-function OnClickHistoricoWF(origemElemento) {
 
-    $('#modalVisualizarWorkflowX').show();
-    $('#modalVisualizarWorkflowFechar').removeClass('disabled');
-    $('#modalVisualizarWorkflowFechar').removeAttr('disabled', 'disabled');
-    $('#modalVisualizarWorkflowProsseguir').removeClass('disabled');
-    $('#modalVisualizarWorkflowProsseguir').removeAttr('disabled', 'disabled');
-    $('#modalVisualizarWorkflowProsseguir').hide();
-    $('#modalVisualizarWorkflowCorpo').html('');
-    $('#modalVisualizarWorkflowCorpoLoading').show();
-
-    var ficha = origemElemento.closest('[data-uniquekey]').attr('data-uniquekey');
-
-    $.ajax({
-        method: 'POST',
-        url: '/Inbox/VisulizarWorkflow',
-        data: { UKObj: ficha },
-        error: function (erro) {
-            $('#modalVisualizarWorkflow').modal('hide');
-            ExibirMensagemGritter('Oops!', erro.responseText, 'gritter-error');
-        },
-        success: function (content) {
-            $('#modalVisualizarWorkflowCorpoLoading').hide();
-            $('#modalVisualizarWorkflowLoading').hide();
-            $('#modalVisualizarWorkflowCorpo').html(content);
-
-            AplicaTooltip();
-
-        }
-    });
-}
 
 
 
