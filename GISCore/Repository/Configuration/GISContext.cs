@@ -89,6 +89,8 @@ namespace GISCore.Repository.Configuration
 
         public DbSet<Workflow> Workflow { get; set; }
 
+        public DbSet<Veiculo> Veiculo { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
 
         {

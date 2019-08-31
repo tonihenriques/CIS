@@ -564,287 +564,36 @@ else
                 </div>
             </div>
 
-            @*<div class="widget-container-col">
+            <div class="widget-container-col">
                     <div class="widget-box transparent">
                         <div class="widget-header @classeTitulos" style="border-bottom: 1px solid #ddd">
                             <h5 class="widget-title">
                                 <i class="ace-icon fa fa-users"></i>
                                 <a href="#" data-action="collapse" class="@classeTitulos">
-                                    <b>ENVOLVIDOS</b>
+                                    <b>Veículo</b>
                                 </a>
                             </h5>
 
-                            @if (Model.Operacoes.Contains(Operacao.IncluirEnvolvidos))
-                            {
-                                <div class="widget-toolbar action-buttons no-border" style="height: 38px; padding-top: 5px;">
-                                    <span>&nbsp;</span>
-                                    <a href="#" class="CustomTooltip green lnkNovoEmpregadoProprio" title="Novo Empregado Próprio" data-target="#modalNewEmpProp" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                        <i class="ace-icon fa fa-user bigger-150"></i>
-                                    </a>
+                            <div class="widget-toolbar action-buttons no-border" style="height: 38px; padding-top: 5px;">
+                                <span>&nbsp;</span>
+                                <a href="#" class="CustomTooltip green lnkNovoEmpregadoProprio" title="Novo Empregado Próprio" data-target="#modalNewEmpProp" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                    <i class="ace-icon fa fa-user bigger-150"></i>
+                                </a>
 
-                                    <span>&nbsp;</span>
-                                    <a href="#" class="CustomTooltip orange lnkNovoEmpregadoTerceiro" title="Novo Empregado Terceirizado" data-target="#modalNewEmpTerc" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                        <i class="ace-icon fa fa-user bigger-150"></i>
-                                    </a>
-                                </div>
-                            }
+                                <span>&nbsp;</span>
+                                <a href="#" class="CustomTooltip orange lnkNovoEmpregadoTerceiro" title="Novo Empregado Terceirizado" data-target="#modalNewEmpTerc" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                    <i class="ace-icon fa fa-user bigger-150"></i>
+                                </a>
+                            </div>                            
                         </div>
 
                         <div class="widget-body">
                             <div class="widget-main">
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-12">
-
-                                        @if ((Model.EnvolvidosProprio != null && Model.EnvolvidosProprio.Count > 0) ||
-                                             (Model.EnvolvidosTerceiro != null && Model.EnvolvidosTerceiro.Count > 0))
+                                        @if (Model.EnvolvidosProprio != null && Model.EnvolvidosProprio.Count > 0)
                                         {
-
-                                            <table id="tableEnvolvidos" class="table table-striped table-bordered table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="center" width="25px;">&nbsp;</th>
-                                                        <th>Número</th>
-                                                        <th>Nome</th>
-                                                        <th>Função</th>
-                                                        <th width="135px"></th>
-                                                    </tr>
-                                                </thead>
-
-                                                <tbody>
-
-                                                    @foreach (VMProprio iEmpregado in Model.EnvolvidosProprio)
-                                                    {
-                                                        <tr>
-                                                            <td class="CustomTooltip green center" title="Empregado próprio">
-                                                                <i class="ace-icon fa fa-user bigger-130" />
-                                                            </td>
-
-                                                            <td>@iEmpregado.NumeroPessoal</td>
-                                                            <td>@iEmpregado.Nome</td>
-                                                            <td>@iEmpregado.Funcao</td>
-
-                                                            <td class="center">
-                                                                <div class="hidden-sm hidden-xs action-buttons">
-                                                                    @if (!string.IsNullOrEmpty(iEmpregado.UKLesaoDoenca))
-                                                                    {
-                                                                        <span class="orange CustomTooltip" title="Houve lesão">
-                                                                            <i class="ace-icon fa fa-exclamation-triangle bigger-130"></i>
-                                                                        </span>
-                                                                    }
-
-                                                                    @if (!Model.Status.Contains("Em Edição"))
-                                                                    {
-                                                                        if (string.IsNullOrEmpty(iEmpregado.UKCAT))
-                                                                        {
-                                                                            if (Model.Operacoes.Contains(Operacao.IncluirCAT))
-                                                                            {
-                                                                                <a class="grey CustomTooltip lkNovaCAT" href="#" data-tipo="Proprio" data-uniquekeyrel="@iEmpregado.UKRel" title="Cadastrar CAT" data-target="#modalNovaCAT" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                                                                    <i class="ace-icon fa fa-life-ring bigger-130"></i>
-                                                                                </a>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <a class="grey CustomTooltip lkNovaCAT" href="#" title="Nenhuma CAT cadastrada">
-                                                                                    <i class="ace-icon fa fa-life-ring bigger-130"></i>
-                                                                                </a>
-                                                                            }
-
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            <a class="orange CustomTooltip lkEditarCAT" href="#" title="Gerenciar CAT" data-tipo="Proprio" data-ukincidente="@Model.UniqueKey" data-ukcat="@iEmpregado.UKCAT" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar CAT" data-target="#modalEditarCAT" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                                                                <i class="ace-icon fa fa-life-ring bigger-130"></i>
-                                                                            </a>
-                                                                        }
-                                                                    }
-
-                                                                    @if (!Model.Status.Contains("Em Edição") && !Model.Status.Contains("Em Análise"))
-                                                                    {
-                                                                        if (string.IsNullOrEmpty(iEmpregado.UKCodificacao))
-                                                                        {
-                                                                            if (Model.Operacoes.Contains(Operacao.IncluirCodificacao))
-                                                                            {
-                                                                                <a class="grey CustomTooltip lkNovaCodificacao" href="#" data-tipo="Proprio" data-uniquekeyrel="@iEmpregado.UKRel" title="Cadastrar Codificação" data-target="#modalNovaCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                                                                    <i class="ace-icon fa fa-bell bigger-130"></i>
-                                                                                </a>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <a class="grey CustomTooltip lkNovaCodificacao" href="#" title="Nenhuma codificação cadastrada">
-                                                                                    <i class="ace-icon fa fa-bell bigger-130"></i>
-                                                                                </a>
-                                                                            }
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            <a class="red CustomTooltip lkEditarCodificacao" href="#" data-tipo="Proprio" data-ukincidente="@Model.UniqueKey" data-ukcodificacao="@iEmpregado.UKCodificacao" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar Codificação" data-target="#modalEditarCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                                                                <i class="ace-icon fa fa-bell bigger-130"></i>
-                                                                            </a>
-                                                                        }
-                                                                    }
-
-                                                                    <a href='#' class="green CustomTooltip lkEditProprio" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar Empregado" data-target="#modalEditEmpProp" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                                                        <i class="ace-icon fa fa-pencil bigger-130"></i>
-                                                                    </a>
-
-                                                                    @if (Model.Operacoes.Contains(Operacao.IncluirEnvolvidos))
-                                                                    {
-                                                                        <a class="red CustomTooltip" href="#" title="Excluir Empregado" onclick="ExcluirEnvolvidoProprio('@iEmpregado.UKRel', '@iEmpregado.Nome'); return false;">
-                                                                            <i class="ace-icon fa fa-trash-o bigger-130"></i>
-                                                                        </a>
-                                                                    }
-                                                                </div>
-
-                                                                <div class="hidden-md hidden-lg">
-                                                                    <div class="inline pos-rel">
-                                                                        <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-                                                                            <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-                                                                        </button>
-
-                                                                        <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                                                                            <li>
-                                                                                <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-                                                                                    <span class="blue">
-                                                                                        <i class="ace-icon fa fa-search-plus bigger-120"></i>
-                                                                                    </span>
-                                                                                </a>
-                                                                            </li>
-
-                                                                            <li>
-                                                                                <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-                                                                                    <span class="red">
-                                                                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                                                                    </span>
-                                                                                </a>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-
-                                                    }
-
-
-                                                    @foreach (VMTerceiro iEmpregado in Model.EnvolvidosTerceiro)
-                                                    {
-                                                        <tr>
-                                                            <td class="CustomTooltip orange center" title="Empregado contratado">
-                                                                <i class="ace-icon fa fa-user bigger-130" />
-                                                            </td>
-
-                                                            <td>@iEmpregado.CPF</td>
-                                                            <td>@iEmpregado.Nome</td>
-                                                            <td>@iEmpregado.Funcao</td>
-
-                                                            <td class="center">
-                                                                <div class="hidden-sm hidden-xs action-buttons">
-
-                                                                    @if (!string.IsNullOrEmpty(iEmpregado.UKLesaoDoenca))
-                                                                    {
-                                                                        <span class="orange CustomTooltip" title="Houve lesão">
-                                                                            <i class="ace-icon fa fa-exclamation-triangle bigger-130"></i>
-                                                                        </span>
-                                                                    }
-
-                                                                    @if (!Model.Status.Contains("Em Edição"))
-                                                                    {
-                                                                        if (string.IsNullOrEmpty(iEmpregado.UKCAT))
-                                                                        {
-                                                                            if (Model.Operacoes.Contains(Operacao.IncluirCodificacao))
-                                                                            {
-                                                                                <a class="grey CustomTooltip lkNovaCAT" href="#" title="Cadastrar CAT" data-tipo="Contratado" data-uniquekeyrel="@iEmpregado.UKRel" data-target="#modalNovaCAT" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                                                                    <i class="ace-icon fa fa-life-ring bigger-130"></i>
-                                                                                </a>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <a class="grey CustomTooltip lkNovaCAT" href="#" title="Nenhuma CAT cadastrada">
-                                                                                    <i class="ace-icon fa fa-life-ring bigger-130"></i>
-                                                                                </a>
-                                                                            }
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            <a class="orange CustomTooltip lkEditarCAT" href="#" title="Gerenciar CAT" data-ukincidente="@Model.UniqueKey" data-tipo="Contratado" data-ukincidente="@Model.UniqueKey" data-ukcat="@iEmpregado.UKCAT" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar CAT" data-target="#modalEditarCAT" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                                                                <i class="ace-icon fa fa-life-ring bigger-130"></i>
-                                                                            </a>
-                                                                        }
-                                                                    }
-
-                                                                    @if (!Model.Status.Contains("Em Edição") && !Model.Status.Contains("Em Análise"))
-                                                                    {
-                                                                        if (string.IsNullOrEmpty(iEmpregado.UKCodificacao))
-                                                                        {
-                                                                            if (Model.Operacoes.Contains(Operacao.IncluirCodificacao))
-                                                                            {
-                                                                                <a class="grey CustomTooltip lkNovaCodificacao" href="#" data-tipo="Contratado" data-uniquekeyrel="@iEmpregado.UKRel" title="Cadastrar Codificação" data-target="#modalNovaCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                                                                    <i class="ace-icon fa fa-bell bigger-130"></i>
-                                                                                </a>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <a class="grey CustomTooltip lkNovaCodificacao" href="#" title="Nenhuma codificação cadastrada">
-                                                                                    <i class="ace-icon fa fa-bell bigger-130"></i>
-                                                                                </a>
-                                                                            }
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            <a class="red CustomTooltip lkEditarCodificacao" href="#" data-ukincidente="@Model.UniqueKey" data-tipo="Contratado" data-ukcodificacao="@iEmpregado.UKCodificacao" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar Codificação" data-target="#modalEditarCodificacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-
-                                                                                <i class="ace-icon fa fa-bell bigger-130"></i>
-                                                                            </a>
-                                                                        }
-                                                                    }
-
-                                                                    <a href='#' class="green CustomTooltip lkEditTerceiro" data-uniquekeyrel="@iEmpregado.UKRel" title="Editar Empregado" data-target="#modalEditEmpTerc" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                                                        <i class="ace-icon fa fa-pencil bigger-130"></i>
-                                                                    </a>
-
-                                                                    @if (Model.Operacoes.Contains(Operacao.IncluirEnvolvidos))
-                                                                    {
-                                                                        <a class="red CustomTooltip" href="#" title="Excluir Empregado" onclick="ExcluirEnvolvidoTerceiro('@iEmpregado.UKRel', '@iEmpregado.Nome'); return false;">
-                                                                            <i class="ace-icon fa fa-trash-o bigger-130"></i>
-                                                                        </a>
-                                                                    }
-                                                                </div>
-
-                                                                <div class="hidden-md hidden-lg">
-                                                                    <div class="inline pos-rel">
-                                                                        <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-                                                                            <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-                                                                        </button>
-
-                                                                        <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                                                                            <li>
-                                                                                <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-                                                                                    <span class="blue">
-                                                                                        <i class="ace-icon fa fa-search-plus bigger-120"></i>
-                                                                                    </span>
-                                                                                </a>
-                                                                            </li>
-
-                                                                            <li>
-                                                                                <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-                                                                                    <span class="red">
-                                                                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                                                                    </span>
-                                                                                </a>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-
-                                                    }
-
-                                                </tbody>
-                                            </table>
-
-
-
+                                            
                                         }
                                         else
                                         {
@@ -867,7 +616,7 @@ else
                             </div> <!-- widget-main -->
                         </div>
                     </div>
-                </div>*@
+                </div>
 
         </div>
     }

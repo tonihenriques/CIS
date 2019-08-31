@@ -134,10 +134,12 @@
     <Compile Include="Entidades\OBJ\Estabelecimento.cs" />
     <Compile Include="Entidades\OBJ\Tabelas\TipoAtividade.cs" />
     <Compile Include="Entidades\OBJ\Usuario.cs" />
+    <Compile Include="Entidades\OBJ\Veiculo.cs" />
     <Compile Include="Entidades\OBJ\Workflow.cs" />
     <Compile Include="Entidades\REL\RegistroEmpregadoContratado.cs" />
     <Compile Include="Entidades\REL\RegistroEmpregadoProprio.cs" />
     <Compile Include="Entidades\REL\UsuarioPerfil.cs" />
+    <Compile Include="Enums\AcaoCondutor.cs" />
     <Compile Include="Enums\EAreaTrabalho.cs" />
     <Compile Include="Enums\EAtividades.cs" />
     <Compile Include="Enums\ECentroEmpresa.cs" />
@@ -152,12 +154,17 @@
     <Compile Include="Enums\ETipoLocalAcid.cs" />
     <Compile Include="Enums\ETipoRegistrador.cs" />
     <Compile Include="Enums\EUnidadeFederacao.cs" />
+    <Compile Include="Enums\NaturezaVeiculo.cs" />
     <Compile Include="Enums\Operacao.cs" />
     <Compile Include="Enums\Regional.cs" />
     <Compile Include="Enums\Situacao.cs" />
     <Compile Include="Enums\StatusIncidente.cs" />
+    <Compile Include="Enums\TipoCondutor.cs" />
     <Compile Include="Enums\TipoDeAcesso.cs" />
+    <Compile Include="Enums\TipoDeVeiculo.cs" />
+    <Compile Include="Enums\TipoFrota.cs" />
     <Compile Include="Enums\YesNo.cs" />
+    <Compile Include="Enums\Zona.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
