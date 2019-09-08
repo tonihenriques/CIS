@@ -29,7 +29,7 @@ namespace GISModel.DTO.IncidenteVeiculo
 
         public StatusIncidente Status { get; set; }
 
-        
+
 
 
 

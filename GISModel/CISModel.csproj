@@ -87,8 +87,12 @@
     <Compile Include="DTO\Inbox\VMWorkflow.cs" />
     <Compile Include="DTO\Inbox\VMWorkflowStep.cs" />
     <Compile Include="DTO\IncidenteVeiculo\VMIncidenteVeiculo.cs" />
+
     <Compile Include="DTO\IncidenteVeiculo\VMNovoVeiculo.cs" />
     <Compile Include="DTO\IncidenteVeiculo\VMVeiculo.cs" />
+
+    <Compile Include="DTO\IncidenteVeiculo\VMPesquisaIncidenteVeiculoBase.cs" />
+
     <Compile Include="DTO\Incidente\VMIncidente.cs" />
     <Compile Include="DTO\Incidente\VMNovaCAT.cs" />
     <Compile Include="DTO\Incidente\VMNovaCodificacao.cs" />

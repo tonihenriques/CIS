@@ -402,7 +402,6 @@ namespace GISWeb.Controllers
             }
         }
 
-
         [RestritoAAjax]
         [HttpPost]
         public ActionResult MontarMenuDeOperacoes(string uk)
