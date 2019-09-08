@@ -576,13 +576,8 @@ else
 
                             <div class="widget-toolbar action-buttons no-border" style="height: 38px; padding-top: 5px;">
                                 <span>&nbsp;</span>
-                                <a href="#" class="CustomTooltip green lnkNovoEmpregadoProprio" title="Novo Empregado Próprio" data-target="#modalNewEmpProp" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                    <i class="ace-icon fa fa-user bigger-150"></i>
-                                </a>
-
-                                <span>&nbsp;</span>
-                                <a href="#" class="CustomTooltip orange lnkNovoEmpregadoTerceiro" title="Novo Empregado Terceirizado" data-target="#modalNewEmpTerc" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                    <i class="ace-icon fa fa-user bigger-150"></i>
+                                <a href="#" class="CustomTooltip green lnkNovoVeiculo" title="Novo Veículo" data-target="#modalNewVeiculo" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                    <i class="ace-icon fa fa-car bigger-150"></i>
                                 </a>
                             </div>                            
                         </div>
@@ -591,9 +586,33 @@ else
                             <div class="widget-main">
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-12">
-                                        @if (Model.EnvolvidosProprio != null && Model.EnvolvidosProprio.Count > 0)
+                                        @if (Model.Veiculos != null && Model.Veiculos.Count > 0)
                                         {
-                                            
+
+                                            <table id="tableVeiculos" class="table table-striped table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="center" width="25px;">&nbsp;</th>
+                                                        <th>Placa</th>
+                                                        <th>Tipo</th>
+                                                        <th>Condutor</th>
+                                                        <th width="135px"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (Veiculo item in Model.Veiculos)
+                                                    {
+                                                        <tr>
+                                                            <td>@item.Placa</td>
+                                                            <td>@item.TipoVeiculo</td>
+                                                            <td>
+                                                                <span class="CustomTooltip" title="@item.TipoCondutor">@item.NomeCondutor</span>
+                                                            </td>
+                                                            <td></td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
                                         }
                                         else
                                         {
@@ -604,7 +623,7 @@ else
                                                 <div>
                                                     <h5 class="text-warning smaller-90">
                                                         <strong>
-                                                            Nenhum envolvido cadastrado até o momento.
+                                                            Nenhum veículo cadastrado até o momento.
                                                         </strong>
                                                     </h5>
                                                 </div>

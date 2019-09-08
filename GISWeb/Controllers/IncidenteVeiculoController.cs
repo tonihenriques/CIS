@@ -7,6 +7,7 @@ using GISModel.DTO.Shared;
 using GISModel.Entidades;
 using GISModel.Entidades.OBJ;
 using GISModel.Entidades.OBJ.Tabelas;
+using GISModel.Entidades.REL;
 using GISModel.Enums;
 using GISWeb.Infraestrutura.Filters;
 using GISWeb.Infraestrutura.Provider.Abstract;
@@ -51,6 +52,12 @@ namespace GISWeb.Controllers
 
             [Inject]
             public IBaseBusiness<Workflow> WorkflowBusiness { get; set; }
+
+            [Inject]
+            public IBaseBusiness<IncidenteVeiculoVeiculo> IncidenteVeiculoVeiculoBusiness { get; set; }
+
+            [Inject]
+            public IBaseBusiness<Veiculo> VeiculoBusiness { get; set; }
 
         #endregion
 
@@ -211,6 +218,10 @@ namespace GISWeb.Controllers
                     registro.Operacoes = vm.Operacoes;
 
                     ViewBag.Incidente = registro;
+
+                    vm.Veiculos = (from iv in IncidenteVeiculoVeiculoBusiness.Consulta.Where(p => string.IsNullOrEmpty(p.UsuarioExclusao) && p.UKIncidenteVeiculo.Equals(vm.UniqueKey)).ToList()
+                                   join v in VeiculoBusiness.Consulta.Where(p => string.IsNullOrEmpty(p.UsuarioExclusao)).ToList() on iv.UKVeiculo equals v.UniqueKey
+                                   select v).ToList();
 
                     return PartialView("_DetalhesVeiculo", vm);
                 }
