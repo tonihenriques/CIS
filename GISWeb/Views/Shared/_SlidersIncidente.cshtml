@@ -708,7 +708,9 @@
             <div class="modal-header">
                 <button id="modalNewVeiculoX" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h3 class="smaller lighter grey no-margin">
-                    <span class="hidden-800">Visualização do Workflow </span>
+
+                    <span class="hidden-800">Novo Veículo</span>
+
                     <b><span id="modalNewVeiculoTituloName"></span></b>
                     <span id="modalNewVeiculoCorpoLoading" style="float: right; font-size: 10px; padding-right: 5px; padding-top: 4px; vertical-align: middle">
                         <span id="modalNewVeiculoCorpoLoadingTexto" style="padding-right: 5px"></span>
@@ -725,6 +727,28 @@
                     </div>
                 </div>
             </div>
+
+
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <span id="modalNewVeiculoLoading" style="display: none; float: left; padding-top: 6px">
+                            <img src="~/Images/slack_loading.gif" width="28px" />
+                        </span>
+
+                        <button id="modalNewVeiculoFechar" class="btn btn-sm btn-default pull-right" data-dismiss="modal">
+                            <i class="ace-icon fa fa-times"></i>
+                            Fechar
+                        </button>
+
+                        <button id="modalNewVeiculoProsseguir" class="btn btn-sm btn-success" style="right: 5px; left: auto">
+                            <i class="ace-icon fa fa-check"></i>
+                            Confirmar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

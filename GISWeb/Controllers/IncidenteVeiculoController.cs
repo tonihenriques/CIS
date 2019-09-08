@@ -1,19 +1,23 @@
-﻿using GISCore.Business.Abstract;
+using GISCore.Business.Abstract;
 using GISCore.Business.Abstract.Tabelas;
+using GISCore.Business.Concrete;
+using GISCore.Business.Concrete.Tabelas;
 using GISHelpers.Extensions.System;
 using GISHelpers.Utils;
+using GISModel.DTO.Incidente;
 using GISModel.DTO.IncidenteVeiculo;
 using GISModel.DTO.Shared;
 using GISModel.Entidades;
 using GISModel.Entidades.OBJ;
 using GISModel.Entidades.OBJ.Tabelas;
-using GISModel.Entidades.REL;
 using GISModel.Enums;
 using GISWeb.Infraestrutura.Filters;
 using GISWeb.Infraestrutura.Provider.Abstract;
 using Ninject;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.SessionState;
@@ -52,12 +56,6 @@ namespace GISWeb.Controllers
 
             [Inject]
             public IBaseBusiness<Workflow> WorkflowBusiness { get; set; }
-
-            [Inject]
-            public IBaseBusiness<IncidenteVeiculoVeiculo> IncidenteVeiculoVeiculoBusiness { get; set; }
-
-            [Inject]
-            public IBaseBusiness<Veiculo> VeiculoBusiness { get; set; }
 
         #endregion
 
@@ -159,7 +157,7 @@ namespace GISWeb.Controllers
 
                     vm.UniqueKey = registro.UniqueKey;
                     vm.Codigo = registro.Codigo;
-                    vm.Status = registro.Status;
+                    //vm.Status = registro.Status;
                     vm.Descricao = registro.Descricao;
                     vm.AcidenteFatal = registro.AcidenteFatal ? "Sim" : "Não";
                     vm.AcidenteGraveIP102 = registro.AcidenteGraveIP102 ? "Sim" : "Não";
@@ -219,10 +217,6 @@ namespace GISWeb.Controllers
 
                     ViewBag.Incidente = registro;
 
-                    vm.Veiculos = (from iv in IncidenteVeiculoVeiculoBusiness.Consulta.Where(p => string.IsNullOrEmpty(p.UsuarioExclusao) && p.UKIncidenteVeiculo.Equals(vm.UniqueKey)).ToList()
-                                   join v in VeiculoBusiness.Consulta.Where(p => string.IsNullOrEmpty(p.UsuarioExclusao)).ToList() on iv.UKVeiculo equals v.UniqueKey
-                                   select v).ToList();
-
                     return PartialView("_DetalhesVeiculo", vm);
                 }
             }
@@ -239,6 +233,175 @@ namespace GISWeb.Controllers
             }
 
         }
+
+
+
+        public ActionResult PesquisaDadosBase()
+        {
+            ViewBag.ESocial = ESocialBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao)).ToList();
+
+            ViewBag.Departamentos = DepartamentoBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao)).ToList();
+
+            ViewBag.Municipios = MunicipioBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao)).ToList().OrderBy(b => b.Descricao);
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PesquisaDadosBase(VMPesquisaIncidenteVeiculoBase entidade)
+        {
+            try
+            {
+                string sWhere = string.Empty;
+
+                if (string.IsNullOrEmpty(entidade.NumeroSmart) &&
+                    string.IsNullOrEmpty(entidade.DataIncidente) &&
+                    string.IsNullOrEmpty(entidade.HoraIncidente) &&
+                    entidade.AcidenteFatal.Equals("Todos") &&
+                    entidade.AcidenteGraveIP102.Equals("Todos") &&
+                    //entidade.ETipoEntrada == 0 &&
+                    //entidade.ETipoAcidente == 0 &&
+                    entidade.Centro == 0 &&
+                    entidade.Regional == 0 &&
+                    string.IsNullOrEmpty(entidade.LocalAcidente) &&
+                    entidade.TipoLocalAcidente == 0 &&
+                    string.IsNullOrEmpty(entidade.Logradouro) &&
+                    string.IsNullOrEmpty(entidade.NumeroLogradouro) &&
+                    //string.IsNullOrEmpty(entidade.UKMunicipio) &&
+                    string.IsNullOrEmpty(entidade.Estado))// &&
+                   // string.IsNullOrEmpty(entidade.NumeroBoletimOcorrencia) &&
+                    //string.IsNullOrEmpty(entidade.DataBoletimOcorrencia) &&
+                    //string.IsNullOrEmpty(entidade.UKESocial) &&
+                    //string.IsNullOrEmpty(entidade.Descricao) &&
+                    //string.IsNullOrEmpty(entidade.UKOrgao))
+                    throw new Exception("Informe pelo menos um filtro para prossegui na pesquisa.");
+
+                if (!string.IsNullOrEmpty(entidade.NumeroSmart))
+                    sWhere += " and o.NumeroSmart like '" + entidade.NumeroSmart.Replace("*", "%") + "'";
+
+                if (!string.IsNullOrEmpty(entidade.DataIncidente))
+                    sWhere += " and o.DataIncidente = '" + DateTime.ParseExact(entidade.DataIncidente, "dd/MM/yyyy", CultureInfo.InvariantCulture).ToString("yyyy-MM-dd") + "'";
+
+                if (!string.IsNullOrEmpty(entidade.HoraIncidente))
+                    sWhere += " and o.HoraIncidente = '" + entidade.HoraIncidente + "'";
+
+                if (!string.IsNullOrEmpty(entidade.AcidenteFatal) && !entidade.AcidenteFatal.Equals("Todos"))
+                {
+                    if (entidade.AcidenteFatal.Equals("Sim"))
+                    {
+                        sWhere += " and o.AcidenteFatal = 1";
+                    }
+                    else
+                    {
+                        sWhere += " and o.AcidenteFatal = 0";
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(entidade.AcidenteGraveIP102) && !entidade.AcidenteGraveIP102.Equals("Todos"))
+                {
+                    if (entidade.AcidenteGraveIP102.Equals("Sim"))
+                    {
+                        sWhere += " and o.AcidenteGraveIP102 = 1";
+                    }
+                    else
+                    {
+                        sWhere += " and o.AcidenteGraveIP102 = 0";
+                    }
+                }
+
+                //if (entidade.ETipoEntrada != 0)
+                //    sWhere += " and o.ETipoEntrada = " + ((int)entidade.ETipoEntrada).ToString();
+
+                //if (entidade.ETipoAcidente != 0)
+                //    sWhere += " and o.ETipoAcidente = " + ((int)entidade.ETipoAcidente).ToString();
+
+                if (entidade.Centro != 0)
+                    sWhere += " and o.Centro = " + ((int)entidade.Centro).ToString();
+
+                if (entidade.Regional != 0)
+                    sWhere += " and o.Regional = " + ((int)entidade.Regional).ToString();
+
+                if (!string.IsNullOrEmpty(entidade.LocalAcidente))
+                    sWhere += " and o.LocalAcidente like '" + entidade.LocalAcidente.Replace("*", "%") + "'";
+
+                if (entidade.TipoLocalAcidente != 0)
+                    sWhere += " and o.TipoLocalAcidente = " + ((int)entidade.TipoLocalAcidente).ToString();
+
+                if (!string.IsNullOrEmpty(entidade.Logradouro))
+                    sWhere += " and o.Logradouro like '" + entidade.Logradouro.Trim().Replace("*", "%") + "'";
+
+                if (!string.IsNullOrEmpty(entidade.NumeroLogradouro))
+                    sWhere += " and o.NumeroLogradouro like '" + entidade.NumeroLogradouro.Replace("*", "%") + "'";
+
+                //if (!string.IsNullOrEmpty(entidade.UKMunicipio))
+                //    sWhere += " and o.UKMunicipio = '" + entidade.UKMunicipio + "'";
+
+                if (!string.IsNullOrEmpty(entidade.Estado))
+                    sWhere += " and o.Estado = '" + entidade.Estado + "'";
+
+                //if (!string.IsNullOrEmpty(entidade.NumeroBoletimOcorrencia))
+                //    sWhere += " and o.NumeroBoletimOcorrencia like '" + entidade.NumeroBoletimOcorrencia.Replace("*", "%") + "'";
+
+                //if (!string.IsNullOrEmpty(entidade.DataBoletimOcorrencia))
+                //    sWhere += " and o.DataBoletimOcorrencia = '" + DateTime.ParseExact(entidade.DataBoletimOcorrencia, "dd/MM/yyyy", CultureInfo.InvariantCulture).ToString("yyyy-MM-dd") + "'";
+
+                //if (!string.IsNullOrEmpty(entidade.UKESocial))
+                //    sWhere += " and o.UKESocial = '" + entidade.UKESocial + "'";
+
+                if (!string.IsNullOrEmpty(entidade.Descricao))
+                    sWhere += " and o.Descricao like '" + entidade.Descricao.Replace("*", "%") + "'";
+
+                //if (!string.IsNullOrEmpty(entidade.UKOrgao))
+                //    sWhere += " and o.UKOrgao = '" + entidade.UKOrgao + "'";
+
+
+
+                string sql = @"select top 100 UniqueKey, Codigo, DataIncidente, AcidenteFatal, AcidenteGraveIP102, 
+                                          ETipoEntrada, ETipoAcidente, 
+                                          (select Sigla from OBJDepartamento where UniqueKey = o.UKOrgao and UsuarioExclusao is null) as Orgao,
+                                          (select Descricao from OBJMunicipio where UniqueKey = o.UKMunicipio and UsuarioExclusao is null) as Municipio
+                           from OBJIncidenteVeiculo o
+                           where o.UsuarioExclusao is null " + sWhere + @"
+                           order by Codigo";
+
+                List<VMIncidenteVeiculo> lista = new List<VMIncidenteVeiculo>();
+                DataTable result = IncidenteVeiculoBusiness.GetDataTable(sql);
+                if (result.Rows.Count > 0)
+                {
+                    foreach (DataRow row in result.Rows)
+                    {
+                        lista.Add(new VMIncidenteVeiculo()
+                        {
+                            UniqueKey = row["UniqueKey"].ToString(),
+                            Codigo = row["Codigo"].ToString(),
+                            DataIncidente = ((DateTime)row["DataIncidente"]).ToString("dd/MM/yyyy"),
+                            TipoEntrada = row["ETipoEntrada"].ToString(),
+                            ETipoAcidente = ((ETipoAcidente)Enum.Parse(typeof(ETipoAcidente), row["ETipoAcidente"].ToString(), true)).GetDisplayName(),
+                            AcidenteFatal = ((int)row["ETipoAcidente"]).Equals(0) ? "Não" : "Sim",
+                            AcidenteGraveIP102 = ((bool)row["AcidenteGraveIP102"]) ? "Sim" : "Não",
+                            //Status = row["Status"].ToString(),
+                            Orgao = row["Orgao"].ToString(),
+                            Municipio = row["Municipio"].ToString()
+                        });
+                    }
+                }
+
+                return PartialView("_ResultadoPesquisa", lista);
+            }
+            catch (Exception ex)
+            {
+                if (ex.GetBaseException() == null)
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.Message } });
+                }
+                else
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.GetBaseException().Message } });
+                }
+            }
+        }
+
 
         [RestritoAAjax]
         [HttpPost]
@@ -268,6 +431,7 @@ namespace GISWeb.Controllers
                 return Content(ex.Message, "text/html");
             }
         }
+
 
     }
 }

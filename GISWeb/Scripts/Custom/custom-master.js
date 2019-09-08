@@ -353,7 +353,56 @@ function AdicionarFuncoesOnClikParaOperacoes() {
         OnClickEditarCAT($(this));
     });
 
+
+    $(".lnkNovoVeiculo").off("click").on("click", function (e) {
+        e.preventDefault();
+        OnClickNovoVeiculo($(this));
+    });
+
+    $(".lnkExcluirVeiculo").off("click").on("click", function (e) {
+        e.preventDefault();
+        OnClickExcluirVeiculoIncidente($(this));
+    });
+    
 }
+
+
+function OnClickExcluirVeiculoIncidente(origemElemento) {
+
+    var sPlaca = origemElemento.closest("[data-placa]").attr("data-placa");
+
+    var msgInformativa = "Você está excluindo o veículo com placa '" + sPlaca + "'.";
+
+    var callback = function () {
+
+        $("#modalDetalhesIncidenteVeiculoCorpoLoading").show();
+        $('#modalDetalhesIncidenteVeiculoCorpoLoadingTexto').html('...Excluindo incidente');
+        BloquearDiv("modalDetalhesIncidenteVeiculo");
+
+        $.ajax({
+            method: "POST",
+            url: "/IncidenteVeiculo/ExcluirVeiculo",
+            data: { UKRel: origemElemento.closest("[data-ukrel]").attr("data-ukrel") },
+            success: function (content) {
+
+                $("#modalDetalhesIncidenteVeiculoCorpoLoading").hide();
+                $('#modalDetalhesIncidenteVeiculoCorpoLoadingTexto').html('');
+                DesbloquearDiv("modalDetalhesIncidenteVeiculo");
+
+                TratarResultadoJSON(content.resultado);
+
+                if (content.resultado.Sucesso != null && content.resultado.Sucesso != undefined && content.resultado.Sucesso != "") {
+                    VisualizarDetalhesIncidenteVeiculo($('#modalDetalhesIncidenteVeiculoCorpo'));
+                }
+
+            }
+        });
+    };
+
+    ExibirMensagemDeConfirmacaoSimples(msgInformativa, "Exclusão", callback, "btn-danger");
+}
+
+
 
 function AtualizarTelasDetalhes() {
 
@@ -379,6 +428,70 @@ function AtualizarTelasDetalhes() {
         }
         
         AtualizarRowPesquisa();
+    }
+}
+
+
+
+
+
+function OnClickNovoVeiculo(origemElemento) {
+
+    $('#modalNewVeiculoX').show();
+    $('#modalNewVeiculoFechar').removeClass('disabled');
+    $('#modalNewVeiculoFechar').removeAttr('disabled', 'disabled');
+    $('#modalNewVeiculoProsseguir').removeClass('disabled');
+    $('#modalNewVeiculoProsseguir').removeAttr('disabled', 'disabled');
+    $('#modalNewVeiculoCorpo').html('');
+    $('#modalNewVeiculoCorpoLoading').show();
+
+    var ficha = origemElemento.closest('[data-uniquekey]').attr('data-uniquekey');
+
+    $.ajax({
+        method: 'POST',
+        url: '/IncidenteVeiculo/NovoVeiculo',
+        data: { UKIncidenteVeiculo: ficha },
+        error: function (erro) {
+            $('#modalNewVeiculo').modal('hide');
+            ExibirMensagemGritter('Oops!', erro.responseText, 'gritter-error');
+        },
+        success: function (content) {
+            $('#modalNewVeiculoCorpoLoading').hide();
+            $('#modalNewVeiculoLoading').hide();
+            $('#modalNewVeiculoCorpo').html(content);
+
+            AplicaTooltip();
+
+            $("#modalNewVeiculoProsseguir").off("click").on("click", function (e) {
+                $("#formCadastroVeiculo").submit();
+            });
+
+        }
+    });
+}
+
+function OnBeginCadastrarVeiculo() {
+    $(".LoadingLayout").show();
+    $('#btnSalvar').hide();
+    $("#formCadastroVeiculo").css({ opacity: "0.5" });
+
+    $('#modalNewVeiculoLoading').show();
+    BloquearDiv("modalNewVeiculo");
+}
+
+function OnSuccessCadastrarVeiculo(data) {
+    $('#formCadastroVeiculo').removeAttr('style');
+    $(".LoadingLayout").hide();
+    $('#btnSalvar').show();
+
+    $('#modalNewVeiculoLoading').hide();
+    DesbloquearDiv("modalNewVeiculo");
+
+    TratarResultadoJSON(data.resultado);
+
+    if (data.resultado.Sucesso != null && data.resultado.Sucesso != undefined && data.resultado.Sucesso != "") {
+        $('#modalNewVeiculo').modal('hide');
+        VisualizarDetalhesIncidenteVeiculo($('#modalDetalhesIncidenteVeiculoCorpo'));
     }
 }
 
@@ -417,8 +530,6 @@ function OnClickHistoricoWF(origemElemento) {
         }
     });
 }
-
-
 
 
 

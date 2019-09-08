@@ -592,7 +592,6 @@ else
                                             <table id="tableVeiculos" class="table table-striped table-bordered table-hover">
                                                 <thead>
                                                     <tr>
-                                                        <th class="center" width="25px;">&nbsp;</th>
                                                         <th>Placa</th>
                                                         <th>Tipo</th>
                                                         <th>Condutor</th>
@@ -601,6 +600,16 @@ else
                                                 </thead>
                                                 <tbody>
                                                     @foreach (Veiculo item in Model.Veiculos)
+
+                                                        <th>Placa</th>
+                                                        <th>Tipo Veículo</th>
+                                                        <th>Condutor</th>
+                                                        <th width="50px"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (VMVeiculo item in Model.Veiculos)
+
                                                     {
                                                         <tr>
                                                             <td>@item.Placa</td>
@@ -608,7 +617,16 @@ else
                                                             <td>
                                                                 <span class="CustomTooltip" title="@item.TipoCondutor">@item.NomeCondutor</span>
                                                             </td>
-                                                            <td></td>
+
+                                                            
+                                                         <td align="center">
+                                                                <a href="#" class="CustomTooltip lnkExcluirVeiculo" title="Excluir" data-ukrel="@item.UKRel" data-placa="@item.Placa">
+                                                                    <span class="red">
+                                                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                                                    </span>
+                                                                </a>
+                                                            </td>
+
                                                         </tr>
                                                     }
                                                 </tbody>

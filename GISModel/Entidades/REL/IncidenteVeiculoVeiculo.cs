@@ -1,4 +1,5 @@
 ﻿using GISModel.Entidades.OBJ;
+using GISModel.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -19,6 +20,23 @@ namespace GISModel.Entidades.REL
         public string UKVeiculo { get; set; }
 
         public virtual Veiculo Veiculo { get; set; }
+
+
+        public string NPCondutor { get; set; }
+
+        public string NomeCondutor { get; set; }
+
+        public Zona Zona { get; set; }
+
+        public NaturezaVeiculo Natureza { get; set; }
+
+        public int Custo { get; set; }
+
+        public TipoCondutor TipoCondutor { get; set; }
+
+        public AcaoCondutor AcaoCondutor { get; set; }
+
+
 
     }
 }

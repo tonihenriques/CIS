@@ -4,7 +4,8 @@ namespace GISModel.Enums
 {
     public enum ETipoMaterial
     {
-       
+
+
         [Display(Name = "001 - VEÍCULOS")]
         VEÍCULOS = 1,
 
@@ -29,7 +30,7 @@ namespace GISModel.Enums
         [Display(Name = "008 - COMPONENTES DO SEP - Geração")]
         COMPONENTES_DO_SEP_Geração = 8
 
-        
+      
 
 
     }

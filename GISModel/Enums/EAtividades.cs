@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace GISModel.Enums
 {
@@ -25,8 +20,7 @@ namespace GISModel.Enums
         A_SERVIÇO_DE_OUTRO_ÓRGÃO = 5,
 
         [Display(Name = "TRAJETO")]
-        TRAJETO = 6,
-
+        TRAJETO = 6
         
     }
 }

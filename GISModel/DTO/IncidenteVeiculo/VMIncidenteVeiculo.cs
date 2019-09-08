@@ -88,7 +88,11 @@ namespace GISModel.DTO.IncidenteVeiculo
 
 
         [Display(Name = "Veículos")]
+
         public List<Veiculo> Veiculos { get; set; }
+
+        public List<VMVeiculo> Veiculos { get; set; }
+
 
     }
 }

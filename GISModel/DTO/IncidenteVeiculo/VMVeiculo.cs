@@ -1,19 +1,18 @@
 ﻿using GISModel.Enums;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GISModel.Entidades.OBJ
+namespace GISModel.DTO.IncidenteVeiculo
 {
-    [Table("OBJVeiculo")]
-    public class Veiculo : EntidadeBase
+    public class VMVeiculo
     {
 
-
+        [Display(Name = "Nº Pessoal Condutor")]
         public string NPCondutor { get; set; }
 
+        [Display(Name = "Nome Condutor")]
         public string NomeCondutor { get; set; }
 
-        [Required(ErrorMessage = "O perfil é obrigatório")]
+        [Display(Name = "Tipo de Veículo")]
         public TipoDeVeiculo TipoVeiculo { get; set; }
 
         public Zona Zona { get; set; }
@@ -22,20 +21,20 @@ namespace GISModel.Entidades.OBJ
 
         public int Custo { get; set; }
 
-
-        public TipoDeVeiculo TipoVeiculo { get; set; }
-        
-
         public string Placa { get; set; }
 
+        [Display(Name = "Tipo de Frota")]
         public TipoFrota TipoFrota { get; set; }
 
 
+        [Display(Name = "Tipo de Condutor")]
         public TipoCondutor TipoCondutor { get; set; }
 
+        [Display(Name = "Ação do Condutor")]
         public AcaoCondutor AcaoCondutor { get; set; }
 
 
+        public string UKRel { get; set; }
 
     }
 }

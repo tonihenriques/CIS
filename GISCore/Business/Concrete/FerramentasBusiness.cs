@@ -194,7 +194,6 @@ namespace GISCore.Business.Concrete
                         }
                         catch (Exception ex)
                         {
-
                             ex.GetBaseException();
                         }
                     }
@@ -236,11 +235,7 @@ namespace GISCore.Business.Concrete
                                 created += 1;
                             }
                         }
-                        catch (Exception ex)
-                        {
-
-
-                        }
+                        catch { }
                     }
                     else
                         break;
@@ -280,9 +275,7 @@ namespace GISCore.Business.Concrete
                                 created += 1;
                             }
                         }
-                        catch (Exception ex)
-                        {
-                        }
+                        catch { }
                     }
                     else
                         break;
@@ -322,7 +315,7 @@ namespace GISCore.Business.Concrete
                                 created += 1;
                             }
                         }
-                        catch (Exception ex) { }
+                        catch { }
                     }
                     else
                         break;
@@ -362,7 +355,7 @@ namespace GISCore.Business.Concrete
                                 created += 1;
                             }
                         }
-                        catch (Exception ex) { }
+                        catch { }
                     }
                     else
                         break;
@@ -402,7 +395,7 @@ namespace GISCore.Business.Concrete
                                 created += 1;
                             }
                         }
-                        catch (Exception ex) { }
+                        catch { }
                     }
                     else
                         break;
@@ -442,7 +435,7 @@ namespace GISCore.Business.Concrete
                                 created += 1;
                             }
                         }
-                        catch (Exception ex) { }
+                        catch { }
                     }
                     else
                         break;
@@ -482,7 +475,7 @@ namespace GISCore.Business.Concrete
                                 created += 1;
                             }
                         }
-                        catch (Exception ex) { }
+                        catch { }
                     }
                     else
                         break;
@@ -522,7 +515,7 @@ namespace GISCore.Business.Concrete
                                 created += 1;
                             }
                         }
-                        catch (Exception ex) { }
+                        catch { }
                     }
                     else
                         break;
@@ -562,7 +555,7 @@ namespace GISCore.Business.Concrete
                                 created += 1;
                             }
                         }
-                        catch (Exception ex) { }
+                        catch { }
                     }
                     else
                         break;
@@ -602,7 +595,7 @@ namespace GISCore.Business.Concrete
                                 created += 1;
                             }
                         }
-                        catch (Exception ex) { }
+                        catch { }
                     }
                     else
                         break;
@@ -642,7 +635,7 @@ namespace GISCore.Business.Concrete
                                 created += 1;
                             }
                         }
-                        catch (Exception ex) { }
+                        catch { }
                     }
                     else
                         break;
@@ -682,7 +675,7 @@ namespace GISCore.Business.Concrete
                                 created += 1;
                             }
                         }
-                        catch (Exception ex) { }
+                        catch { }
                     }
                     else
                         break;
@@ -722,7 +715,7 @@ namespace GISCore.Business.Concrete
                                 created += 1;
                             }
                         }
-                        catch (Exception ex) { }
+                        catch { }
                     }
                     else
                         break;
