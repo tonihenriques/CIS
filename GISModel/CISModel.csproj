@@ -84,8 +84,15 @@
     <Compile Include="DTO\Envolvidos\VMProprio.cs" />
     <Compile Include="DTO\Envolvidos\VMTerceiro.cs" />
     <Compile Include="DTO\Inbox\ItemInbox.cs" />
+    <Compile Include="DTO\Inbox\VMWorkflow.cs" />
+    <Compile Include="DTO\Inbox\VMWorkflowStep.cs" />
     <Compile Include="DTO\IncidenteVeiculo\VMIncidenteVeiculo.cs" />
+
+    <Compile Include="DTO\IncidenteVeiculo\VMNovoVeiculo.cs" />
+    <Compile Include="DTO\IncidenteVeiculo\VMVeiculo.cs" />
+
     <Compile Include="DTO\IncidenteVeiculo\VMPesquisaIncidenteVeiculoBase.cs" />
+
     <Compile Include="DTO\Incidente\VMIncidente.cs" />
     <Compile Include="DTO\Incidente\VMNovaCAT.cs" />
     <Compile Include="DTO\Incidente\VMNovaCodificacao.cs" />
@@ -133,15 +140,40 @@
     <Compile Include="Entidades\OBJ\Estabelecimento.cs" />
     <Compile Include="Entidades\OBJ\Tabelas\TipoAtividade.cs" />
     <Compile Include="Entidades\OBJ\Usuario.cs" />
+    <Compile Include="Entidades\OBJ\Veiculo.cs" />
     <Compile Include="Entidades\OBJ\Workflow.cs" />
+    <Compile Include="Entidades\REL\IncidenteVeiculoVeiculo.cs" />
     <Compile Include="Entidades\REL\RegistroEmpregadoContratado.cs" />
     <Compile Include="Entidades\REL\RegistroEmpregadoProprio.cs" />
     <Compile Include="Entidades\REL\UsuarioPerfil.cs" />
+    <Compile Include="Enums\AcaoCondutor.cs" />
     <Compile Include="Enums\EAreaTrabalho.cs" />
     <Compile Include="Enums\EAtividades.cs" />
     <Compile Include="Enums\ECentroEmpresa.cs" />
     <Compile Include="Enums\EConsequencia.cs" />
+
+    <Compile Include="Enums\EMaterialCusto.cs" />
     <Compile Include="Enums\EOrgaoClasse.cs" />
+    <Compile Include="Enums\ENivelTensao .cs" />
+    <Compile Include="Enums\EPopulacaoLesao.cs" />
+    <Compile Include="Enums\EPopulacaoCausa.cs" />
+    <Compile Include="Enums\EPopulacaoAtividade.cs" />
+    <Compile Include="Enums\ESituacaoRede.cs" />
+    <Compile Include="Enums\EPopulacaoTipoAcidente .cs" />
+    <Compile Include="Enums\ECusto.cs" />
+    <Compile Include="Enums\ETipoMaterial.cs" />
+    <Compile Include="Enums\ETipoOcorrencia .cs" />
+
+    <Compile Include="Enums\ECusto.cs" />
+    <Compile Include="Enums\EMaterialCusto.cs" />
+    <Compile Include="Enums\ENivelTensao.cs" />
+    <Compile Include="Enums\EOrgaoClasse.cs" />
+    <Compile Include="Enums\EPopulacaoAtividade.cs" />
+    <Compile Include="Enums\EPopulacaoCausa.cs" />
+    <Compile Include="Enums\EPopulacaoLesao.cs" />
+    <Compile Include="Enums\EPopulacaoTipoAcidente.cs" />
+    <Compile Include="Enums\ESituacaoRede.cs" />
+
     <Compile Include="Enums\ETipoAcidente.cs" />
     <Compile Include="Enums\ETipoAcidenteVeiculo.cs" />
     <Compile Include="Enums\ETipoCAT.cs" />
@@ -149,14 +181,21 @@
     <Compile Include="Enums\ETipoEntradaVeiculo.cs" />
     <Compile Include="Enums\ETipoIniciativa.cs" />
     <Compile Include="Enums\ETipoLocalAcid.cs" />
+    <Compile Include="Enums\ETipoMaterial.cs" />
+    <Compile Include="Enums\ETipoOcorrencia.cs" />
     <Compile Include="Enums\ETipoRegistrador.cs" />
     <Compile Include="Enums\EUnidadeFederacao.cs" />
+    <Compile Include="Enums\NaturezaVeiculo.cs" />
     <Compile Include="Enums\Operacao.cs" />
     <Compile Include="Enums\Regional.cs" />
     <Compile Include="Enums\Situacao.cs" />
     <Compile Include="Enums\StatusIncidente.cs" />
+    <Compile Include="Enums\TipoCondutor.cs" />
     <Compile Include="Enums\TipoDeAcesso.cs" />
+    <Compile Include="Enums\TipoDeVeiculo.cs" />
+    <Compile Include="Enums\TipoFrota.cs" />
     <Compile Include="Enums\YesNo.cs" />
+    <Compile Include="Enums\Zona.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

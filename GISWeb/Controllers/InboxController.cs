@@ -440,6 +440,136 @@ namespace GISWeb.Controllers
 
 
 
+        [HttpPost]
+        [RestritoAAjax]
+        public ActionResult VisulizarWorkflow(string UKObj) {
+
+            try
+            {
+
+                string sql = @"select Nome, Status, MensagemPasso, Responsavel, DataInclusao, DataExclusao, MajorVersion, UsuarioExclusao,
+	                                  (select Nome from OBJUsuario where UPPER(Login) = w.Responsavel and UsuarioExclusao is null) as NomeResponsavel,
+                                      (select Nome from OBJUsuario where UPPER(Login) = w.UsuarioExclusao and UsuarioExclusao is null) as NomeExclusao
+                               from OBJWorkflow w
+                               where UKObject = '" + UKObj + @"'
+                               order by MajorVersion desc, DataInclusao desc";
+
+                List<VMWorkflow> lista = new List<VMWorkflow>();
+                DataTable result = IncidenteBusiness.GetDataTable(sql);
+                if (result.Rows.Count > 0)
+                {
+                    VMWorkflow objWF = null;
+                    
+                    foreach (DataRow row in result.Rows)
+                    {
+                        if (objWF == null)
+                        {
+                            objWF = new VMWorkflow()
+                            {
+                                MajorVersion = (int)row["MajorVersion"],
+                                Passos = new List<VMWorkflowStep>() {
+                                    new VMWorkflowStep() {
+                                        Nome = row["Nome"].ToString(),
+                                        Status = row["Status"].ToString(),
+                                        MensagemPasso = row["MensagemPasso"].ToString(),
+                                        NomeResponsavel = row["NomeResponsavel"].ToString(),
+                                        Responsavel = row["Responsavel"].ToString(),
+                                        DataInclusao = (DateTime)row["DataInclusao"],
+                                        DataExclusao = (DateTime)row["DataExclusao"],
+                                        UsuarioExclusao = row["UsuarioExclusao"].ToString(),
+                                        NomeUsuarioExclusao = row["NomeExclusao"].ToString()
+                                    }
+                                }
+                            };
+                        }
+                        else if (objWF.MajorVersion == (int)row["MajorVersion"])
+                        {
+                            objWF.Passos.Add(new VMWorkflowStep()
+                            {
+                                Nome = row["Nome"].ToString(),
+                                Status = row["Status"].ToString(),
+                                MensagemPasso = row["MensagemPasso"].ToString(),
+                                NomeResponsavel = row["NomeResponsavel"].ToString(),
+                                Responsavel = row["Responsavel"].ToString(),
+                                DataInclusao = (DateTime)row["DataInclusao"],
+                                DataExclusao = (DateTime)row["DataExclusao"],
+                                UsuarioExclusao = row["UsuarioExclusao"].ToString(),
+                                NomeUsuarioExclusao = row["NomeExclusao"].ToString()
+                            });
+                        }
+                        else
+                        {
+                            bool Concluido = objWF.Passos.Where(a => a.Nome.Equals("Concluído") && a.Status.Equals("RS")).Count() > 0;
+                            bool EmAndamento = objWF.Passos.Where(a => a.Status.Equals("RS")).Count() > 0;
+                            if (Concluido)
+                            {
+                                objWF.Status = "Concluído";
+                            }
+                            else if (EmAndamento)
+                            {
+                                objWF.Status = "Em andamento";
+                            }
+                            else
+                            {
+                                objWF.Status = "Abortado";
+                            }
+
+                            lista.Add(objWF);
+
+                            objWF = new VMWorkflow()
+                            {
+                                MajorVersion = (int)row["MajorVersion"],
+                                Passos = new List<VMWorkflowStep>() {
+                                    new VMWorkflowStep() {
+                                        Nome = row["Nome"].ToString(),
+                                        Status = row["Status"].ToString(),
+                                        MensagemPasso = row["MensagemPasso"].ToString(),
+                                        NomeResponsavel = row["NomeResponsavel"].ToString(),
+                                        Responsavel = row["Responsavel"].ToString(),
+                                        DataInclusao = (DateTime)row["DataInclusao"],
+                                        DataExclusao = (DateTime)row["DataExclusao"],
+                                        UsuarioExclusao = row["UsuarioExclusao"].ToString(),
+                                        NomeUsuarioExclusao = row["NomeExclusao"].ToString()
+                                    }
+                                }
+                            };
+                        }
+
+                    } // For each
+
+
+                    if (objWF != null)
+                    {
+                        bool Concluido = objWF.Passos.Where(a => a.Nome.Equals("Concluído") && a.Status.Equals("RS")).Count() > 0;
+                        bool EmAndamento = objWF.Passos.Where(a => a.Status.Equals("RS")).Count() > 0;
+                        if (Concluido)
+                        {
+                            objWF.Status = "Concluído";
+                        }
+                        else if (EmAndamento)
+                        {
+                            objWF.Status = "Em andamento";
+                        }
+                        else
+                        {
+                            objWF.Status = "Abortado";
+                        }
+
+                        lista.Add(objWF);
+                    }
+
+
+                }
+
+                return PartialView("_VisulizarWorkflow", lista);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { erro = ex.Message });
+            }
+        }
+
+
 
         [RestritoAAjax]
         public ActionResult AprovarIncidente(string uk, string tipo, string ukwf)
@@ -518,6 +648,7 @@ namespace GISWeb.Controllers
                     objWF.Status = "SO";
                     objWF.DataExclusao = dtNow;
                     objWF.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                    objWF.MensagemPasso = item.Comentarios;
                     WorkflowBusiness.Alterar(objWF);
 
 
@@ -532,16 +663,7 @@ namespace GISWeb.Controllers
 
                         obj2.ID = Guid.NewGuid().ToString();
                         obj2.UniqueKey = item.UniqueKey;
-
-                        if (novoStatus.Equals("Concluído"))
-                        {
-                            obj2.Status = "SO";
-                        }
-                        else
-                        {
-                            obj2.Status = "RS";
-                        }
-
+                        obj2.Status = "RS";
                         obj2.MensagemPasso = item.Comentarios;
                         obj2.Nome = novoStatus;
                         obj2.Responsavel = resp;
@@ -577,6 +699,7 @@ namespace GISWeb.Controllers
 
                         objWF.Status = "SO";
                         objWF.DataExclusao = DateTime.Now;
+                        objWF.MensagemPasso = item.Comentarios;
                         objWF.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
                         WorkflowBusiness.Alterar(objWF);
 
@@ -590,16 +713,7 @@ namespace GISWeb.Controllers
 
                             obj2.ID = Guid.NewGuid().ToString();
                             obj2.UniqueKey = item.UniqueKey;
-
-                            if (novoStatus.Equals("Concluído"))
-                            {
-                                obj2.Status = "SO";
-                            }
-                            else
-                            {
-                                obj2.Status = "RS";
-                            }
-
+                            obj2.Status = "RS";
                             obj2.MensagemPasso = item.Comentarios;
                             obj2.Nome = novoStatus;
                             obj2.Responsavel = resp;
@@ -713,6 +827,7 @@ namespace GISWeb.Controllers
                         obj.Status = "CL";
                         obj.DataExclusao = dtNow;
                         obj.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                        obj.MensagemPasso = item.Comentarios;
                         WorkflowBusiness.Alterar(obj);
 
                         if (first)
@@ -879,6 +994,7 @@ namespace GISWeb.Controllers
                         objWF.Status = "RJ";
                         objWF.DataExclusao = dtNow;
                         objWF.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                        objWF.MensagemPasso = item.Comentarios;
                         WorkflowBusiness.Alterar(objWF);
 
                         string novoStatus = OperacaoBusiness.RecuperarStatusAnterior(objWF.Nome);
@@ -960,9 +1076,7 @@ namespace GISWeb.Controllers
                         ReiniciarCache(CustomAuthorizationProvider.UsuarioAutenticado.Login);
 
                         objWF.Status = "RJ";
-
-                        
-
+                        objWF.MensagemPasso = item.Comentarios;
                         objWF.DataExclusao = dtNow;
                         objWF.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
                         WorkflowBusiness.Alterar(objWF);

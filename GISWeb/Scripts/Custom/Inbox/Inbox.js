@@ -1,4 +1,9 @@
 ﻿
+
+
+
+
+
 function OnClickAprovarIncidente(origemElemento, pTipo, pWF) {
     $('#modalAprovarX').show();
     $('#modalAprovarFechar').removeClass('disabled');
@@ -84,6 +89,7 @@ function OnSuccessAprovar(content) {
     BuscarTotalDocsInbox();
 
 }
+
 
 
 function OnClickAssumirIncidente(origemElemento, pTipo, pWF) {

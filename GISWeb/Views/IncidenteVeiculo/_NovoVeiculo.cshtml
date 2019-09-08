@@ -1,0 +1,120 @@
+﻿@model GISModel.DTO.IncidenteVeiculo.VMNovoVeiculo
+
+@{
+    ViewBag.Title = "Cadastro de Veículo";
+}
+
+<div id="formCadEmpregadoProprio">
+    @using (Ajax.BeginForm("CadastrarVeiculo", "IncidenteVeiculo", null,
+        new AjaxOptions
+        {
+            HttpMethod = "POST",
+            OnBegin = "OnBeginCadastrarVeiculo",
+            OnSuccess = "OnSuccessCadastrarVeiculo",
+        }, new { @id = "formCadastroVeiculo", @class = "form-horizontal" }))
+    {
+        @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                @Html.LabelFor(model => model.NPCondutor, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                <div class="col-xs-12 col-sm-12">
+                    @Html.EditorFor(model => model.NPCondutor, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.NomeCondutor, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                <div class="col-xs-12 col-sm-12">
+                    @Html.EditorFor(model => model.NomeCondutor, new { htmlAttributes = new { @class = "date-picker form-control" } })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                @Html.LabelFor(model => model.TipoCondutor, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                <div class="col-xs-12 col-sm-12">
+                    @Html.EnumDropDownListFor(model => model.TipoCondutor, "Selecione um tipo...", htmlAttributes: new { @class = "chosen-select form-control" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TipoVeiculo, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EnumDropDownListFor(model => model.TipoVeiculo, "Selecione um tipo...", htmlAttributes: new { @class = "chosen-select form-control" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TipoFrota, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EnumDropDownListFor(model => model.TipoFrota, "Selecione um tipo...", htmlAttributes: new { @class = "chosen-select form-control" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Placa, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EditorFor(model => model.Placa, new { htmlAttributes = new { @class = "date-picker form-control" } })
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Natureza, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EnumDropDownListFor(model => model.Natureza, "Selecione uma natureza...", htmlAttributes: new { @class = "chosen-select form-control" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.AcaoCondutor, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EnumDropDownListFor(model => model.AcaoCondutor, "Selecione uma ação...", htmlAttributes: new { @class = "chosen-select form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Zona, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EnumDropDownListFor(model => model.Zona, "Selecione uma natureza...", htmlAttributes: new { @class = "chosen-select form-control" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Custo, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EditorFor(model => model.Custo, new { htmlAttributes = new { @class = "date-picker form-control" } })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @Html.HiddenFor(model => model.UKIncidenteVeiculo)
+
+    }
+</div>

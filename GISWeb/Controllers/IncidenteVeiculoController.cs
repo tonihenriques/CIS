@@ -1,4 +1,4 @@
-﻿using GISCore.Business.Abstract;
+using GISCore.Business.Abstract;
 using GISCore.Business.Abstract.Tabelas;
 using GISCore.Business.Concrete;
 using GISCore.Business.Concrete.Tabelas;
@@ -235,6 +235,7 @@ namespace GISWeb.Controllers
         }
 
 
+
         public ActionResult PesquisaDadosBase()
         {
             ViewBag.ESocial = ESocialBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao)).ToList();
@@ -400,7 +401,7 @@ namespace GISWeb.Controllers
                 }
             }
         }
-               
+
         [RestritoAAjax]
         [HttpPost]
         public ActionResult MontarMenuDeOperacoes(string uk)
@@ -429,6 +430,7 @@ namespace GISWeb.Controllers
                 return Content(ex.Message, "text/html");
             }
         }
+
 
     }
 }

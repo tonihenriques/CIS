@@ -1,0 +1,26 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace GISModel.Enums
+{
+    public enum ETipoOcorrencia
+    {
+        
+
+        [Display(Name = "001 - CEMIG - DANOS EM BENS E PROPRIEDADES DA EMPRESA")]
+        CEMIG_DANOS_EM_BENS_E_PROPRIEDADES_DA_EMPRESA = 1,
+
+        [Display(Name = "002 - CONTRATADA -DANOS EM BENS E PROPRIEDADES DA CONTRATADA")]
+        CONTRATADA_DANOS_EM_BENS_E_PROPRIEDADES_DA_CONTRATADA = 2,
+
+        [Display(Name = "003 - POPULAÇÂO -DANOS A BENS E INSTALAÇÕES")]
+        POPULAÇÂO_DANOS_A_BENS_E_INSTALAÇÕES = 3,
+
+        [Display(Name = "004 - VEÍCULO - PEDRA PROJETADA NO PARA-BRISAS POR OUTROS VEÍCULOS")]
+        VEÍCULO_PEDRA_PROJETADA_NO_PARA_BRISAS_POR_OUTROS_VEÍCULOS = 4,
+
+        [Display(Name = "005 - VEÍCULOS - DANOS EM VEIC. PARADOS OU ESTACIONADOS")]
+        VEÍCULOS_DANOS_EM_VEIC_PARADOS_OU_ESTACIONADOS = 5
+
+    }
+}
+

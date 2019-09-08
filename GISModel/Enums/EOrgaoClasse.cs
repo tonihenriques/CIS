@@ -12,7 +12,6 @@ namespace GISModel.Enums
 
         [Display(Name = "Reg. Minist. do Trabalho")]
         Minist_Trabalho = 2
-
         
     }
 }
