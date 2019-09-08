@@ -87,6 +87,8 @@
     <Compile Include="DTO\Inbox\VMWorkflow.cs" />
     <Compile Include="DTO\Inbox\VMWorkflowStep.cs" />
     <Compile Include="DTO\IncidenteVeiculo\VMIncidenteVeiculo.cs" />
+    <Compile Include="DTO\IncidenteVeiculo\VMNovoVeiculo.cs" />
+    <Compile Include="DTO\IncidenteVeiculo\VMVeiculo.cs" />
     <Compile Include="DTO\Incidente\VMIncidente.cs" />
     <Compile Include="DTO\Incidente\VMNovaCAT.cs" />
     <Compile Include="DTO\Incidente\VMNovaCodificacao.cs" />
@@ -136,6 +138,7 @@
     <Compile Include="Entidades\OBJ\Usuario.cs" />
     <Compile Include="Entidades\OBJ\Veiculo.cs" />
     <Compile Include="Entidades\OBJ\Workflow.cs" />
+    <Compile Include="Entidades\REL\IncidenteVeiculoVeiculo.cs" />
     <Compile Include="Entidades\REL\RegistroEmpregadoContratado.cs" />
     <Compile Include="Entidades\REL\RegistroEmpregadoProprio.cs" />
     <Compile Include="Entidades\REL\UsuarioPerfil.cs" />

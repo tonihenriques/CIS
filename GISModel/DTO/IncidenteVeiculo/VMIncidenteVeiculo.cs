@@ -1,6 +1,8 @@
 ﻿using GISModel.Entidades;
+using GISModel.Entidades.OBJ;
 using GISModel.Enums;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace GISModel.DTO.IncidenteVeiculo
 {
@@ -83,5 +85,10 @@ namespace GISModel.DTO.IncidenteVeiculo
         public List<Arquivo> Arquivos { get; set; }
 
         public OperacaoCollection Operacoes { get; set; }
+
+
+        [Display(Name = "Veículos")]
+        public List<VMVeiculo> Veiculos { get; set; }
+
     }
 }
