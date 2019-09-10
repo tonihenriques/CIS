@@ -1,4 +1,8 @@
-﻿div > .bloquearDiv {
+﻿.modal {
+    overflow: auto !important;
+}
+
+div > .bloquearDiv {
     position: absolute;
     top: 0;
     right: 0;

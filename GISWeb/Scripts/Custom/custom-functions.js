@@ -23,6 +23,24 @@
 
 
 
+function ResolverProblemaModal() {
+
+    setInterval(function () {
+
+        if (!$("body").hasClass("modal-open")) return;
+
+        var modalDialog = $(".modal.in > .modal-dialog");
+        var backdrop = $(".modal.in > .modal-backdrop");
+        var backdropHeight = backdrop.height();
+        var modalDialogHeight = modalDialog.height();
+
+        if (modalDialogHeight > backdropHeight) backdrop.height(modalDialogHeight + 100);
+
+    }, 500);
+
+}
+
+
 function ExibirMensagemGritter(titulo, corpo, gritterClasse) {
     var t = titulo;
     if (t == "") t = 'Alerta!';
@@ -408,40 +426,3 @@ function DesbloquearDiv(id) {
     $("#" + id).children(".bloquearDiv").remove();
 }
 
-
-function AplicaValidacaoCPF() {
-    var CustomValidation = {};
-    CustomValidation.Init = function () {
-        //CustomValidationCPF
-        $.validator.addMethod('customvalidationcpf', function (value, element, params) {
-            var cpf = value.replace(/[^0-9]/gi, ''); //Remove tudo que não for número
-            if (value.length == 0)
-                return true; //vazio
-            if (cpf.length != 11 || cpf == "00000000000" || cpf == "11111111111" || cpf == "22222222222" || cpf == "33333333333" || cpf == "44444444444" || cpf == "55555555555" || cpf == "66666666666" || cpf == "77777777777" || cpf == "88888888888" || cpf == "99999999999")
-                return false;
-            add = 0;
-            for (i = 0; i < 9; i++)
-                add += parseInt(cpf.charAt(i)) * (10 - i);
-            rev = 11 - (add % 11);
-            if (rev == 10 || rev == 11)
-                rev = 0;
-            if (rev != parseInt(cpf.charAt(9)))
-                return false;
-            add = 0;
-            for (i = 0; i < 10; i++)
-                add += parseInt(cpf.charAt(i)) * (11 - i);
-            rev = 11 - (add % 11);
-            if (rev == 10 || rev == 11)
-                rev = 0;
-            if (rev != parseInt(cpf.charAt(10)))
-                return false;
-            return true; //cpf válido
-        }, '');
-        $.validator.unobtrusive.adapters.add('customvalidationcpf', {}, function (options) {
-            options.rules['customvalidationcpf'] = true;
-            options.messages['customvalidationcpf'] = options.message;
-        });
-    }
-    //executa -- importante que isso seja feito antes do document.ready
-    CustomValidation.Init();
-}

@@ -3,18 +3,8 @@
 
     BuscarTotalDocsInbox();
 
-    setInterval(function () {
+    ResolverProblemaModal();
 
-        if (!$("body").hasClass("modal-open")) return;
-
-        var modalDialog = $(".modal.in > .modal-dialog");
-        var backdrop = $(".modal.in > .modal-backdrop");
-        var backdropHeight = backdrop.height();
-        var modalDialogHeight = modalDialog.height();
-
-        if (modalDialogHeight > backdropHeight) backdrop.height(modalDialogHeight + 100);
-
-    }, 500);
 });
 
 
@@ -145,6 +135,9 @@ function VisualizarDetalhesIncidenteVeiculo(elementoclicado) {
 
             AdicionarFuncoesOnClikParaOperacoes();
         }
+
+        ResolverProblemaModal();
+
     });
 
 }
@@ -391,7 +384,12 @@ function OnClickExcluirVeiculoIncidente(origemElemento) {
 
                 TratarResultadoJSON(content.resultado);
 
-                if (content.resultado.Sucesso != null && content.resultado.Sucesso != undefined && content.resultado.Sucesso != "") {
+                if (content.resultado.Sucesso != null && content.resultado.Sucesso != undefined && content.resultado.Sucesso != "")
+                {
+                    //var ukIncidente = $(origemElemento).closest("[data-uniquekey]").attr("data-uniquekey");
+                    //$('#modalDetalhesIncidenteVeiculo').modal('hide');
+                    //$("#" + ukIncidente).click();
+                    
                     VisualizarDetalhesIncidenteVeiculo($('#modalDetalhesIncidenteVeiculoCorpo'));
                 }
 
