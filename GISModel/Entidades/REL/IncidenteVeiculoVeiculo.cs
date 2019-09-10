@@ -22,8 +22,6 @@ namespace GISModel.Entidades.REL
         public virtual Veiculo Veiculo { get; set; }
 
 
-
-
         public string NPCondutor { get; set; }
 
         public string NomeCondutor { get; set; }
@@ -37,6 +35,7 @@ namespace GISModel.Entidades.REL
         public TipoCondutor TipoCondutor { get; set; }
 
         public AcaoCondutor AcaoCondutor { get; set; }
+
 
 
     }

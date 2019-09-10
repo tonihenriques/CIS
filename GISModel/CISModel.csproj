@@ -87,8 +87,12 @@
     <Compile Include="DTO\Inbox\VMWorkflow.cs" />
     <Compile Include="DTO\Inbox\VMWorkflowStep.cs" />
     <Compile Include="DTO\IncidenteVeiculo\VMIncidenteVeiculo.cs" />
+
     <Compile Include="DTO\IncidenteVeiculo\VMNovoVeiculo.cs" />
     <Compile Include="DTO\IncidenteVeiculo\VMVeiculo.cs" />
+
+    <Compile Include="DTO\IncidenteVeiculo\VMPesquisaIncidenteVeiculoBase.cs" />
+
     <Compile Include="DTO\Incidente\VMIncidente.cs" />
     <Compile Include="DTO\Incidente\VMNovaCAT.cs" />
     <Compile Include="DTO\Incidente\VMNovaCodificacao.cs" />
@@ -147,6 +151,19 @@
     <Compile Include="Enums\EAtividades.cs" />
     <Compile Include="Enums\ECentroEmpresa.cs" />
     <Compile Include="Enums\EConsequencia.cs" />
+
+    <Compile Include="Enums\EMaterialCusto.cs" />
+    <Compile Include="Enums\EOrgaoClasse.cs" />
+    <Compile Include="Enums\ENivelTensao .cs" />
+    <Compile Include="Enums\EPopulacaoLesao.cs" />
+    <Compile Include="Enums\EPopulacaoCausa.cs" />
+    <Compile Include="Enums\EPopulacaoAtividade.cs" />
+    <Compile Include="Enums\ESituacaoRede.cs" />
+    <Compile Include="Enums\EPopulacaoTipoAcidente .cs" />
+    <Compile Include="Enums\ECusto.cs" />
+    <Compile Include="Enums\ETipoMaterial.cs" />
+    <Compile Include="Enums\ETipoOcorrencia .cs" />
+
     <Compile Include="Enums\ECusto.cs" />
     <Compile Include="Enums\EMaterialCusto.cs" />
     <Compile Include="Enums\ENivelTensao.cs" />
@@ -156,6 +173,7 @@
     <Compile Include="Enums\EPopulacaoLesao.cs" />
     <Compile Include="Enums\EPopulacaoTipoAcidente.cs" />
     <Compile Include="Enums\ESituacaoRede.cs" />
+
     <Compile Include="Enums\ETipoAcidente.cs" />
     <Compile Include="Enums\ETipoAcidenteVeiculo.cs" />
     <Compile Include="Enums\ETipoCAT.cs" />

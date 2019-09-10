@@ -11,5 +11,8 @@ namespace GISModel.Enums
         [Display(Name = "002 - Irregular")]
         Irregular = 2,
 
+
     }
 }
+
+===

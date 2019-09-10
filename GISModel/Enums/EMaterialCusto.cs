@@ -4,7 +4,11 @@ namespace GISModel.Enums
 {
     public enum EMaterialCusto
     {
+
+       //ATÉ R$ 3000,00
+
         //ATÉ R$ 3000,00
+
         [Display(Name = "001 - BAIXO")]
         BAIXO = 1,
 
@@ -20,9 +24,12 @@ namespace GISModel.Enums
         [Display(Name = "004 - ALTO")]
         ALTO = 4,
 
-        //QUANDO NAO HA CUSTO
+
         [Display(Name = "005 - NÃO SE APLICA")]
-        NAO_SE_APLICA = 5
+        NAO_SE_APLICA = 5,
 
     }
 }
+
+
+        

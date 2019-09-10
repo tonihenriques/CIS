@@ -4,7 +4,10 @@ namespace GISModel.Enums
 {
     public enum ECusto
     {
+
+     
         //SEM AFASTAMENTO 
+
         [Display(Name = "001 - LEVE")]
         LEVE = 1,
 
@@ -18,7 +21,11 @@ namespace GISModel.Enums
 
         //CASO NAO SE ENQUADRE
         [Display(Name = "004 - NÃO SE APLICA")]
-        NAO_SE_APLICA = 4
+
+        NAO_SE_APLICA = 4,  
+
+
+       
 
     }
 }

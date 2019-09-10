@@ -235,6 +235,7 @@
     <Content Include="Scripts\Custom\Inbox\MeusGrupos.js" />
     <Content Include="Scripts\Custom\Inbox\Pessoal.js" />
     <Content Include="Scripts\Custom\IncidenteVeiculo\Novo.js" />
+    <Content Include="Scripts\Custom\IncidenteVeiculo\Pesquisa.js" />
     <Content Include="Scripts\Custom\Incidente\Pesquisa.js" />
     <Content Include="Scripts\Custom\Incidente\PesquisaCAT.js" />
     <Content Include="Scripts\Custom\Incidente\PesquisaCodificacao.js" />
@@ -416,8 +417,14 @@
     <Content Include="Views\IncidenteVeiculo\_MenuOperacoes.cshtml" />
     <Content Include="Views\Home\Sobre.cshtml" />
     <Content Include="Views\Home\Suporte.cshtml" />
+
     <Content Include="Views\Inbox\_VisulizarWorkflow.cshtml" />
     <Content Include="Views\IncidenteVeiculo\_NovoVeiculo.cshtml" />
+
+    <Content Include="Views\IncidenteVeiculo\PesquisaDadosBase.cshtml" />
+    <Content Include="Views\IncidenteVeiculo\_ResultadoPesquisa.cshtml" />
+    <Content Include="Views\IncidenteVeiculo\_ResultadoPesquisaRow.cshtml" />
+
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

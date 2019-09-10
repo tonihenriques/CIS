@@ -5,6 +5,7 @@ namespace GISModel.Enums
     public enum EPopulacaoLesao
     {
 
+
         [Display(Name = "001 - MORTE ")]
         MORTE = 1,
 
@@ -30,7 +31,9 @@ namespace GISModel.Enums
         CHOQUE_ELETRICO_SEM_CONSEQUENCIAS = 8,
 
         [Display(Name = "009 - ASFIXIA")]
-        ASFIXIA = 9,
+
+        ASFIXIA = 9,            
+
 
         [Display(Name = "010 - LESOES MULTIPLAS ")]
         LESOES_MULTIPLAS = 10,
@@ -38,5 +41,8 @@ namespace GISModel.Enums
         [Display(Name = "011 - OUTRAS")]
         OUTRAS = 11
 
+
+
     }
 }
+

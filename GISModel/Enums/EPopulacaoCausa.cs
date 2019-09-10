@@ -5,6 +5,8 @@ namespace GISModel.Enums
     public enum EPopulacaoCausa
     {
 
+
+
         [Display(Name = "001 - CONTATO COM PARTE ENERGIZADA ")]
         CONTATO_COM_PARTE_ENERGIZADA = 1,
 
@@ -45,7 +47,9 @@ namespace GISModel.Enums
         [Display(Name = "13 - TOCAR NA REDE NA EXECUCAO DE OBRAS CIVIS")]
         TOCAR_NA_REDE_NA_EXECUCAO_DE_OBRAS_CIVIS = 13,
 
-        [Display(Name = "014 - TOCAR NA REDE COM INTENSAO")]
+
+        [Display(Name = "014 - TOCAR NA REDE COM INTENSAO")]        
+
         TOCAR_NA_REDE_COM_INTENSAO = 14,
 
         [Display(Name = "015 - QUEDA DE CONDUTOR / EQUIP. SOBRE PESSOA")]
@@ -64,7 +68,11 @@ namespace GISModel.Enums
         CHOQUE_ELET_A_PARTIR_DA_CAIXA_DE_MEDICAO = 19,
 
         [Display(Name = "020 - OUTROS")]
-        OUTROS = 20         
+
+        OUTROS = 20,
+
+
+
 
     }
 }

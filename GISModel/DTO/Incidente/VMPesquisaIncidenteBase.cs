@@ -39,7 +39,6 @@ namespace GISModel.DTO.Incidente
 
         [Required(ErrorMessage = "A regional é obrigatória")]
         public Regional Regional { get; set; }
-
         
 
         [Display(Name = "Tipo de Acidente")]
@@ -76,15 +75,11 @@ namespace GISModel.DTO.Incidente
         [Display(Name = "Acid. grave (IP 10.2)?")]
         public string AcidenteGraveIP102 { get; set; }
 
-
-
-
         [Display(Name = "Diretoria")]
         public string UKDiretoria { get; set; }
 
         [Display(Name = "Orgão")]
         public string UKOrgao { get; set; }
-
 
         [Display(Name = "Cidade")]
         public string UKMunicipio { get; set; }
@@ -100,11 +95,8 @@ namespace GISModel.DTO.Incidente
         [Display(Name = "Fonte da Lesão")]
         public string UKFonteLesao { get; set; }
 
-
         [Display(Name = "Data Atualização")]
         public DateTime? DataAtualizacao { get; set; }
-
-
 
         public string Status { get; set; }
 
