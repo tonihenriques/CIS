@@ -92,7 +92,15 @@ namespace GISCore.Repository.Configuration
         public DbSet<Veiculo> Veiculo { get; set; }
 
         public DbSet<IncidenteVeiculoVeiculo> IncidenteVeiculoVeiculo { get; set; }
-        
+
+        public DbSet<Material> Material { get; set; }
+
+        public DbSet<Populacao> Populacao { get; set; }
+
+        public DbSet<IncidenteVeiculoPopulacao> IncidenteVeiculoPopulacao { get; set; }
+
+
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
         }

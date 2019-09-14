@@ -1,4 +1,5 @@
-﻿using GISModel.Entidades;
+﻿using GISModel.DTO.Populacao;
+using GISModel.Entidades;
 using GISModel.Entidades.OBJ;
 using GISModel.Enums;
 using System.Collections.Generic;
@@ -88,11 +89,14 @@ namespace GISModel.DTO.IncidenteVeiculo
 
 
         [Display(Name = "Veículos")]
-
-        public List<Veiculo> Veiculos { get; set; }
-
         public List<VMVeiculo> Veiculos { get; set; }
 
+
+        [Display(Name = "População")]
+        public List<VMPopulacao> Populacao { get; set; }
+
+
+        public List<Material> Materiais { get; set; }
 
     }
 }

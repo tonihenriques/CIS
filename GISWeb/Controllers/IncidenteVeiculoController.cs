@@ -1,15 +1,13 @@
 using GISCore.Business.Abstract;
 using GISCore.Business.Abstract.Tabelas;
-using GISCore.Business.Concrete;
-using GISCore.Business.Concrete.Tabelas;
 using GISHelpers.Extensions.System;
 using GISHelpers.Utils;
-using GISModel.DTO.Incidente;
 using GISModel.DTO.IncidenteVeiculo;
 using GISModel.DTO.Shared;
 using GISModel.Entidades;
 using GISModel.Entidades.OBJ;
 using GISModel.Entidades.OBJ.Tabelas;
+using GISModel.Entidades.REL;
 using GISModel.Enums;
 using GISWeb.Infraestrutura.Filters;
 using GISWeb.Infraestrutura.Provider.Abstract;
@@ -56,6 +54,12 @@ namespace GISWeb.Controllers
 
             [Inject]
             public IBaseBusiness<Workflow> WorkflowBusiness { get; set; }
+
+            [Inject]
+            public IBaseBusiness<IncidenteVeiculoVeiculo> IncidenteVeiculoVeiculoBusiness { get; set; }
+
+            [Inject]
+            public IBaseBusiness<Veiculo> VeiculoBusiness { get; set; }
 
         #endregion
 
@@ -216,6 +220,18 @@ namespace GISWeb.Controllers
                     registro.Operacoes = vm.Operacoes;
 
                     ViewBag.Incidente = registro;
+
+                    vm.Veiculos = (from iv in IncidenteVeiculoVeiculoBusiness.Consulta.Where(p => string.IsNullOrEmpty(p.UsuarioExclusao) && p.UKIncidenteVeiculo.Equals(vm.UniqueKey)).ToList()
+                                   join v in VeiculoBusiness.Consulta.Where(p => string.IsNullOrEmpty(p.UsuarioExclusao)).ToList() on iv.UKVeiculo equals v.UniqueKey
+                                   select new VMVeiculo()
+                                   {
+                                       TipoCondutor = iv.TipoCondutor,
+                                       NomeCondutor = iv.NomeCondutor,
+                                       TipoFrota = v.TipoFrota,
+                                       Placa = v.Placa,
+                                       TipoVeiculo = v.TipoVeiculo,
+                                       UKRel = iv.UniqueKey
+                                   }).ToList();
 
                     return PartialView("_DetalhesVeiculo", vm);
                 }
@@ -430,6 +446,118 @@ namespace GISWeb.Controllers
                 return Content(ex.Message, "text/html");
             }
         }
+
+
+        [RestritoAAjax]
+        [HttpPost]
+        public ActionResult NovoVeiculo(string UKIncidenteVeiculo)
+        {
+            return PartialView("_NovoVeiculo", new VMNovoVeiculo() { UKIncidenteVeiculo = UKIncidenteVeiculo });
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CadastrarVeiculo(VMNovoVeiculo entidade)
+        {
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+
+                    Veiculo obj = VeiculoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.Placa.Equals(entidade.Placa));
+                    if (obj == null)
+                    {
+                        obj = new Veiculo()
+                        {
+                            UniqueKey = Guid.NewGuid().ToString(),
+                            Placa = entidade.Placa,
+                            TipoFrota = entidade.TipoFrota,
+                            TipoVeiculo = entidade.TipoVeiculo
+                        };
+
+                        VeiculoBusiness.Inserir(obj);
+                    }
+
+                    IncidenteVeiculoVeiculo rel = new IncidenteVeiculoVeiculo()
+                    {
+                        UKIncidenteVeiculo = entidade.UKIncidenteVeiculo,
+                        UKVeiculo = obj.UniqueKey,
+                        AcaoCondutor = entidade.AcaoCondutor,
+                        Custo = entidade.Custo,
+                        Natureza = entidade.Natureza,
+                        NomeCondutor = entidade.NomeCondutor,
+                        NPCondutor = entidade.NPCondutor,
+                        Zona = entidade.Zona,
+                        TipoCondutor = entidade.TipoCondutor,
+                        UsuarioInclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login
+                    };
+
+                    IncidenteVeiculoVeiculoBusiness.Inserir(rel);
+
+                    return Json(new { resultado = new RetornoJSON() { Sucesso = "Veículo cadastrado com sucesso" } });
+
+                }
+                catch (Exception ex)
+                {
+                    if (ex.GetBaseException() == null)
+                    {
+                        return Json(new { resultado = new RetornoJSON() { Erro = ex.Message } });
+                    }
+                    else
+                    {
+                        return Json(new { resultado = new RetornoJSON() { Erro = ex.GetBaseException().Message } });
+                    }
+                }
+
+            }
+            else
+            {
+                return Json(new { resultado = TratarRetornoValidacaoToJSON() });
+            }
+
+        }
+
+        [RestritoAAjax]
+        [HttpPost]
+        public ActionResult ExcluirVeiculo(string UKRel)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(UKRel))
+                {
+                    throw new Exception("Não foi possível localizar o veículo a ser excluído.");
+                }
+                else
+                {
+
+                    IncidenteVeiculoVeiculo rel = IncidenteVeiculoVeiculoBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(UKRel));
+                    if (rel == null)
+                    {
+                        throw new Exception("Não foi possível localizar o veículo a ser excluído.");
+                    }
+                    else
+                    {
+                        rel.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                        IncidenteVeiculoVeiculoBusiness.Terminar(rel);
+                        return Json(new { resultado = new RetornoJSON() { Sucesso = "Veículo excluído com sucesso." } });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex.GetBaseException() == null)
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.Message } });
+                }
+                else
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.GetBaseException().Message } });
+                }
+            }
+        }
+
 
 
     }

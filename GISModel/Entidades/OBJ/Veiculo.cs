@@ -23,9 +23,6 @@ namespace GISModel.Entidades.OBJ
         public int Custo { get; set; }
 
 
-        public TipoDeVeiculo TipoVeiculo { get; set; }
-        
-
         public string Placa { get; set; }
 
         public TipoFrota TipoFrota { get; set; }
