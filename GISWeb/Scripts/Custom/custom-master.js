@@ -356,6 +356,16 @@ function AdicionarFuncoesOnClikParaOperacoes() {
         e.preventDefault();
         OnClickExcluirVeiculoIncidente($(this));
     });
+
+    $(".lnkNovoMaterial").off("click").on("click", function (e) {
+        e.preventDefault();
+        OnClickNovoMaterial($(this));
+    });
+
+    $(".lnkExcluirMaterial").off("click").on("click", function (e) {
+        e.preventDefault();
+        OnClickExcluirMaterial($(this));
+    });
     
 }
 
@@ -492,6 +502,74 @@ function OnSuccessCadastrarVeiculo(data) {
         VisualizarDetalhesIncidenteVeiculo($('#modalDetalhesIncidenteVeiculoCorpo'));
     }
 }
+
+
+
+
+
+
+
+function OnClickNovoMaterial(origemElemento) {
+
+    $('#modalNewMaterialX').show();
+    $('#modalNewMaterialFechar').removeClass('disabled');
+    $('#modalNewMaterialFechar').removeAttr('disabled', 'disabled');
+    $('#modalNewMaterialProsseguir').removeClass('disabled');
+    $('#modalNewMaterialProsseguir').removeAttr('disabled', 'disabled');
+    $('#modalNewMaterialCorpo').html('');
+    $('#modalNewMaterialCorpoLoading').show();
+
+    var ficha = origemElemento.closest('[data-uniquekey]').attr('data-uniquekey');
+
+    $.ajax({
+        method: 'POST',
+        url: '/Material/Novo',
+        data: { UKIncidenteVeiculo: ficha },
+        error: function (erro) {
+            $('#modalNewMaterial').modal('hide');
+            ExibirMensagemGritter('Oops!', erro.responseText, 'gritter-error');
+        },
+        success: function (content) {
+            $('#modalNewMaterialCorpoLoading').hide();
+            $('#modalNewMaterialLoading').hide();
+            $('#modalNewMaterialCorpo').html(content);
+
+            AplicaTooltip();
+
+            $("#modalNewMaterialProsseguir").off("click").on("click", function (e) {
+                $("#formCadastroMaterial").submit();
+            });
+
+        }
+    });
+}
+
+function OnBeginCadastrarMaterial() {
+    $(".LoadingLayout").show();
+    $('#btnSalvar').hide();
+    $("#formCadastroMaterial").css({ opacity: "0.5" });
+
+    $('#modalNewMaterialLoading').show();
+    BloquearDiv("modalNewMaterial");
+}
+
+function OnSuccessCadastrarMaterial(data) {
+    $('#formCadastroMaterial').removeAttr('style');
+    $(".LoadingLayout").hide();
+    $('#btnSalvar').show();
+
+    $('#modalNewMaterialLoading').hide();
+    DesbloquearDiv("modalNewMaterial");
+
+    TratarResultadoJSON(data.resultado);
+
+    if (data.resultado.Sucesso != null && data.resultado.Sucesso != undefined && data.resultado.Sucesso != "") {
+        $('#modalNewMaterial').modal('hide');
+        VisualizarDetalhesIncidenteVeiculo($('#modalDetalhesIncidenteVeiculoCorpo'));
+    }
+}
+
+
 
 
 

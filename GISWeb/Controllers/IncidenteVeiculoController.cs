@@ -3,6 +3,7 @@ using GISCore.Business.Abstract.Tabelas;
 using GISHelpers.Extensions.System;
 using GISHelpers.Utils;
 using GISModel.DTO.IncidenteVeiculo;
+using GISModel.DTO.Populacao;
 using GISModel.DTO.Shared;
 using GISModel.Entidades;
 using GISModel.Entidades.OBJ;
@@ -60,6 +61,15 @@ namespace GISWeb.Controllers
 
             [Inject]
             public IBaseBusiness<Veiculo> VeiculoBusiness { get; set; }
+
+            [Inject]
+            public IBaseBusiness<Material> MaterialBusiness { get; set; }
+
+            [Inject]
+            public IBaseBusiness<IncidenteVeiculoPopulacao> IncidenteVeiculoPopulacaoBusiness { get; set; }
+
+            [Inject]
+            public IBaseBusiness<Populacao> PopulacaoBusiness { get; set; }
 
         #endregion
 
@@ -232,6 +242,24 @@ namespace GISWeb.Controllers
                                        TipoVeiculo = v.TipoVeiculo,
                                        UKRel = iv.UniqueKey
                                    }).ToList();
+
+                    vm.Populacao = (from iv in IncidenteVeiculoPopulacaoBusiness.Consulta.Where(p => string.IsNullOrEmpty(p.UsuarioExclusao) && p.UKIncidenteVeiculo.Equals(vm.UniqueKey)).ToList()
+                                    join v in PopulacaoBusiness.Consulta.Where(p => string.IsNullOrEmpty(p.UsuarioExclusao)).ToList() on iv.UKPopulacao equals v.UniqueKey
+                                    select new VMPopulacao()
+                                    {
+                                        TipoAcidente = iv.TipoAcidente,
+                                        Atividade = iv.Atividade,
+                                        Causa = iv.Causa,
+                                        AgenteCausador = iv.AgenteCausador,
+                                        DataNascimento = v.DataNascimento,
+                                        Sexo = v.Sexo,
+                                        Nome = v.Nome,
+                                        Natureza = iv.Natureza,
+                                        UKPopulacao = v.UniqueKey,
+                                        UKRel = iv.UniqueKey
+                                    }).ToList();
+
+                    vm.Materiais = MaterialBusiness.Consulta.Where(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UKIncidente.Equals(vm.UniqueKey)).ToList();
 
                     return PartialView("_DetalhesVeiculo", vm);
                 }

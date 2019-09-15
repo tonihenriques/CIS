@@ -1,0 +1,63 @@
+﻿
+@model GISModel.Entidades.OBJ.Material
+
+
+@{
+    ViewBag.Title = "Cadastro de Veículo";
+}
+
+<div id="formCadMaterial">
+    @using (Ajax.BeginForm("Cadastrar", "Material", null,
+        new AjaxOptions
+        {
+            HttpMethod = "POST",
+            OnBegin = "OnBeginCadastrarMaterial",
+            OnSuccess = "OnSuccessCadastrarMaterial",
+        }, new { @id = "formCadastroMaterial", @class = "form-horizontal" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TipoOcorrencia, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EnumDropDownListFor(model => model.TipoOcorrencia, "Selecione um tipo...", htmlAttributes: new { @class = "chosen-select form-control" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TipoMaterial, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EnumDropDownListFor(model => model.TipoMaterial, "Selecione um tipo...", htmlAttributes: new { @class = "chosen-select form-control" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Custo, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EditorFor(model => model.Custo, new { htmlAttributes = new { @class = "date-picker form-control" } })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MaterialDanificado, htmlAttributes: new { @class = "form-field-select-3 col-xs-12 col-sm-12 no-padding-right" })
+                    <div class="col-xs-12 col-sm-12">
+                        @Html.EditorFor(model => model.MaterialDanificado, new { htmlAttributes = new { @class = "date-picker form-control" } })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @Html.HiddenFor(model => model.UKIncidente)
+
+    }
+</div>

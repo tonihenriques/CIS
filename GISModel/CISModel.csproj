@@ -97,6 +97,7 @@
     <Compile Include="DTO\Incidente\VMPesqIncidenteEnvTerceiro.cs" />
     <Compile Include="DTO\Incidente\VMPesquisaIncidenteBase.cs" />
     <Compile Include="DTO\Incidente\VMPesqIncidenteEnvProprio.cs" />
+    <Compile Include="DTO\Material\VMNovoMaterial.cs" />
     <Compile Include="DTO\Menu\PerfilMenuViewModel.cs" />
     <Compile Include="DTO\OperacaoCollection.cs" />
     <Compile Include="DTO\Permissoes\UsuarioPerfilViewModel.cs" />

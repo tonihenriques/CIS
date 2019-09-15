@@ -96,7 +96,7 @@ namespace GISModel.DTO.IncidenteVeiculo
         public List<VMPopulacao> Populacao { get; set; }
 
 
-        public List<Material> Materiais { get; set; }
+        public List<Entidades.OBJ.Material> Materiais { get; set; }
 
     }
 }
