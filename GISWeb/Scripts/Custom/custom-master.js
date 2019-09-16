@@ -357,6 +357,8 @@ function AdicionarFuncoesOnClikParaOperacoes() {
         OnClickExcluirVeiculoIncidente($(this));
     });
 
+
+
     $(".lnkNovoMaterial").off("click").on("click", function (e) {
         e.preventDefault();
         OnClickNovoMaterial($(this));
@@ -366,48 +368,19 @@ function AdicionarFuncoesOnClikParaOperacoes() {
         e.preventDefault();
         OnClickExcluirMaterial($(this));
     });
-    
-}
 
 
-function OnClickExcluirVeiculoIncidente(origemElemento) {
 
-    var sPlaca = origemElemento.closest("[data-placa]").attr("data-placa");
+    $(".lnkNovaPessoa").off("click").on("click", function (e) {
+        e.preventDefault();
+        OnClickNovaPopulacao($(this));
+    });
 
-    var msgInformativa = "Você está excluindo o veículo com placa '" + sPlaca + "'.";
+    $(".lnkExcluirPopulacao").off("click").on("click", function (e) {
+        e.preventDefault();
+        OnClickExcluirPopulacao($(this));
+    });
 
-    var callback = function () {
-
-        $("#modalDetalhesIncidenteVeiculoCorpoLoading").show();
-        $('#modalDetalhesIncidenteVeiculoCorpoLoadingTexto').html('...Excluindo incidente');
-        BloquearDiv("modalDetalhesIncidenteVeiculo");
-
-        $.ajax({
-            method: "POST",
-            url: "/IncidenteVeiculo/ExcluirVeiculo",
-            data: { UKRel: origemElemento.closest("[data-ukrel]").attr("data-ukrel") },
-            success: function (content) {
-
-                $("#modalDetalhesIncidenteVeiculoCorpoLoading").hide();
-                $('#modalDetalhesIncidenteVeiculoCorpoLoadingTexto').html('');
-                DesbloquearDiv("modalDetalhesIncidenteVeiculo");
-
-                TratarResultadoJSON(content.resultado);
-
-                if (content.resultado.Sucesso != null && content.resultado.Sucesso != undefined && content.resultado.Sucesso != "")
-                {
-                    //var ukIncidente = $(origemElemento).closest("[data-uniquekey]").attr("data-uniquekey");
-                    //$('#modalDetalhesIncidenteVeiculo').modal('hide');
-                    //$("#" + ukIncidente).click();
-                    
-                    VisualizarDetalhesIncidenteVeiculo($('#modalDetalhesIncidenteVeiculoCorpo'));
-                }
-
-            }
-        });
-    };
-
-    ExibirMensagemDeConfirmacaoSimples(msgInformativa, "Exclusão", callback, "btn-danger");
 }
 
 
@@ -442,6 +415,46 @@ function AtualizarTelasDetalhes() {
 
 
 
+//################################# VEÍCULO
+
+function OnClickExcluirVeiculoIncidente(origemElemento) {
+
+    var sPlaca = origemElemento.closest("[data-placa]").attr("data-placa");
+
+    var msgInformativa = "Você está excluindo o veículo com placa '" + sPlaca + "'.";
+
+    var callback = function () {
+
+        $("#modalDetalhesIncidenteVeiculoCorpoLoading").show();
+        $('#modalDetalhesIncidenteVeiculoCorpoLoadingTexto').html('...Excluindo incidente');
+        BloquearDiv("modalDetalhesIncidenteVeiculo");
+
+        $.ajax({
+            method: "POST",
+            url: "/IncidenteVeiculo/ExcluirVeiculo",
+            data: { UKRel: origemElemento.closest("[data-ukrel]").attr("data-ukrel") },
+            success: function (content) {
+
+                $("#modalDetalhesIncidenteVeiculoCorpoLoading").hide();
+                $('#modalDetalhesIncidenteVeiculoCorpoLoadingTexto').html('');
+                DesbloquearDiv("modalDetalhesIncidenteVeiculo");
+
+                TratarResultadoJSON(content.resultado);
+
+                if (content.resultado.Sucesso != null && content.resultado.Sucesso != undefined && content.resultado.Sucesso != "") {
+                    //var ukIncidente = $(origemElemento).closest("[data-uniquekey]").attr("data-uniquekey");
+                    //$('#modalDetalhesIncidenteVeiculo').modal('hide');
+                    //$("#" + ukIncidente).click();
+
+                    VisualizarDetalhesIncidenteVeiculo($('#modalDetalhesIncidenteVeiculoCorpo'));
+                }
+
+            }
+        });
+    };
+
+    ExibirMensagemDeConfirmacaoSimples(msgInformativa, "Exclusão", callback, "btn-danger");
+}
 
 function OnClickNovoVeiculo(origemElemento) {
 
@@ -505,9 +518,42 @@ function OnSuccessCadastrarVeiculo(data) {
 
 
 
+//################################# MATERIAL
 
+function OnClickExcluirMaterial(origemElemento) {
 
+    var sTipoMaterial = origemElemento.closest("[data-tipomaterial]").attr("data-tipomaterial");
 
+    var msgInformativa = "Você está excluindo o material '" + sTipoMaterial + "'.";
+
+    var callback = function () {
+
+        $("#modalDetalhesIncidenteVeiculoCorpoLoading").show();
+        $('#modalDetalhesIncidenteVeiculoCorpoLoadingTexto').html('...Excluindo incidente');
+        BloquearDiv("modalDetalhesIncidenteVeiculo");
+
+        $.ajax({
+            method: "POST",
+            url: "/Material/Excluir",
+            data: { UK: origemElemento.closest("[data-ukmaterial]").attr("data-ukmaterial") },
+            success: function (content) {
+
+                $("#modalDetalhesIncidenteVeiculoCorpoLoading").hide();
+                $('#modalDetalhesIncidenteVeiculoCorpoLoadingTexto').html('');
+                DesbloquearDiv("modalDetalhesIncidenteVeiculo");
+
+                TratarResultadoJSON(content.resultado);
+
+                if (content.resultado.Sucesso != null && content.resultado.Sucesso != undefined && content.resultado.Sucesso != "") {
+                    VisualizarDetalhesIncidenteVeiculo($('#modalDetalhesIncidenteVeiculoCorpo'));
+                }
+
+            }
+        });
+    };
+
+    ExibirMensagemDeConfirmacaoSimples(msgInformativa, "Exclusão", callback, "btn-danger");
+}
 
 function OnClickNovoMaterial(origemElemento) {
 
@@ -570,6 +616,107 @@ function OnSuccessCadastrarMaterial(data) {
 }
 
 
+
+//################################# POPULAÇÃO
+
+function OnClickExcluirPopulacao(origemElemento) {
+
+    var sNomePessoa = origemElemento.closest("[data-nomepessoa]").attr("data-nomepessoa");
+
+    var msgInformativa = "Você está excluindo a pessoa '" + sNomePessoa + "'.";
+
+    var callback = function () {
+
+        $("#modalDetalhesIncidenteVeiculoCorpoLoading").show();
+        $('#modalDetalhesIncidenteVeiculoCorpoLoadingTexto').html('...Excluindo pessoa');
+        BloquearDiv("modalDetalhesIncidenteVeiculo");
+
+        $.ajax({
+            method: "POST",
+            url: "/Populacao/Excluir",
+            data: { UKRel: origemElemento.closest("[data-ukrelpessoa]").attr("data-ukrelpessoa") },
+            success: function (content) {
+
+                $("#modalDetalhesIncidenteVeiculoCorpoLoading").hide();
+                $('#modalDetalhesIncidenteVeiculoCorpoLoadingTexto').html('');
+                DesbloquearDiv("modalDetalhesIncidenteVeiculo");
+
+                TratarResultadoJSON(content.resultado);
+
+                if (content.resultado.Sucesso != null && content.resultado.Sucesso != undefined && content.resultado.Sucesso != "") {
+                    VisualizarDetalhesIncidenteVeiculo($('#modalDetalhesIncidenteVeiculoCorpo'));
+                }
+
+            }
+        });
+    };
+
+    ExibirMensagemDeConfirmacaoSimples(msgInformativa, "Exclusão", callback, "btn-danger");
+}
+
+function OnClickNovaPopulacao(origemElemento) {
+
+    $('#modalNewPopulacaoX').show();
+    $('#modalNewPopulacaoFechar').removeClass('disabled');
+    $('#modalNewPopulacaoFechar').removeAttr('disabled', 'disabled');
+    $('#modalNewPopulacaoProsseguir').removeClass('disabled');
+    $('#modalNewPopulacaoProsseguir').removeAttr('disabled', 'disabled');
+    $('#modalNewPopulacaoCorpo').html('');
+    $('#modalNewPopulacaoCorpoLoading').show();
+
+    var ficha = origemElemento.closest('[data-uniquekey]').attr('data-uniquekey');
+
+    $.ajax({
+        method: 'POST',
+        url: '/Populacao/Novo',
+        data: { UKIncidenteVeiculo: ficha },
+        error: function (erro) {
+            $('#modalNewPopulacao').modal('hide');
+            ExibirMensagemGritter('Oops!', erro.responseText, 'gritter-error');
+        },
+        success: function (content) {
+            $('#modalNewPopulacaoCorpoLoading').hide();
+            $('#modalNewPopulacaoLoading').hide();
+            $('#modalNewPopulacaoCorpo').html(content);
+
+            AplicaTooltip();
+
+            AplicaDatePicker();
+
+            $("#Sexo").val("");
+
+            $("#modalNewPopulacaoProsseguir").off("click").on("click", function (e) {
+                $("#formCadastroPopulacao").submit();
+            });
+
+        }
+    });
+}
+
+function OnBeginCadastrarPopulacao() {
+    $(".LoadingLayout").show();
+    $('#btnSalvar').hide();
+    $("#formCadPopulacao").css({ opacity: "0.5" });
+
+    $('#modalNewPopulacaoLoading').show();
+    BloquearDiv("modalNewPopulacao");
+}
+
+function OnSuccessCadastrarPopulacao(data) {
+    $('#formCadPopulacao').removeAttr('style');
+    $(".LoadingLayout").hide();
+    $('#btnSalvar').show();
+
+    $('#modalNewPopulacaoLoading').hide();
+    DesbloquearDiv("modalNewPopulacao");
+
+    TratarResultadoJSON(data.resultado);
+
+    if (data.resultado.Sucesso != null && data.resultado.Sucesso != undefined && data.resultado.Sucesso != "") {
+        $('#modalNewPopulacao').modal('hide');
+        VisualizarDetalhesIncidenteVeiculo($('#modalDetalhesIncidenteVeiculoCorpo'));
+    }
+}
 
 
 

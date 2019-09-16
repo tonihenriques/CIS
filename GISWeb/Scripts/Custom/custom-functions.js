@@ -19,6 +19,7 @@
             return el.apply(this, arguments);
         };
     });
+
 })(jQuery);
 
 

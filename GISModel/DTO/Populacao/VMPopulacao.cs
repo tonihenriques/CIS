@@ -11,22 +11,17 @@ namespace GISModel.DTO.Populacao
         [Required(ErrorMessage = "Informe o nome da pessoa a ser cadastrada")]
         public string Nome { get; set; }
 
-        [Required(ErrorMessage = "O campo 'Sexo' é obrigatório")]
-        public string Sexo { get; set; }
+        [RequiredEnum(ErrorMessage = "O campo 'Sexo' é obrigatório")]
+        public ESexo Sexo { get; set; }
 
         [Display(Name = "Data de Nascimento")]
         [Required(ErrorMessage = "O campo 'Data de Nascimento' é obrigatório")]
-        public DateTime DataNascimento { get; set; }
+        public string DataNascimento { get; set; }
 
 
 
         public string UKRel { get; set; }
-
-
-
-
-
-        [Required(ErrorMessage = "Informe a pessoa envolvida no incidente")]
+        public string UKIncidenteVeiculo { get; set; }
         public string UKPopulacao { get; set; }
         
 

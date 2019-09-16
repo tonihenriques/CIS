@@ -251,7 +251,7 @@ namespace GISWeb.Controllers
                                         Atividade = iv.Atividade,
                                         Causa = iv.Causa,
                                         AgenteCausador = iv.AgenteCausador,
-                                        DataNascimento = v.DataNascimento,
+                                        DataNascimento = v.DataNascimento.ToString("dd/MM/yyyy"),
                                         Sexo = v.Sexo,
                                         Nome = v.Nome,
                                         Natureza = iv.Natureza,

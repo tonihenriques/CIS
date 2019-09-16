@@ -607,7 +607,7 @@ else
                                                 <td>@item.Placa</td>
                                                 <td>@item.TipoVeiculo</td>
                                                 <td>
-                                                    <span class="CustomTooltip" title="@item.TipoCondutor">@item.NomeCondutor</span>
+                                                    <span class="CustomTooltip" title="@GISHelpers.Extensions.System.EnumExtensions.GetDisplayName(item.TipoCondutor)">@item.NomeCondutor</span>
                                                 </td>
 
 
@@ -687,13 +687,9 @@ else
                                             <tr>
                                                 <td>@item.Nome</td>
                                                 <td>@item.DataNascimento</td>
-                                                <td>
-                                                    @item.TipoAcidente
-                                                </td>
-
-
+                                                <td>@GISHelpers.Extensions.System.EnumExtensions.GetDisplayName(item.TipoAcidente)</td>
                                                 <td align="center">
-                                                    <a href="#" class="CustomTooltip lnkExcluirPessoa" title="Excluir" data-ukrel="@item.UKRel" data-nomepessoa="@item.Nome">
+                                                    <a href="#" class="CustomTooltip lnkExcluirPopulacao" title="Excluir" data-ukrelpessoa="@item.UKRel" data-nomepessoa="@item.Nome">
                                                         <span class="red">
                                                             <i class="ace-icon fa fa-trash-o bigger-120"></i>
                                                         </span>
@@ -766,13 +762,11 @@ else
                                         @foreach (Material item in Model.Materiais)
                                         {
                                             <tr>
-                                                <td>@item.TipoMaterial</td>
-                                                <td>@item.TipoOcorrencia</td>
+                                                <td>@GISHelpers.Extensions.System.EnumExtensions.GetDisplayName(item.TipoMaterial)</td>
+                                                <td>@GISHelpers.Extensions.System.EnumExtensions.GetDisplayName(item.TipoOcorrencia)</td>
                                                 <td>@item.Custo</td>
-
-
                                                 <td align="center">
-                                                    <a href="#" class="CustomTooltip lnkExcluirMaterial" title="Excluir" data-ukmaterial="@item.UniqueKey" data-nomepessoa="@item.TipoMaterial">
+                                                    <a href="#" class="CustomTooltip lnkExcluirMaterial" title="Excluir" data-ukmaterial="@item.UniqueKey" data-tipomaterial="@GISHelpers.Extensions.System.EnumExtensions.GetDisplayName(item.TipoMaterial)">
                                                         <span class="red">
                                                             <i class="ace-icon fa fa-trash-o bigger-120"></i>
                                                         </span>

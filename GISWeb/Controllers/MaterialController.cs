@@ -5,6 +5,7 @@ using GISWeb.Infraestrutura.Filters;
 using GISWeb.Infraestrutura.Provider.Abstract;
 using Ninject;
 using System;
+using System.Linq;
 using System.Web.Mvc;
 using System.Web.SessionState;
 
@@ -67,6 +68,47 @@ namespace GISWeb.Controllers
                 return Json(new { resultado = TratarRetornoValidacaoToJSON() });
             }
 
+        }
+
+
+
+        [RestritoAAjax]
+        [HttpPost]
+        public ActionResult Excluir(string UK)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(UK))
+                {
+                    throw new Exception("Não foi possível localizar a identificação do material a ser excluído.");
+                }
+                else
+                {
+
+                    Material obj = MaterialBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.UniqueKey.Equals(UK));
+                    if (obj == null)
+                    {
+                        throw new Exception("Não foi possível localizar o material a ser excluído.");
+                    }
+                    else
+                    {
+                        obj.UsuarioExclusao = CustomAuthorizationProvider.UsuarioAutenticado.Login;
+                        MaterialBusiness.Terminar(obj);
+                        return Json(new { resultado = new RetornoJSON() { Sucesso = "Material excluído com sucesso." } });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex.GetBaseException() == null)
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.Message } });
+                }
+                else
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = ex.GetBaseException().Message } });
+                }
+            }
         }
 
     }

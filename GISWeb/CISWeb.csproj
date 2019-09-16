@@ -299,6 +299,7 @@
     <Compile Include="Controllers\PerfilController.cs" />
     <Compile Include="Controllers\PermissoesController.cs" />
     <Compile Include="Controllers\IncidenteController.cs" />
+    <Compile Include="Controllers\PopulacaoController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -424,6 +425,7 @@
     <Content Include="Views\IncidenteVeiculo\_ResultadoPesquisa.cshtml" />
     <Content Include="Views\IncidenteVeiculo\_ResultadoPesquisaRow.cshtml" />
     <Content Include="Views\Material\_Novo.cshtml" />
+    <Content Include="Views\Populacao\_Novo.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

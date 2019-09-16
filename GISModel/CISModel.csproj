@@ -158,6 +158,7 @@
     <Compile Include="Enums\ENivelTensao.cs" />
     <Compile Include="Enums\EPopulacaoLesao.cs" />
     <Compile Include="Enums\EPopulacaoTipoAcidente .cs" />
+    <Compile Include="Enums\ESexo.cs" />
     <Compile Include="Enums\ETipoOcorrencia .cs" />
     <Compile Include="Enums\ECusto.cs" />
     <Compile Include="Enums\EMaterialCusto.cs" />
