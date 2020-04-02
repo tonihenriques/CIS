@@ -131,11 +131,6 @@
     <Compile Include="Business\Concrete\Tabelas\TipoAtividadeBusiness.cs" />
     <Compile Include="Business\Concrete\UsuarioBusiness.cs" />
     <Compile Include="Business\Concrete\UsuarioPerfilBusiness.cs" />
-    <Compile Include="Connected Services\CEMIGInfoService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="Connected Services\WCF_Suporte\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -152,11 +147,6 @@
     <Compile Include="Repository\Abstract\IBaseRepository.cs" />
     <Compile Include="Repository\Concrete\BaseRepository.cs" />
     <Compile Include="Repository\Configuration\GISContext.cs" />
-    <Compile Include="Web References\WSAutenticacao\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GISHelpers\CISHelpers.csproj">
@@ -170,35 +160,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Connected Services\CEMIGInfoService\GISCore.CEMIGInfoService.Aplicacao.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\CEMIGInfoService\GISCore.CEMIGInfoService.Contrato.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\CEMIGInfoService\GISCore.CEMIGInfoService.Empregado.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\CEMIGInfoService\GISCore.CEMIGInfoService.Fornecedor.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\CEMIGInfoService\GISCore.CEMIGInfoService.NS.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\CEMIGInfoService\GISCore.CEMIGInfoService.Orgao.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\CEMIGInfoService\InfoService.wsdl" />
-    <None Include="Connected Services\CEMIGInfoService\InfoService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\CEMIGInfoService\InfoService1.wsdl" />
-    <None Include="Connected Services\CEMIGInfoService\InfoService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\CEMIGInfoService\InfoService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Connected Services\WCF_Suporte\Suporte.wsdl" />
     <None Include="Connected Services\WCF_Suporte\Suporte.xsd">
       <SubType>Designer</SubType>
@@ -212,11 +173,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Web References\WSAutenticacao\cartaocorporativo.wsdl" />
-    <None Include="Web References\WSAutenticacao\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
@@ -225,23 +181,6 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="https://web.cemig.com.br/gedoc/spf.custom.ws.gedocapp/cartaocorporativo.asmx">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\WSAutenticacao\</RelPath>
-      <UpdateFromURL>https://web.cemig.com.br/gedoc/spf.custom.ws.gedocapp/cartaocorporativo.asmx</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>GISCore_WSAutenticacao_CartaoCorporativo</CachedSettingsPropName>
-    </WebReferenceUrl>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Web References\WSAutenticacao\cartaocorporativo.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Connected Services\CEMIGInfoService\" />
     <WCFMetadataStorage Include="Connected Services\WCF_Suporte\" />
   </ItemGroup>
   <ItemGroup>
@@ -255,21 +194,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\WCF_Suporte\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\CEMIGInfoService\InfoService.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\CEMIGInfoService\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\CEMIGInfoService\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\CEMIGInfoService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>

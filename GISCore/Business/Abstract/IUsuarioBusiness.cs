@@ -12,5 +12,9 @@ namespace GISCore.Business.Abstract
 
         void SalvarAvatar(string login, string imageStringBase64);
 
+        void DefinirSenha(NovaSenhaViewModel novaSenhaViewModel);
+
+        string CreateHashFromPassword(string pstrOriginalPassword);
+
     }
 }

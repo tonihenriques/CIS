@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace GISModel.DTO.Account
 {
@@ -13,6 +8,14 @@ namespace GISModel.DTO.Account
         public string IDUsuario { get; set; }
 
         public string Email { get; set; }
+
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Senha Atual")]
+        [Required(ErrorMessage = "Informe a senha atual")]
+        public string SenhaAtual { get; set; }
+
+
 
         [Required(ErrorMessage = "Informe a nova senha")]
         [Display(Name = "Nova Senha")]
