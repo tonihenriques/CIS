@@ -1,5 +1,6 @@
 ﻿using GISCore.Business.Abstract;
 using GISModel.DTO.Account;
+using GISModel.DTO.Shared;
 using GISModel.Entidades;
 using GISWeb.Infraestrutura.Filters;
 using GISWeb.Infraestrutura.Provider.Abstract;
@@ -133,6 +134,57 @@ namespace GISWeb.Controllers
             //}
             return Json(new { url = Url.Action("Perfil") });
         }
+
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult DefinirSenha(NovaSenhaViewModel entidade)
+        {
+            if (ModelState.IsValid)
+            {
+                if (entidade.NovaSenha.Equals(entidade.ConfirmarNovaSenha))
+                {
+                    try
+                    {
+                        Usuario user = UsuarioBusiness.Consulta.FirstOrDefault(a => string.IsNullOrEmpty(a.UsuarioExclusao) && a.Login.Equals(AutorizacaoProvider.UsuarioAutenticado.Login));
+
+                        if (user == null)
+                            return Json(new { resultado = new RetornoJSON() { Erro = "Não foi possível localizar o usuário logado na base de dados. Favor acionar o administrador." } });
+
+                        if (!user.Senha.Equals(UsuarioBusiness.CreateHashFromPassword(entidade.SenhaAtual)))
+                            return Json(new { resultado = new RetornoJSON() { Alerta = "A senha atual não confere com a senha da base de dados." } });
+
+                        entidade.IDUsuario = user.ID;
+
+                        UsuarioBusiness.DefinirSenha(entidade);
+
+                        return Json(new { resultado = new RetornoJSON() { Sucesso = "Senha alterada com sucesso." } });
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex.GetBaseException() == null)
+                        {
+                            return Json(new { resultado = new RetornoJSON() { Erro = ex.Message } });
+                        }
+                        else
+                        {
+                            return Json(new { resultado = new RetornoJSON() { Erro = ex.GetBaseException().Message } });
+                        }
+                    }
+                }
+                else
+                {
+                    return Json(new { resultado = new RetornoJSON() { Erro = "As duas senhas devem ser identicas." } });
+                }
+            }
+            else
+            {
+                return Json(new { resultado = TratarRetornoValidacaoToJSON() });
+            }
+        }
+
 
     }
 }

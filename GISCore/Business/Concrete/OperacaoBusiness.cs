@@ -69,8 +69,26 @@ namespace GISCore.Business.Concrete
                     if (!operacoes.Contains(GISModel.Enums.Operacao.HistoricoWorkflow))
                         operacoes.Add(GISModel.Enums.Operacao.HistoricoWorkflow);
                 }
+
+                if (permissoes.Where(a => a.Perfil.Equals("Medico")).Count() > 0)
+                {
+                    if (!operacoes.Contains(GISModel.Enums.Operacao.IncluirCAT))
+                        operacoes.Add(GISModel.Enums.Operacao.IncluirCAT);
+                }
+
+
+                if (permissoes.Where(a => a.Perfil.Equals("Técnico de Segurança")).Count() > 0)
+                {
+                    if (!operacoes.Contains(GISModel.Enums.Operacao.AnexarArquivos))
+                        operacoes.Add(GISModel.Enums.Operacao.AnexarArquivos);
+
+                    if (!operacoes.Contains(GISModel.Enums.Operacao.ExcluirArquivos))
+                        operacoes.Add(GISModel.Enums.Operacao.ExcluirArquivos);
+                }
+
+
             }
-            
+
             return operacoes;
 
         }
@@ -132,6 +150,24 @@ namespace GISCore.Business.Concrete
                     if (!operacoes.Contains(GISModel.Enums.Operacao.HistoricoWorkflow))
                         operacoes.Add(GISModel.Enums.Operacao.HistoricoWorkflow);
                 }
+
+
+                if (permissoes.Where(a => a.Perfil.Equals("Medico")).Count() > 0)
+                {
+                    if (!operacoes.Contains(GISModel.Enums.Operacao.IncluirCAT))
+                        operacoes.Add(GISModel.Enums.Operacao.IncluirCAT);
+                }
+
+
+                if (permissoes.Where(a => a.Perfil.Equals("Técnico de Segurança")).Count() > 0)
+                {
+                    if (!operacoes.Contains(GISModel.Enums.Operacao.AnexarArquivos))
+                        operacoes.Add(GISModel.Enums.Operacao.AnexarArquivos);
+
+                    if (!operacoes.Contains(GISModel.Enums.Operacao.ExcluirArquivos))
+                        operacoes.Add(GISModel.Enums.Operacao.ExcluirArquivos);
+                }
+
             }
 
             return operacoes;

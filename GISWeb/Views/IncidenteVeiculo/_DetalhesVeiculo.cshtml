@@ -1,4 +1,6 @@
 ﻿@using GISModel.DTO.IncidenteVeiculo
+@using GISModel.DTO.Populacao
+
 @using GISModel.Entidades
 @using GISModel.Entidades.OBJ
 @using GISModel.Enums
@@ -75,587 +77,731 @@ else
             classeTitulos = "blue";
         }
 
-        <div id="detalhesIncidente" data-uniquekey="@Model.UniqueKey" data-codigo="@Model.Codigo" data-ukwf="@Model.UKWorkflow" data-tipo="Veiculo">
-            <div class="widget-container-col">
-                <div class="widget-box transparent">
-                    <div class="widget-header" style="border-bottom: 1px solid #ddd">
-                        <h5 class="widget-title">
-                            <i class="ace-icon fa fa-info-circle"></i>
-                            <a href="#" data-action="collapse" class="@classeTitulos">
-                                <b>INFORMAÇÕES PRINCIPAIS</b>
-                            </a>
-                        </h5>
+<div id="detalhesIncidente" data-uniquekey="@Model.UniqueKey" data-codigo="@Model.Codigo" data-ukwf="@Model.UKWorkflow" data-tipo="Veiculo">
+    <div class="widget-container-col">
+        <div class="widget-box transparent">
+            <div class="widget-header" style="border-bottom: 1px solid #ddd">
+                <h5 class="widget-title">
+                    <i class="ace-icon fa fa-info-circle"></i>
+                    <a href="#" data-action="collapse" class="@classeTitulos">
+                        <b>INFORMAÇÕES PRINCIPAIS</b>
+                    </a>
+                </h5>
 
 
 
-                        <div class="widget-toolbar no-border" style="height: 38px; padding-top: 5px;">
-                            <div class="btn-group pull-right">
+                <div class="widget-toolbar no-border" style="height: 38px; padding-top: 5px;">
+                    <div class="btn-group pull-right">
 
-                                @if (Model.Operacoes.Contains(Operacao.Aprovar))
-                                {
-                                    <button class="btn btn-xs btn-success lnkAprovar" data-target="#modalAprovar" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                        <i class="ace-icon fa fa-check"></i>
-                                        Aprovar
-                                    </button>
+                        @if (Model.Operacoes.Contains(Operacao.Aprovar))
+                        {
+                            <button class="btn btn-xs btn-success lnkAprovar" data-target="#modalAprovar" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                <i class="ace-icon fa fa-check"></i>
+                                Aprovar
+                            </button>
 
-                                    Model.Operacoes.Remove(Operacao.Aprovar);
+                            Model.Operacoes.Remove(Operacao.Aprovar);
 
-                                    if (Model.Operacoes.Contains(Operacao.Reprovar))
-                                    {
-                                        <button class="btn btn-xs btn-danger lnkReprovar" data-target="#modalRejeitar" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                            <i class="ace-icon fa fa-remove"></i>
-                                            Reprovar
-                                        </button>
-
-                                        Model.Operacoes.Remove(Operacao.Reprovar);
-                                    }
-                                }
-                                else if (Model.Operacoes.Contains(Operacao.Assumir))
-                                {
-                                    <button class="btn btn-xs btn-info lnkAssumir" data-target="#modalAssumir" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-claim="true">
-                                        <i class="ace-icon fa fa-arrow-circle-down"></i>
-                                        Assumir
-                                    </button>
-
-                                    Model.Operacoes.Remove(Operacao.Assumir);
-                                }
-                                else if (Model.Operacoes.Contains(Operacao.Encaminhar))
-                                {
-                                    <button class="btn btn-xs btn-info lnkAtribuir" data-target="#modalEncaminhar" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-claim="false">
-                                        <i class="ace-icon fa fa-random"></i>
-                                        Atribuir
-                                    </button>
-
-                                    Model.Operacoes.Remove(Operacao.Encaminhar);
-                                }
-                                else
-                                {
-                                    <button class="btn btn-xs btn-default" data-toggle="dropdown" aria-expanded="false">
-                                        <i class=" ace-icon fa fa-bars">
-                                        </i>
-                                        Menu
-                                    </button>
-                                }
-
-                                <button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    <span class="ace-icon fa fa-caret-down icon-only"></span>
+                            if (Model.Operacoes.Contains(Operacao.Reprovar))
+                            {
+                                <button class="btn btn-xs btn-danger lnkReprovar" data-target="#modalRejeitar" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                    <i class="ace-icon fa fa-remove"></i>
+                                    Reprovar
                                 </button>
 
-                                <ul class="dropdown-menu dropdown-only-icon dropdown-yellow2 dropdown-menu-right dropdown-caret dropdown-close">
+                                Model.Operacoes.Remove(Operacao.Reprovar);
+                            }
+                        }
+                        else if (Model.Operacoes.Contains(Operacao.Assumir))
+                        {
+                            <button class="btn btn-xs btn-info lnkAssumir" data-target="#modalAssumir" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-claim="true">
+                                <i class="ace-icon fa fa-arrow-circle-down"></i>
+                                Assumir
+                            </button>
+
+                            Model.Operacoes.Remove(Operacao.Assumir);
+                        }
+                        else if (Model.Operacoes.Contains(Operacao.Encaminhar))
+                        {
+                            <button class="btn btn-xs btn-info lnkAtribuir" data-target="#modalEncaminhar" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-claim="false">
+                                <i class="ace-icon fa fa-random"></i>
+                                Atribuir
+                            </button>
+
+                            Model.Operacoes.Remove(Operacao.Encaminhar);
+                        }
+                        else
+                        {
+                            <button class="btn btn-xs btn-default" data-toggle="dropdown" aria-expanded="false">
+                                <i class=" ace-icon fa fa-bars">
+                                </i>
+                                Menu
+                            </button>
+                        }
+
+                        <button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <span class="ace-icon fa fa-caret-down icon-only"></span>
+                        </button>
+
+                        <ul class="dropdown-menu dropdown-only-icon dropdown-yellow2 dropdown-menu-right dropdown-caret dropdown-close">
+                            @{
+                                Html.RenderPartial("~/Views/IncidenteVeiculo/_MenuOperacoes.cshtml", ((IncidenteVeiculo)ViewBag.Incidente));
+                            }
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div class="row">
+
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="profile-user-info profile-user-info-striped">
+
+                                <div class="profile-info-row">
+
                                     @{
-                                        Html.RenderPartial("~/Views/IncidenteVeiculo/_MenuOperacoes.cshtml", ((IncidenteVeiculo)ViewBag.Incidente));
+                                        var revStateColor = string.Empty;
+
+                                        if (Model.StatusWF.Contains("Em Edição"))
+                                        {
+                                            revStateColor = "#478FCA";
+                                        }
+                                        else if (Model.StatusWF.Contains("Em Análise"))
+                                        {
+                                            revStateColor = "#a0a0a0";
+                                        }
+                                        else if (Model.StatusWF.Contains("Em Processamento"))
+                                        {
+                                            revStateColor = "#ffb752";
+                                        }
+                                        else if (Model.StatusWF.Contains("Em Aprovação"))
+                                        {
+                                            revStateColor = "#a0a0a0";
+                                        }
+                                        else if (Model.StatusWF.Contains("Concluído"))
+                                        {
+                                            revStateColor = "#87B87F";
+                                        }
                                     }
-                                </ul>
+
+                                    <div class="profile-info-name"> Status </div>
+
+                                    <div class="profile-info-value center" style="background-color: @revStateColor; color: #FFFFFF; font-weight: bold; margin-left: 0px;">
+                                        <span style="color: #FFFFFF; font-weight: 600;">
+                                            @Model.StatusWF
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"></div>
+
+                                    <div class="profile-info-value" style="background-color: #edf3f4; border-top: 1px solid #f7fbff"></div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Código </div>
+
+                                    <div class="profile-info-value">
+                                        <span>@Model.Codigo</span>
+                                    </div>
+                                </div>
+
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Nº SMART </div>
+
+                                    <div class="profile-info-value">
+                                        <span>@Model.NumeroSmart</span>
+                                    </div>
+                                </div>
+
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Data Incidente </div>
+
+                                    <div class="profile-info-value">
+                                        <span id="labelTitulo">
+                                            <span>@Model.DataIncidente</span>
+                                        </span>
+
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Hora Incidente </div>
+
+                                    <div class="profile-info-value">
+                                        <span id="labelTitulo">
+                                            <span>@Model.HoraIncidente</span>
+                                        </span>
+
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Acidente Fatal? </div>
+
+                                    <div class="profile-info-value">
+                                        <span id="labelTitulo">
+                                            <span>@Model.AcidenteFatal</span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Acid. grave (IP 10.2)? </div>
+
+                                    <div class="profile-info-value">
+                                        <span id="labelTitulo">
+                                            <span>@Model.AcidenteGraveIP102</span>
+                                        </span>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 
-                    </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="profile-user-info profile-user-info-striped">
 
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Estado </div>
 
-
-                    <div class="widget-body">
-                        <div class="widget-main">
-                            <div class="row">
-
-                                <div class="col-xs-12 col-sm-6">
-                                    <div class="profile-user-info profile-user-info-striped">
-
-                                        <div class="profile-info-row">
-
-                                            @{
-                                                var revStateColor = string.Empty;
-
-                                                if (Model.StatusWF.Contains("Em Edição"))
-                                                {
-                                                    revStateColor = "#478FCA";
-                                                }
-                                                else if (Model.StatusWF.Contains("Em Análise"))
-                                                {
-                                                    revStateColor = "#a0a0a0";
-                                                }
-                                                else if (Model.StatusWF.Contains("Em Processamento"))
-                                                {
-                                                    revStateColor = "#ffb752";
-                                                }
-                                                else if (Model.StatusWF.Contains("Em Aprovação"))
-                                                {
-                                                    revStateColor = "#a0a0a0";
-                                                }
-                                                else if (Model.StatusWF.Contains("Concluído"))
-                                                {
-                                                    revStateColor = "#87B87F";
-                                                }
-                                            }
-
-                                            <div class="profile-info-name"> Status </div>
-
-                                            <div class="profile-info-value center" style="background-color: @revStateColor; color: #FFFFFF; font-weight: bold; margin-left: 0px;">
-                                                <span style="color: #FFFFFF; font-weight: 600;">
-                                                    @Model.StatusWF
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"></div>
-
-                                            <div class="profile-info-value" style="background-color: #edf3f4; border-top: 1px solid #f7fbff"></div>
-                                        </div>
-
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> Código </div>
-
-                                            <div class="profile-info-value">
-                                                <span>@Model.Codigo</span>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> Nº SMART </div>
-
-                                            <div class="profile-info-value">
-                                                <span>@Model.NumeroSmart</span>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> Data Incidente </div>
-
-                                            <div class="profile-info-value">
-                                                <span id="labelTitulo">
-                                                    <span>@Model.DataIncidente</span>
-                                                </span>
-
-                                            </div>
-                                        </div>
-
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> Hora Incidente </div>
-
-                                            <div class="profile-info-value">
-                                                <span id="labelTitulo">
-                                                    <span>@Model.HoraIncidente</span>
-                                                </span>
-
-                                            </div>
-                                        </div>
-
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> Acidente Fatal? </div>
-
-                                            <div class="profile-info-value">
-                                                <span id="labelTitulo">
-                                                    <span>@Model.AcidenteFatal</span>
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> Acid. grave (IP 10.2)? </div>
-
-                                            <div class="profile-info-value">
-                                                <span id="labelTitulo">
-                                                    <span>@Model.AcidenteGraveIP102</span>
-                                                </span>
-                                            </div>
-                                        </div>
-
+                                    <div class="profile-info-value">
+                                        <span>@Model.Estado</span>
                                     </div>
                                 </div>
 
-                                <div class="col-xs-12 col-sm-6">
-                                    <div class="profile-user-info profile-user-info-striped">
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Município </div>
 
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> Estado </div>
-
-                                            <div class="profile-info-value">
-                                                <span>@Model.Estado</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> Município </div>
-
-                                            <div class="profile-info-value">
-                                                <span>@Model.Municipio</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> Regional </div>
-
-                                            <div class="profile-info-value">
-                                                <span>@Model.Regional</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> Órgão </div>
-
-                                            <div class="profile-info-value">
-                                                <span>@Model.Orgao</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> Local Acidente </div>
-
-                                            <div class="profile-info-value">
-                                                <span>@Model.LocalAcidente</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> Tipo Local Acidente </div>
-
-                                            <div class="profile-info-value">
-                                                <span>
-                                                    @Model.TipoLocalAcidente
-                                                </span>
-                                            </div>
-                                        </div>
-
-
-
+                                    <div class="profile-info-value">
+                                        <span>@Model.Municipio</span>
                                     </div>
                                 </div>
 
-                            </div> <!-- Row -->
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Regional </div>
 
-                            <div class="space-4"></div>
-
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-6">
-                                    <div class="profile-user-info profile-user-info-striped">
-
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> Tipo Entrada </div>
-
-                                            <div class="profile-info-value">
-                                                <span>
-                                                    @Model.TipoEntrada
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> e-Social </div>
-
-                                            <div class="profile-info-value">
-                                                <span class="CustomTooltip" title="@ViewBag.ESocialDesc">
-                                                    @Model.ESocial
-                                                </span>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> Logradouro </div>
-
-                                            <div class="profile-info-value">
-                                                <span>@Model.Logradouro</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> Nº Logradouro </div>
-
-                                            <div class="profile-info-value">
-                                                <span>@Model.NumeroLogradouro</span>
-                                            </div>
-                                        </div>
-
-
+                                    <div class="profile-info-value">
+                                        <span>@Model.Regional</span>
                                     </div>
                                 </div>
 
-                                <div class="col-xs-12 col-sm-6">
-                                    <div class="profile-user-info profile-user-info-striped">
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Órgão </div>
 
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> Centro </div>
-
-                                            <div class="profile-info-value">
-                                                <span>@Model.Centro</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> Data Criação </div>
-
-                                            <div class="profile-info-value">
-                                                <span>@Model.DataInclusao</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> Usuário Criação </div>
-
-                                            <div class="profile-info-value">
-                                                <span>@Model.UsuarioInclusao</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> Última Atualização </div>
-
-                                            <div class="profile-info-value">
-                                                <span>@Model.DataAtualizacao</span>
-                                            </div>
-                                        </div>
-
+                                    <div class="profile-info-value">
+                                        <span>@Model.Orgao</span>
                                     </div>
                                 </div>
 
-                            </div> <!-- Row -->
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Local Acidente </div>
 
-                            <div class="space-4"></div>
-
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-12">
-                                    <div class="profile-user-info profile-user-info-striped">
-
-                                        <div class="profile-info-row">
-                                            <div class="profile-info-name"> Descrição </div>
-
-                                            <div class="profile-info-value">
-                                                <span>@Model.Descricao</span>
-                                            </div>
-                                        </div>
-
+                                    <div class="profile-info-value">
+                                        <span>@Model.LocalAcidente</span>
                                     </div>
                                 </div>
 
-                            </div> <!-- Row -->
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Tipo Local Acidente </div>
 
-                        </div> <!-- widget-main -->
-                    </div>
+                                    <div class="profile-info-value">
+                                        <span>
+                                            @Model.TipoLocalAcidente
+                                        </span>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+                    </div> <!-- Row -->
+
+                    <div class="space-4"></div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="profile-user-info profile-user-info-striped">
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Tipo Entrada </div>
+
+                                    <div class="profile-info-value">
+                                        <span>
+                                            @Model.TipoEntrada
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> e-Social </div>
+
+                                    <div class="profile-info-value">
+                                        <span class="CustomTooltip" title="@ViewBag.ESocialDesc">
+                                            @Model.ESocial
+                                        </span>
+                                    </div>
+                                </div>
+
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Logradouro </div>
+
+                                    <div class="profile-info-value">
+                                        <span>@Model.Logradouro</span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Nº Logradouro </div>
+
+                                    <div class="profile-info-value">
+                                        <span>@Model.NumeroLogradouro</span>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="profile-user-info profile-user-info-striped">
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Centro </div>
+
+                                    <div class="profile-info-value">
+                                        <span>@Model.Centro</span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Data Criação </div>
+
+                                    <div class="profile-info-value">
+                                        <span>@Model.DataInclusao</span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Usuário Criação </div>
+
+                                    <div class="profile-info-value">
+                                        <span>@Model.UsuarioInclusao</span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Última Atualização </div>
+
+                                    <div class="profile-info-value">
+                                        <span>@Model.DataAtualizacao</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div> <!-- Row -->
+
+                    <div class="space-4"></div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            <div class="profile-user-info profile-user-info-striped">
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Descrição </div>
+
+                                    <div class="profile-info-value">
+                                        <span>@Model.Descricao</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div> <!-- Row -->
+
+                </div> <!-- widget-main -->
+            </div>
+        </div>
+    </div>
+
+    <div class="widget-container-col">
+        <div class="widget-box transparent collapsed">
+            @{
+                var totalArquivosAnexados = 0;
+
+                if (Model.Arquivos != null && Model.Arquivos.Count > 0)
+                {
+                    totalArquivosAnexados = Model.Arquivos.Count;
+                }
+            }
+
+            <div class="widget-header @classeTitulos" style="border-bottom: 1px solid #ddd">
+                <h5 class="widget-title">
+                    <i class="ace-icon fa fa-cloud-download"></i>
+                    <a href="#" data-action="collapse" class="@classeTitulos">
+                        <b>ARQUIVOS ANEXADOS <span style="color: #617b5d">(@totalArquivosAnexados)</span></b>
+                    </a>
+                </h5>
+
+                <div class="widget-toolbar action-buttons no-border" style="height: 38px; padding-top: 5px;">
+
+                    @if (Model.Arquivos != null && Model.Arquivos.Count > 0)
+                    {
+                        <span>&nbsp;</span>
+
+                        <a href="@path/Arquivo/Download/@Model.UniqueKey" target="_blank" class="CustomTooltip" title="Baixar Todos os Arquivos">
+                            <i class="ace-icon fa fa-download red2 bigger-150"></i>
+                        </a>
+                    }
+
+                    @if (Model.Operacoes.Contains(Operacao.AnexarArquivos))
+                    {
+                        <span>&nbsp;</span>
+
+                        <a href="#" class="CustomTooltip lnkUploadArquivo" title="Anexar Novo Arquivo" data-target="#modalArquivo" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                            <i class="ace-icon fa fa-cloud-upload bigger-170"></i>
+                        </a>
+                    }
+
                 </div>
             </div>
 
-            <div class="widget-container-col">
-                <div class="widget-box transparent">
-                    @{
-                        var totalArquivosAnexados = 0;
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="timeline-container">
+                                @{
+                                    if (Model.Arquivos != null && Model.Arquivos.Count > 0)
+                                    {
+                                        foreach (Arquivo arq in Model.Arquivos)
+                                        {
+                                            <div class="timeline-item clearfix" data-uniquekey="@arq.UniqueKey">
+                                                <div class="timeline-info CustomTooltip" title="Anexados">
+                                                    <i class="timeline-indicator ace-icon fa fa-minus btn btn-primary no-hover"></i>
+                                                </div>
 
-                        if (Model.Arquivos != null && Model.Arquivos.Count > 0)
-                        {
-                            totalArquivosAnexados = Model.Arquivos.Count;
-                        }
-                    }
+                                                <div class="widget-box transparent collapsed">
+                                                    <div class="widget-header widget-header-small">
+                                                        <h5 class="widget-title smaller">
+                                                            <a href="@path/Arquivo/Visualizar/@arq.UniqueKey" target="_blank" class="CustomTooltip blue" title="Visualizar">
+                                                                @arq.NomeLocal
+                                                            </a>
+                                                        </h5>
 
-                    <div class="widget-header @classeTitulos" style="border-bottom: 1px solid #ddd">
-                        <h5 class="widget-title">
-                            <i class="ace-icon fa fa-cloud-download"></i>
-                            <a href="#" data-action="collapse" class="@classeTitulos">
-                                <b>ARQUIVOS ANEXADOS <span style="color: #617b5d">(@totalArquivosAnexados)</span></b>
-                            </a>
-                        </h5>
+                                                        <span class="widget-toolbar no-border action-buttons">
+                                                            <a href="#" data-action="collapse">
+                                                                <i class="ace-icon fa fa-chevron-down bigger-125"></i>
+                                                            </a>
+                                                        </span>
+                                                    </div>
+                                                    <div class="padding-8 clearfix">
+                                                    </div>
+                                                    <div class="widget-body">
+                                                        <div class="widget-main">
 
-                        <div class="widget-toolbar action-buttons no-border" style="height: 38px; padding-top: 5px;">
+                                                            <div class="widget-toolbox clearfix">
+                                                                <div class="row">
 
-                            @if (Model.Arquivos != null && Model.Arquivos.Count > 0)
-                            {
-                                <span>&nbsp;</span>
+                                                                    <div class="pull-left" style="font-size: 11px">
+                                                                        <i class="ace-icon fa fa-cloud bigger-110 blue"></i>
 
-                                <a href="@path/Arquivo/Download/@Model.UniqueKey" target="_blank" class="CustomTooltip" title="Baixar Todos os Arquivos">
-                                    <i class="ace-icon fa fa-download red2 bigger-150"></i>
-                                </a>
-                            }
-
-                            @if (Model.Operacoes.Contains(Operacao.AnexarArquivos))
-                            {
-                                <span>&nbsp;</span>
-
-                                <a href="#" class="CustomTooltip lnkUploadArquivo" title="Anexar Novo Arquivo" data-target="#modalArquivo" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                    <i class="ace-icon fa fa-cloud-upload bigger-170"></i>
-                                </a>
-                            }
-
-                        </div>
-                    </div>
-
-                    <div class="widget-body">
-                        <div class="widget-main">
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="timeline-container">
-                                        @{
-                                            if (Model.Arquivos != null && Model.Arquivos.Count > 0)
-                                            {
-                                                foreach (Arquivo arq in Model.Arquivos)
-                                                {
-                                                    <div class="timeline-item clearfix" data-uniquekey="@arq.UniqueKey">
-                                                        <div class="timeline-info CustomTooltip" title="Anexados">
-                                                            <i class="timeline-indicator ace-icon fa fa-minus btn btn-primary no-hover"></i>
-                                                        </div>
-
-                                                        <div class="widget-box transparent collapsed">
-                                                            <div class="widget-header widget-header-small">
-                                                                <h5 class="widget-title smaller">
-                                                                    <a href="@path/Arquivo/Visualizar/@arq.UniqueKey" target="_blank" class="CustomTooltip blue" title="Visualizar">
-                                                                        @arq.NomeLocal
-                                                                    </a>
-                                                                </h5>
-
-                                                                <span class="widget-toolbar no-border action-buttons">
-                                                                    <a href="#" data-action="collapse">
-                                                                        <i class="ace-icon fa fa-chevron-down bigger-125"></i>
-                                                                    </a>
-                                                                </span>
-                                                            </div>
-                                                            <div class="padding-8 clearfix">
-                                                            </div>
-                                                            <div class="widget-body">
-                                                                <div class="widget-main">
-
-                                                                    <div class="widget-toolbox clearfix">
-                                                                        <div class="row">
-
-                                                                            <div class="pull-left" style="font-size: 11px">
-                                                                                <i class="ace-icon fa fa-cloud bigger-110 blue"></i>
-
-                                                                                <span>&nbsp;Arquivo anexado em @arq.DataInclusao por @arq.UsuarioInclusao</span>
-                                                                            </div>
-
-                                                                            @if (Model.Operacoes.Contains(Operacao.ExcluirArquivos))
-                                                                            {
-                                                                                <div class="pull-right action-buttons">
-                                                                                    <a href="#" class="red2 lnkExcluirArquivoVeiculo CustomTooltip" title="Excluir">
-                                                                                        <i class="ace-icon fa fa-remove bigger-125"></i>
-                                                                                    </a>
-                                                                                </div>
-                                                                            }
-
-                                                                        </div>
+                                                                        <span>&nbsp;Arquivo anexado em @arq.DataInclusao por @arq.UsuarioInclusao</span>
                                                                     </div>
+
+                                                                    @if (Model.Operacoes.Contains(Operacao.ExcluirArquivos))
+                                                                    {
+                                                                        <div class="pull-right action-buttons">
+                                                                            <a href="#" class="red2 lnkExcluirArquivoVeiculo CustomTooltip" title="Excluir">
+                                                                                <i class="ace-icon fa fa-remove bigger-125"></i>
+                                                                            </a>
+                                                                        </div>
+                                                                    }
+
                                                                 </div>
                                                             </div>
                                                         </div>
-
-                                                    </div>
-                                                }
-                                            }
-                                            else
-                                            {
-                                                <div class="timeline-item clearfix">
-                                                    <div class="timeline-info">
-                                                        <i class="timeline-indicator ace-icon fa fa-exclamation-triangle btn btn-warning no-hover"></i>
-                                                    </div>
-                                                    <div>
-                                                        <h5 class="text-warning smaller-90">
-                                                            <strong>
-                                                                Nenhum arquivo anexado até o momento.
-                                                            </strong>
-                                                        </h5>
                                                     </div>
                                                 </div>
-                                            }
+
+                                            </div>
                                         }
-                                    </div>
-                                </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="timeline-item clearfix">
+                                            <div class="timeline-info">
+                                                <i class="timeline-indicator ace-icon fa fa-exclamation-triangle btn btn-warning no-hover"></i>
+                                            </div>
+                                            <div>
+                                                <h5 class="text-warning smaller-90">
+                                                    <strong>
+                                                        Nenhum arquivo anexado até o momento.
+                                                    </strong>
+                                                </h5>
+                                            </div>
+                                        </div>
+                                    }
+                                }
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
-            <div class="widget-container-col">
-                    <div class="widget-box transparent">
-                        <div class="widget-header @classeTitulos" style="border-bottom: 1px solid #ddd">
-                            <h5 class="widget-title">
-                                <i class="ace-icon fa fa-users"></i>
-                                <a href="#" data-action="collapse" class="@classeTitulos">
-                                    <b>Veículo</b>
-                                </a>
-                            </h5>
-
-                            <div class="widget-toolbar action-buttons no-border" style="height: 38px; padding-top: 5px;">
-                                <span>&nbsp;</span>
-                                <a href="#" class="CustomTooltip green lnkNovoVeiculo" title="Novo Veículo" data-target="#modalNewVeiculo" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                    <i class="ace-icon fa fa-car bigger-150"></i>
-                                </a>
-                            </div>                            
-                        </div>
-
-                        <div class="widget-body">
-                            <div class="widget-main">
-                                <div class="row">
-                                    <div class="col-xs-12 col-sm-12">
-                                        @if (Model.Veiculos != null && Model.Veiculos.Count > 0)
-                                        {
-
-                                            <table id="tableVeiculos" class="table table-striped table-bordered table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Placa</th>
-                                                        <th>Tipo</th>
-                                                        <th>Condutor</th>
-                                                        <th width="135px"></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach (Veiculo item in Model.Veiculos)
-
-                                                        <th>Placa</th>
-                                                        <th>Tipo Veículo</th>
-                                                        <th>Condutor</th>
-                                                        <th width="50px"></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach (VMVeiculo item in Model.Veiculos)
-
-                                                    {
-                                                        <tr>
-                                                            <td>@item.Placa</td>
-                                                            <td>@item.TipoVeiculo</td>
-                                                            <td>
-                                                                <span class="CustomTooltip" title="@item.TipoCondutor">@item.NomeCondutor</span>
-                                                            </td>
-
-                                                            
-                                                         <td align="center">
-                                                                <a href="#" class="CustomTooltip lnkExcluirVeiculo" title="Excluir" data-ukrel="@item.UKRel" data-placa="@item.Placa">
-                                                                    <span class="red">
-                                                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                                                    </span>
-                                                                </a>
-                                                            </td>
-
-                                                        </tr>
-                                                    }
-                                                </tbody>
-                                            </table>
-                                        }
-                                        else
-                                        {
-                                            <div class="timeline-item clearfix">
-                                                <div class="timeline-info">
-                                                    <i class="timeline-indicator ace-icon fa fa-exclamation-triangle btn btn-warning no-hover"></i>
-                                                </div>
-                                                <div>
-                                                    <h5 class="text-warning smaller-90">
-                                                        <strong>
-                                                            Nenhum veículo cadastrado até o momento.
-                                                        </strong>
-                                                    </h5>
-                                                </div>
-                                            </div>
-                                        }
-                                    </div> <!-- Col -->
-                                </div> <!-- Row -->
-
-                            </div> <!-- widget-main -->
-                        </div>
-                    </div>
-                </div>
-
         </div>
+    </div>
+
+    <div class="widget-container-col">
+        <div class="widget-box transparent collapsed">
+            <div class="widget-header @classeTitulos" style="border-bottom: 1px solid #ddd">
+                <h5 class="widget-title">
+                    <i class="ace-icon fa fa-users"></i>
+                    <a href="#" data-action="collapse" class="@classeTitulos">
+                        <b>Veículo</b>
+                    </a>
+                </h5>
+
+                <div class="widget-toolbar action-buttons no-border" style="height: 38px; padding-top: 5px;">
+                    <span>&nbsp;</span>
+                    <a href="#" class="CustomTooltip green lnkNovoVeiculo" title="Novo Veículo" data-target="#modalNewVeiculo" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                        <i class="ace-icon fa fa-car bigger-150"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            @if (Model.Veiculos != null && Model.Veiculos.Count > 0)
+                            {
+
+                                <table id="tableVeiculos" class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Placa</th>
+                                            <th>Tipo</th>
+                                            <th>Condutor</th>
+                                            <th width="135px"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (VMVeiculo item in Model.Veiculos)
+                                        {
+                                            <tr>
+                                                <td>@item.Placa</td>
+                                                <td>@item.TipoVeiculo</td>
+                                                <td>
+                                                    <span class="CustomTooltip" title="@GISHelpers.Extensions.System.EnumExtensions.GetDisplayName(item.TipoCondutor)">@item.NomeCondutor</span>
+                                                </td>
+
+
+                                                <td align="center">
+                                                    <a href="#" class="CustomTooltip lnkExcluirVeiculo" title="Excluir" data-ukrel="@item.UKRel" data-placa="@item.Placa">
+                                                        <span class="red">
+                                                            <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                                        </span>
+                                                    </a>
+                                                </td>
+
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                            else
+                            {
+                                <div class="timeline-item clearfix">
+                                    <div class="timeline-info">
+                                        <i class="timeline-indicator ace-icon fa fa-exclamation-triangle btn btn-warning no-hover"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="text-warning smaller-90">
+                                            <strong>
+                                                Nenhum veículo cadastrado até o momento.
+                                            </strong>
+                                        </h5>
+                                    </div>
+                                </div>
+                            }
+                        </div> <!-- Col -->
+                    </div> <!-- Row -->
+
+                </div> <!-- widget-main -->
+            </div>
+        </div>
+    </div>
+
+    <div class="widget-container-col">
+        <div class="widget-box transparent collapsed">
+            <div class="widget-header @classeTitulos" style="border-bottom: 1px solid #ddd">
+                <h5 class="widget-title">
+                    <i class="ace-icon fa fa-users"></i>
+                    <a href="#" data-action="collapse" class="@classeTitulos">
+                        <b>População</b>
+                    </a>
+                </h5>
+
+                <div class="widget-toolbar action-buttons no-border" style="height: 38px; padding-top: 5px;">
+                    <span>&nbsp;</span>
+                    <a href="#" class="CustomTooltip green lnkNovaPessoa" title="Nova pessoa" data-target="#modalNewPopulacao" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                        <i class="ace-icon fa fa-user bigger-150"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            @if (Model.Populacao != null && Model.Populacao.Count > 0)
+                            {
+
+                                <table id="tablePopulacao" class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Data Nascimento</th>
+                                            <th>Tipo Acidente</th>
+                                            <th width="135px"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (VMPopulacao item in Model.Populacao)
+                                        {
+                                            <tr>
+                                                <td>@item.Nome</td>
+                                                <td>@item.DataNascimento</td>
+                                                <td>@GISHelpers.Extensions.System.EnumExtensions.GetDisplayName(item.TipoAcidente)</td>
+                                                <td align="center">
+                                                    <a href="#" class="CustomTooltip lnkExcluirPopulacao" title="Excluir" data-ukrelpessoa="@item.UKRel" data-nomepessoa="@item.Nome">
+                                                        <span class="red">
+                                                            <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                                        </span>
+                                                    </a>
+                                                </td>
+
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                            else
+                            {
+                                <div class="timeline-item clearfix">
+                                    <div class="timeline-info">
+                                        <i class="timeline-indicator ace-icon fa fa-exclamation-triangle btn btn-warning no-hover"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="text-warning smaller-90">
+                                            <strong>
+                                                Nenhuma pessoa cadastrada até o momento.
+                                            </strong>
+                                        </h5>
+                                    </div>
+                                </div>
+                            }
+                        </div> <!-- Col -->
+                    </div> <!-- Row -->
+
+                </div> <!-- widget-main -->
+            </div>
+        </div>
+    </div>
+
+    <div class="widget-container-col">
+        <div class="widget-box transparent collapsed">
+            <div class="widget-header @classeTitulos" style="border-bottom: 1px solid #ddd">
+                <h5 class="widget-title">
+                    <i class="ace-icon fa fa-users"></i>
+                    <a href="#" data-action="collapse" class="@classeTitulos">
+                        <b>Materiais</b>
+                    </a>
+                </h5>
+
+                <div class="widget-toolbar action-buttons no-border" style="height: 38px; padding-top: 5px;">
+                    <span>&nbsp;</span>
+                    <a href="#" class="CustomTooltip green lnkNovoMaterial" title="Novo Material" data-target="#modalNewMaterial" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                        <i class="ace-icon fa fa-cubes bigger-150"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            @if (Model.Materiais != null && Model.Materiais.Count > 0)
+                            {
+
+                                <table id="tablePopulacao" class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Tipo Material</th>
+                                            <th>Tipo Ocorrência</th>
+                                            <th>Custo</th>
+                                            <th width="135px"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (Material item in Model.Materiais)
+                                        {
+                                            <tr>
+                                                <td>@GISHelpers.Extensions.System.EnumExtensions.GetDisplayName(item.TipoMaterial)</td>
+                                                <td>@GISHelpers.Extensions.System.EnumExtensions.GetDisplayName(item.TipoOcorrencia)</td>
+                                                <td>@item.Custo</td>
+                                                <td align="center">
+                                                    <a href="#" class="CustomTooltip lnkExcluirMaterial" title="Excluir" data-ukmaterial="@item.UniqueKey" data-tipomaterial="@GISHelpers.Extensions.System.EnumExtensions.GetDisplayName(item.TipoMaterial)">
+                                                        <span class="red">
+                                                            <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                                        </span>
+                                                    </a>
+                                                </td>
+
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                            else
+                            {
+                                <div class="timeline-item clearfix">
+                                    <div class="timeline-info">
+                                        <i class="timeline-indicator ace-icon fa fa-exclamation-triangle btn btn-warning no-hover"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="text-warning smaller-90">
+                                            <strong>
+                                                Nenhuma material cadastrado até o momento.
+                                            </strong>
+                                        </h5>
+                                    </div>
+                                </div>
+                            }
+                        </div> <!-- Col -->
+                    </div> <!-- Row -->
+
+                </div> <!-- widget-main -->
+            </div>
+        </div>
+    </div>
+
+</div>
     }
 }
 
